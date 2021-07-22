@@ -15,8 +15,8 @@ css-prefix: c
 custom-tags: no
 decorate-inferred-ul: no
 doctype: auto
-drop-empty-elements: yes
-drop-empty-paras: yes
+drop-empty-elements: no
+drop-empty-paras: no
 drop-proprietary-attributes: no
 enclose-block-text: no
 enclose-text: no
