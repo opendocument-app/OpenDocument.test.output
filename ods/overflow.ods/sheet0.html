@@ -17,11 +17,13 @@
   p {
   padding: 0 !important;
   }
+  p:after {
+  content: "";
+  display: inline-block;
+  width: 0px;
+  }
   span {
   margin: 0 !important;
-  }
-  .odr-whitespace {
-  white-space: pre-wrap;
   }
 
   /* https://github.com/marcelblanarik/js-keyword-highlighter/blob/dd69436bee06f8c658abe1e12e2abb35d3bf250b/index.html#L81-L82 */
@@ -32,8 +34,9 @@
   border-collapse: collapse;
   table-layout: fixed;
   }
-  table td {
-  vertical-align: top;
+  td {
+  vertical-align: bottom;
+  text-overflow: ellipsis;
   }
 
   p {
@@ -43,158 +46,160 @@
 
   .odr-gridlines-none table td {}
   .odr-gridlines-soft table td {
-  border:1px solid #C0C0C0;
+  border-top: 1px solid #C0C0C0;
+  border-left: 1px solid #C0C0C0;
   }
   .odr-gridlines-hard table td {
-  border:1px solid #C0C0C0 !important;
+  border: 1px solid #C0C0C0 !important;
   }
 
   table td.odr-value-type-float {
   text-align: right;
   }
-  .table-cell.table-cell {font-family:Liberation Sans;}
-  .Default.Default {}
-  .Heading.Heading {color:#000000;font-size:24pt;font-style:normal;font-weight:bold;}
-  .Heading_20_1.Heading_20_1 {color:#000000;font-size:18pt;font-style:normal;font-weight:normal;}
-  .Heading_20_2.Heading_20_2 {color:#000000;font-size:12pt;font-style:normal;font-weight:normal;}
-  .Text.Text {}
-  .Note.Note {background-color:#ffffcc;border:0.74pt solid #808080;color:#333333;font-size:10pt;font-style:normal;font-weight:normal;}
-  .Footnote.Footnote {color:#808080;font-size:10pt;font-style:italic;font-weight:normal;}
-  .Hyperlink.Hyperlink {color:#0000ee;font-size:10pt;font-style:normal;text-decoration:underline;font-weight:normal;}
-  .Status.Status {}
-  .Good.Good {background-color:#ccffcc;color:#006600;font-size:10pt;font-style:normal;font-weight:normal;}
-  .Neutral.Neutral {background-color:#ffffcc;color:#996600;font-size:10pt;font-style:normal;font-weight:normal;}
-  .Bad.Bad {background-color:#ffcccc;color:#cc0000;font-size:10pt;font-style:normal;font-weight:normal;}
-  .Warning.Warning {color:#cc0000;font-size:10pt;font-style:normal;font-weight:normal;}
-  .Error.Error {background-color:#cc0000;color:#ffffff;font-size:10pt;font-style:normal;font-weight:bold;}
-  .Accent.Accent {color:#000000;font-size:10pt;font-style:normal;font-weight:bold;}
-  .Accent_20_1.Accent_20_1 {background-color:#000000;color:#ffffff;font-size:10pt;font-style:normal;font-weight:normal;}
-  .Accent_20_2.Accent_20_2 {background-color:#808080;color:#ffffff;font-size:10pt;font-style:normal;font-weight:normal;}
-  .Accent_20_3.Accent_20_3 {background-color:#dddddd;}
-  .Mpm1.Mpm1 {}
-  .Mpm2.Mpm2 {}
-  .master_Default.master_Default {}
-  .master_Report.master_Report {}
-  .co1.co1 {width:3.0228in;}
-  .co2.co2 {width:0.889in;}
-  .ro1.ro1 {height:0.178in;}
-  .ro2.ro2 {height:0.3417in;}
-  .ro3.ro3 {height:7.7937in;}
-  .ta1.ta1 {}
-  .ce1.ce1 {font-family:Liberation Serif;font-size:10pt;font-style:normal;text-shadow:none;font-weight:normal;}
   </style>
 </head>
 <body class="odr-gridlines-soft">
-  <table class="ta1 table" cellpadding="0" border="0" cellspacing="0">
-    <col class="co1 table-column">
-    <col class="co2 table-column">
-    <col class="co2 table-column">
-    <col class="co2 table-column">
-    <tr class="ro1 table-row">
-      <td class="Default table-cell odr-value-type-string">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="0">with row height</span></p>
-      </td>
-      <td class="Default table-cell odr-value-type-string">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="1">Lorem ipsum dolor sit amet, consectetur adipiscing
-        elit. Sed cursus tristique urna, non condimentum augue iaculis eget.
-        Donec eu diam in ante cursus finibus in sed tellus. Integer eros velit,
-        luctus in congue a, cursus non nisi. Praesent mollis mauris et enim
-        dapibus, non finibus risus sodales. Maecenas laoreet fermentum
-        ultrices. Fusce finibus faucibus diam, sed lobortis metus hendrerit
-        sed. Maecenas sed est sem. Cras eget tortor a odio tempor malesuada
-        quis ac dolor. Sed non sodales lorem. Duis cursus purus at sollicitudin
-        bibendum. Mauris nec lectus sed urna maximus bibendum.</span></p>
-      </td>
-      <td class="Default table-cell"></td>
-      <td class="Default table-cell"></td>
+  <table cellpadding="0" border="0" cellspacing="0">
+    <col>
+    <col>
+    <col>
+    <col>
+    <col>
+    <tr>
+      <td style="width:30px;height:20px;"></td>
+      <td style=
+      "text-align:center;vertical-align:middle;width:3.022800in;max-width:3.022800in;">
+      A</td>
+      <td style=
+      "text-align:center;vertical-align:middle;width:0.889000in;max-width:0.889000in;">
+      B</td>
+      <td style=
+      "text-align:center;vertical-align:middle;width:0.889000in;max-width:0.889000in;">
+      C</td>
+      <td style=
+      "text-align:center;vertical-align:middle;width:0.889000in;max-width:0.889000in;">
+      D</td>
     </tr>
-    <tr class="ro2 table-row">
-      <td class="Default table-cell odr-value-type-string">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="2">with double row height</span></p>
+    <tr style="height:0.178000in;">
+      <td style=
+      "text-align:center;vertical-align:middle;height:0.178000in;max-height:0.178000in;">
+      1</td>
+      <td>
+        <p><span style="font-family:'Liberation Sans';">with row
+        height</span></p>
       </td>
-      <td class="odr-value-type-string ce1 table-cell Default">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="3">Lorem ipsum dolor sit amet, consectetur adipiscing
-        elit. Sed cursus tristique urna, non condimentum augue iaculis eget.
-        Donec eu diam in ante cursus finibus in sed tellus. Integer eros velit,
-        luctus in congue a, cursus non nisi. Praesent mollis mauris et enim
-        dapibus, non finibus risus sodales. Maecenas laoreet fermentum
-        ultrices. Fusce finibus faucibus diam, sed lobortis metus hendrerit
-        sed. Maecenas sed est sem. Cras eget tortor a odio tempor malesuada
-        quis ac dolor. Sed non sodales lorem. Duis cursus purus at sollicitudin
-        bibendum. Mauris nec lectus sed urna maximus bibendum.</span></p>
+      <td>
+        <p><span style="font-family:'Liberation Sans';">Lorem ipsum dolor sit
+        amet, consectetur adipiscing elit. Sed cursus tristique urna, non
+        condimentum augue iaculis eget. Donec eu diam in ante cursus finibus in
+        sed tellus. Integer eros velit, luctus in congue a, cursus non nisi.
+        Praesent mollis mauris et enim dapibus, non finibus risus sodales.
+        Maecenas laoreet fermentum ultrices. Fusce finibus faucibus diam, sed
+        lobortis metus hendrerit sed. Maecenas sed est sem. Cras eget tortor a
+        odio tempor malesuada quis ac dolor. Sed non sodales lorem. Duis cursus
+        purus at sollicitudin bibendum. Mauris nec lectus sed urna maximus
+        bibendum.</span></p>
       </td>
-      <td class="Default table-cell"></td>
-      <td class="Default table-cell"></td>
+      <td></td>
+      <td></td>
     </tr>
-    <tr class="ro1 table-row">
-      <td class="Default table-cell odr-value-type-string">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="4">with row height and right next</span></p>
+    <tr style="height:0.341700in;">
+      <td style=
+      "text-align:center;vertical-align:middle;height:0.341700in;max-height:0.341700in;">
+      2</td>
+      <td>
+        <p><span style="font-family:'Liberation Sans';">with double row
+        height</span></p>
       </td>
-      <td class="Default table-cell odr-value-type-string">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="5">Lorem ipsum dolor sit amet, consectetur adipiscing
-        elit. Sed cursus tristique urna, non condimentum augue iaculis eget.
-        Donec eu diam in ante cursus finibus in sed tellus. Integer eros velit,
-        luctus in congue a, cursus non nisi. Praesent mollis mauris et enim
-        dapibus, non finibus risus sodales. Maecenas laoreet fermentum
-        ultrices. Fusce finibus faucibus diam, sed lobortis metus hendrerit
-        sed. Maecenas sed est sem. Cras eget tortor a odio tempor malesuada
-        quis ac dolor. Sed non sodales lorem. Duis cursus purus at sollicitudin
-        bibendum. Mauris nec lectus sed urna maximus bibendum.</span></p>
+      <td>
+        <p><span style=
+        "font-family:'Liberation Serif';font-size:10.000000pt;text-shadow:none;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus
+        tristique urna, non condimentum augue iaculis eget. Donec eu diam in
+        ante cursus finibus in sed tellus. Integer eros velit, luctus in congue
+        a, cursus non nisi. Praesent mollis mauris et enim dapibus, non finibus
+        risus sodales. Maecenas laoreet fermentum ultrices. Fusce finibus
+        faucibus diam, sed lobortis metus hendrerit sed. Maecenas sed est sem.
+        Cras eget tortor a odio tempor malesuada quis ac dolor. Sed non sodales
+        lorem. Duis cursus purus at sollicitudin bibendum. Mauris nec lectus
+        sed urna maximus bibendum.</span></p>
       </td>
-      <td class="Default table-cell odr-value-type-string">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="6">content</span></p>
-      </td>
-      <td class="Default table-cell"></td>
+      <td></td>
+      <td></td>
     </tr>
-    <tr class="ro1 table-row">
-      <td class="Default table-cell odr-value-type-string">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="7">with row height and right next</span></p>
+    <tr style="height:0.178000in;">
+      <td style=
+      "text-align:center;vertical-align:middle;height:0.178000in;max-height:0.178000in;">
+      3</td>
+      <td>
+        <p><span style="font-family:'Liberation Sans';">with row height and
+        right next</span></p>
       </td>
-      <td class="Default table-cell odr-value-type-string">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="8">Lorem ipsum dolor sit amet, consectetur adipiscing
-        elit. Sed cursus tristique urna, non condimentum augue iaculis eget.
-        Donec eu diam in ante cursus finibus in sed tellus. Integer eros velit,
-        luctus in congue a, cursus non nisi. Praesent mollis mauris et enim
-        dapibus, non finibus risus sodales. Maecenas laoreet fermentum
-        ultrices. Fusce finibus faucibus diam, sed lobortis metus hendrerit
-        sed. Maecenas sed est sem. Cras eget tortor a odio tempor malesuada
-        quis ac dolor. Sed non sodales lorem. Duis cursus purus at sollicitudin
-        bibendum. Mauris nec lectus sed urna maximus bibendum.</span></p>
+      <td>
+        <p><span style="font-family:'Liberation Sans';">Lorem ipsum dolor sit
+        amet, consectetur adipiscing elit. Sed cursus tristique urna, non
+        condimentum augue iaculis eget. Donec eu diam in ante cursus finibus in
+        sed tellus. Integer eros velit, luctus in congue a, cursus non nisi.
+        Praesent mollis mauris et enim dapibus, non finibus risus sodales.
+        Maecenas laoreet fermentum ultrices. Fusce finibus faucibus diam, sed
+        lobortis metus hendrerit sed. Maecenas sed est sem. Cras eget tortor a
+        odio tempor malesuada quis ac dolor. Sed non sodales lorem. Duis cursus
+        purus at sollicitudin bibendum. Mauris nec lectus sed urna maximus
+        bibendum.</span></p>
       </td>
-      <td class="Default table-cell"></td>
-      <td class="Default table-cell odr-value-type-string">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="9">content</span></p>
+      <td>
+        <p><span style="font-family:'Liberation Sans';">content</span></p>
+      </td>
+      <td></td>
+    </tr>
+    <tr style="height:0.178000in;">
+      <td style=
+      "text-align:center;vertical-align:middle;height:0.178000in;max-height:0.178000in;">
+      4</td>
+      <td>
+        <p><span style="font-family:'Liberation Sans';">with row height and
+        right next</span></p>
+      </td>
+      <td>
+        <p><span style="font-family:'Liberation Sans';">Lorem ipsum dolor sit
+        amet, consectetur adipiscing elit. Sed cursus tristique urna, non
+        condimentum augue iaculis eget. Donec eu diam in ante cursus finibus in
+        sed tellus. Integer eros velit, luctus in congue a, cursus non nisi.
+        Praesent mollis mauris et enim dapibus, non finibus risus sodales.
+        Maecenas laoreet fermentum ultrices. Fusce finibus faucibus diam, sed
+        lobortis metus hendrerit sed. Maecenas sed est sem. Cras eget tortor a
+        odio tempor malesuada quis ac dolor. Sed non sodales lorem. Duis cursus
+        purus at sollicitudin bibendum. Mauris nec lectus sed urna maximus
+        bibendum.</span></p>
+      </td>
+      <td></td>
+      <td>
+        <p><span style="font-family:'Liberation Sans';">content</span></p>
       </td>
     </tr>
-    <tr class="ro3 table-row">
-      <td class="Default table-cell odr-value-type-string">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="10">without row height</span></p>
+    <tr style="height:7.793700in;">
+      <td style=
+      "text-align:center;vertical-align:middle;height:7.793700in;max-height:7.793700in;">
+      5</td>
+      <td>
+        <p><span style="font-family:'Liberation Sans';">without row
+        height</span></p>
       </td>
-      <td class="odr-value-type-string ce1 table-cell Default">
-        <p class="Default table-cell"><span contenteditable="true"
-        data-odr-cid="11">Lorem ipsum dolor sit amet, consectetur adipiscing
-        elit. Sed cursus tristique urna, non condimentum augue iaculis eget.
-        Donec eu diam in ante cursus finibus in sed tellus. Integer eros velit,
-        luctus in congue a, cursus non nisi. Praesent mollis mauris et enim
-        dapibus, non finibus risus sodales. Maecenas laoreet fermentum
-        ultrices. Fusce finibus faucibus diam, sed lobortis metus hendrerit
-        sed. Maecenas sed est sem. Cras eget tortor a odio tempor malesuada
-        quis ac dolor. Sed non sodales lorem. Duis cursus purus at sollicitudin
-        bibendum. Mauris nec lectus sed urna maximus bibendum.</span></p>
+      <td>
+        <p><span style=
+        "font-family:'Liberation Serif';font-size:10.000000pt;text-shadow:none;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus
+        tristique urna, non condimentum augue iaculis eget. Donec eu diam in
+        ante cursus finibus in sed tellus. Integer eros velit, luctus in congue
+        a, cursus non nisi. Praesent mollis mauris et enim dapibus, non finibus
+        risus sodales. Maecenas laoreet fermentum ultrices. Fusce finibus
+        faucibus diam, sed lobortis metus hendrerit sed. Maecenas sed est sem.
+        Cras eget tortor a odio tempor malesuada quis ac dolor. Sed non sodales
+        lorem. Duis cursus purus at sollicitudin bibendum. Mauris nec lectus
+        sed urna maximus bibendum.</span></p>
       </td>
-      <td class="Default table-cell"></td>
-      <td class="Default table-cell"></td>
+      <td></td>
+      <td></td>
     </tr>
   </table>
   <script>

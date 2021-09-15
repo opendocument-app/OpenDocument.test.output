@@ -17,125 +17,62 @@
   p {
   padding: 0 !important;
   }
+  p:after {
+  content: "";
+  display: inline-block;
+  width: 0px;
+  }
   span {
   margin: 0 !important;
-  }
-  .odr-whitespace {
-  white-space: pre-wrap;
   }
 
   /* https://github.com/marcelblanarik/js-keyword-highlighter/blob/dd69436bee06f8c658abe1e12e2abb35d3bf250b/index.html#L81-L82 */
   mark { background: yellow; }
   mark.current { background: orange; }
-  .graphic.graphic {stroke:#3465af;fill:#729fcf;font-size:24pt;}
-  .standard.standard {stroke-width:0cm;stroke:#3465af;fill:#729fcf;padding-top:0.125cm;padding-bottom:0.125cm;padding-left:0.25cm;padding-right:0.25cm;margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0cm;font-size:18pt;font-style:normal;text-shadow:none;font-weight:normal;}
-  .objectwitharrow.objectwitharrow {stroke-width:0.15cm;stroke:#000000;}
-  .objectwithshadow.objectwithshadow {}
-  .objectwithoutfill.objectwithoutfill {stroke:#000000;}
-  .text.text {}
-  .textbody.textbody {font-size:16pt;}
-  .textbodyjustfied.textbodyjustfied {text-align:justify;}
-  .textbodyindent.textbodyindent {margin-left:0cm;margin-right:0cm;}
-  .title.title {font-size:44pt;}
-  .title1.title1 {fill:#008080;text-align:center;font-size:24pt;}
-  .title2.title2 {stroke-width:0.05cm;fill:#ffcc99;margin-left:0cm;margin-right:0.2cm;margin-top:0.1cm;margin-bottom:0.1cm;text-align:center;font-size:36pt;}
-  .headline.headline {margin-top:0.42cm;margin-bottom:0.21cm;font-size:24pt;}
-  .headline1.headline1 {margin-top:0.42cm;margin-bottom:0.21cm;font-size:18pt;font-weight:bold;}
-  .headline2.headline2 {margin-top:0.42cm;margin-bottom:0.21cm;font-size:14pt;font-style:italic;font-weight:bold;}
-  .measure.measure {stroke:#000000;font-size:12pt;}
-  .default.default {fill:#ccccff;padding-top:0.13cm;padding-bottom:0.13cm;padding-left:0.25cm;padding-right:0.25cm;margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0cm;font-size:18pt;}
-  .gray1.gray1 {fill:#e6e6e6;}
-  .gray2.gray2 {fill:#cccccc;}
-  .gray3.gray3 {fill:#b3b3b3;}
-  .bw1.bw1 {fill:#ffffff;}
-  .bw2.bw2 {fill:#e6e6e6;}
-  .bw3.bw3 {fill:#000000;}
-  .orange1.orange1 {fill:#ffcc99;}
-  .orange2.orange2 {fill:#ff9966;}
-  .orange3.orange3 {fill:#ff6633;}
-  .turquise1.turquise1 {fill:#47b8b8;}
-  .turquise2.turquise2 {fill:#33a3a3;}
-  .turquise3.turquise3 {fill:#198a8a;}
-  .blue1.blue1 {fill:#99ccff;}
-  .blue2.blue2 {fill:#0099ff;}
-  .blue3.blue3 {fill:#0066cc;}
-  .sun1.sun1 {fill:#e6e6ff;}
-  .sun2.sun2 {fill:#ccccff;}
-  .sun3.sun3 {fill:#9999ff;}
-  .earth1.earth1 {fill:#ffffcc;}
-  .earth2.earth2 {fill:#ffcc99;}
-  .earth3.earth3 {fill:#cc6633;}
-  .green1.green1 {fill:#ffffcc;}
-  .green2.green2 {fill:#94bd5e;}
-  .green3.green3 {fill:#5c8526;}
-  .seetang1.seetang1 {fill:#ccffff;}
-  .seetang2.seetang2 {fill:#47b8b8;}
-  .seetang3.seetang3 {fill:#33a3a3;}
-  .lightblue1.lightblue1 {fill:#ffffff;}
-  .lightblue2.lightblue2 {fill:#e6e6ff;}
-  .lightblue3.lightblue3 {fill:#9999cc;}
-  .yellow1.yellow1 {fill:#ffffcc;}
-  .yellow2.yellow2 {fill:#ffff99;}
-  .yellow3.yellow3 {fill:#ffcc99;}
-  .Default-background.Default-background {}
-  .Default-backgroundobjects.Default-backgroundobjects {}
-  .Default-notes.Default-notes {margin-left:0.6cm;margin-right:0cm;font-size:20pt;font-style:normal;text-shadow:none;font-weight:normal;}
-  .Default-outline1.Default-outline1 {margin-top:0cm;margin-bottom:0.5cm;font-size:32pt;font-style:normal;text-shadow:none;font-weight:normal;}
-  .Default-outline2.Default-outline2 {margin-top:0cm;margin-bottom:0.4cm;font-size:28pt;}
-  .Default-outline3.Default-outline3 {margin-top:0cm;margin-bottom:0.3cm;font-size:24pt;}
-  .Default-outline4.Default-outline4 {margin-top:0cm;margin-bottom:0.2cm;font-size:20pt;}
-  .Default-outline5.Default-outline5 {margin-top:0cm;margin-bottom:0.1cm;font-size:20pt;}
-  .Default-outline6.Default-outline6 {margin-top:0cm;margin-bottom:0.1cm;font-size:20pt;}
-  .Default-outline7.Default-outline7 {margin-top:0cm;margin-bottom:0.1cm;font-size:20pt;}
-  .Default-outline8.Default-outline8 {margin-top:0cm;margin-bottom:0.1cm;font-size:20pt;}
-  .Default-outline9.Default-outline9 {margin-top:0cm;margin-bottom:0.1cm;font-size:20pt;}
-  .Default-subtitle.Default-subtitle {display:flex;justify-content:center;flex-direction: column;margin-left:0cm;margin-right:0cm;text-align:center;font-size:32pt;font-style:normal;text-shadow:none;font-weight:normal;}
-  .Default-title.Default-title {display:flex;justify-content:center;flex-direction: column;text-align:center;font-size:44pt;font-style:normal;text-shadow:none;font-weight:normal;}
-  .PM0.PM0 {margin-top:0cm;margin-bottom:0cm;margin-left:0cm;margin-right:0cm;width:21.59cm;height:27.94cm;}
-  .PM1.PM1 {margin-top:0cm;margin-bottom:0cm;margin-left:0cm;margin-right:0cm;width:28cm;height:21cm;}
-  .Mdp1.Mdp1 {}
-  .Mdp2.Mdp2 {}
-  .Mgr1.Mgr1 {fill:#ffffff;}
-  .Mgr2.Mgr2 {fill:#ffffff;}
-  .Mpr1.Mpr1 {fill:#ffffff;}
-  .Mpr2.Mpr2 {fill:#ffffff;}
-  .Mpr3.Mpr3 {fill:#ffffff;}
-  .MP1.MP1 {font-size:14pt;}
-  .MP2.MP2 {text-align:end;font-size:14pt;}
-  .MP3.MP3 {text-align:center;font-size:14pt;}
-  .master_Default.master_Default {}
-  .dp1.dp1 {}
-  .dp2.dp2 {}
-  .gr1.gr1 {display:flex;justify-content:center;flex-direction: column;}
-  .gr2.gr2 {}
-  .pr1.pr1 {}
-  .pr2.pr2 {fill:#ffffff;}
-  .pr3.pr3 {}
-  .pr4.pr4 {}
-  .P1.P1 {text-align:center;}
   </style>
 </head>
 <body class="odr-gridlines-soft">
-  <div class="dp1 drawing-page drawing-page master_Default Mdp1 PM1 Mdp1 PM1">
+  <div style="width:28.000000cm;height:21.000000cm;">
     <div style=
-    "width:25.199cm;height:3.506cm;position:absolute;left:1.4cm;top:0.837cm;"
-    class="pr3 presentation Default-title presentation Default-title">
-      <p class=""><span contenteditable="true" data-odr-cid=
-      "2">Overview</span></p>
-    </div>
-    <div style=
-    "width:25.199cm;height:12.179cm;position:absolute;left:1.4cm;top:4.914cm;"
-    class="pr4 presentation Default-outline1 presentation Default-outline1">
-      <ul class="L2">
-        <li class="">
-          <p class=""><span contenteditable="true" data-odr-cid="3">this is
-          fucking awesome</span></p>
-        </li>
-        <li class="">
-          <p class=""><span contenteditable="true" data-odr-cid="4">and
-          more…</span></p>
-        </li>
-      </ul>
+    "margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
+      <div style=
+      "display:block;position:absolute;left:1.4cm;top:0.837cm;width:25.199cm;height:3.506cm;display:flex;justify-content:center;flex-direction:column;">
+      </div>
+      <div style=
+      "display:block;position:absolute;left:1.4cm;top:4.914cm;width:25.199cm;height:12.179cm;">
+      </div>
+      <div style=
+      "display:block;position:absolute;left:1.4cm;top:19.131cm;width:6.523cm;height:1.448cm;fill:#ffffff;">
+        <p></p>
+      </div>
+      <div style=
+      "display:block;position:absolute;left:9.576cm;top:19.131cm;width:8.875cm;height:1.448cm;fill:#ffffff;">
+        <p style="text-align:center;"></p>
+      </div>
+      <div style=
+      "display:block;position:absolute;left:20.076cm;top:19.131cm;width:6.523cm;height:1.448cm;fill:#ffffff;">
+        <p style="text-align:right;"></p>
+      </div>
+      <div style=
+      "display:block;position:absolute;left:1.4cm;top:0.837cm;width:25.199cm;height:3.506cm;display:flex;justify-content:center;flex-direction:column;">
+        <p style="text-align:center;"><span style=
+        "font-size:44.000000pt;text-shadow:none;">Overview</span></p>
+      </div>
+      <div style=
+      "display:block;position:absolute;left:1.4cm;top:4.914cm;width:25.199cm;height:12.179cm;">
+        <ul>
+          <li style="font-size:32.000000pt;text-shadow:none;">
+            <p style="margin-top:0.000000cm;margin-bottom:0.500000cm;">
+            <span style="font-size:32.000000pt;text-shadow:none;">this is
+            fucking awesome</span></p>
+          </li>
+          <li style="font-size:32.000000pt;text-shadow:none;">
+            <p style="margin-top:0.000000cm;margin-bottom:0.500000cm;">
+            <span style="font-size:32.000000pt;text-shadow:none;">and
+            more…</span></p>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
   <script>

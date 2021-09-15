@@ -17,95 +17,53 @@
   p {
   padding: 0 !important;
   }
+  p:after {
+  content: "";
+  display: inline-block;
+  width: 0px;
+  }
   span {
   margin: 0 !important;
-  }
-  .odr-whitespace {
-  white-space: pre-wrap;
   }
 
   /* https://github.com/marcelblanarik/js-keyword-highlighter/blob/dd69436bee06f8c658abe1e12e2abb35d3bf250b/index.html#L81-L82 */
   mark { background: yellow; }
   mark.current { background: orange; }
-  .graphic.graphic {stroke:#808080;fill:#cfe7f5;font-size:24pt;}
-  .standard.standard {stroke-width:0cm;stroke:#808080;fill:#cfe7f5;padding-top:0.125cm;padding-bottom:0.125cm;padding-left:0.25cm;padding-right:0.25cm;margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0cm;font-size:18pt;font-style:normal;text-shadow:none;font-weight:normal;}
-  .objectwitharrow.objectwitharrow {stroke-width:0.15cm;stroke:#000000;}
-  .objectwithshadow.objectwithshadow {}
-  .objectwithoutfill.objectwithoutfill {stroke:#000000;}
-  .text.text {}
-  .textbody.textbody {font-size:16pt;}
-  .textbodyjustfied.textbodyjustfied {text-align:justify;}
-  .textbodyindent.textbodyindent {margin-left:0cm;margin-right:0cm;}
-  .title.title {font-size:44pt;}
-  .title1.title1 {fill:#008080;text-align:center;font-size:24pt;}
-  .title2.title2 {stroke-width:0.05cm;fill:#ffcc99;margin-left:0cm;margin-right:0.2cm;margin-top:0.1cm;margin-bottom:0.1cm;text-align:center;font-size:36pt;}
-  .headline.headline {margin-top:0.42cm;margin-bottom:0.21cm;font-size:24pt;}
-  .headline1.headline1 {margin-top:0.42cm;margin-bottom:0.21cm;font-size:18pt;font-weight:bold;}
-  .headline2.headline2 {margin-top:0.42cm;margin-bottom:0.21cm;font-size:14pt;font-style:italic;font-weight:bold;}
-  .measure.measure {stroke:#000000;font-size:12pt;}
-  .Default-background.Default-background {}
-  .Default-backgroundobjects.Default-backgroundobjects {}
-  .Default-notes.Default-notes {margin-left:0.6cm;margin-right:0cm;font-size:20pt;font-style:normal;text-shadow:none;font-weight:normal;}
-  .Default-outline1.Default-outline1 {margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0.5cm;font-size:32pt;font-style:normal;text-shadow:none;font-weight:normal;}
-  .Default-outline2.Default-outline2 {margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0.4cm;font-size:28pt;}
-  .Default-outline3.Default-outline3 {margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0.3cm;font-size:24pt;}
-  .Default-outline4.Default-outline4 {margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0.2cm;font-size:20pt;}
-  .Default-outline5.Default-outline5 {margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0.1cm;font-size:20pt;}
-  .Default-outline6.Default-outline6 {margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0.1cm;font-size:20pt;}
-  .Default-outline7.Default-outline7 {margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0.1cm;font-size:20pt;}
-  .Default-outline8.Default-outline8 {margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0.1cm;font-size:20pt;}
-  .Default-outline9.Default-outline9 {margin-left:0cm;margin-right:0cm;margin-top:0cm;margin-bottom:0.1cm;font-size:20pt;}
-  .Default-subtitle.Default-subtitle {display:flex;justify-content:center;flex-direction: column;margin-left:0cm;margin-right:0cm;text-align:center;font-size:32pt;font-style:normal;text-shadow:none;font-weight:normal;}
-  .Default-title.Default-title {display:flex;justify-content:center;flex-direction: column;text-align:center;font-size:44pt;font-style:normal;text-shadow:none;font-weight:normal;}
-  .PM0.PM0 {margin-top:0cm;margin-bottom:0cm;margin-left:0cm;margin-right:0cm;width:21.59cm;height:27.94cm;}
-  .PM1.PM1 {margin-top:0cm;margin-bottom:0cm;margin-left:0cm;margin-right:0cm;width:27.991cm;height:21.006cm;}
-  .Mdp1.Mdp1 {}
-  .Mdp2.Mdp2 {}
-  .Mgr1.Mgr1 {fill:#ffffff;}
-  .Mgr2.Mgr2 {fill:#ffffff;}
-  .Mpr1.Mpr1 {fill:#ffffff;}
-  .Mpr2.Mpr2 {fill:#ffffff;}
-  .Mpr3.Mpr3 {fill:#ffffff;}
-  .MP1.MP1 {font-size:14pt;}
-  .MP2.MP2 {text-align:end;font-size:14pt;}
-  .MP3.MP3 {text-align:center;font-size:14pt;}
-  .MT1.MT1 {font-size:14pt;}
-  .master_Default.master_Default {}
-  .dp1.dp1 {}
-  .dp2.dp2 {}
-  .dp3.dp3 {fill:#800000;}
-  .dp4.dp4 {}
-  .gr1.gr1 {}
-  .gr2.gr2 {display:flex;justify-content:center;flex-direction: column;}
-  .pr1.pr1 {}
-  .pr2.pr2 {fill:#ffffff;}
-  .pr3.pr3 {fill:#ffffff;}
-  .pr4.pr4 {}
-  .pr5.pr5 {}
-  .pr6.pr6 {fill:#ffffff;}
-  .pr7.pr7 {}
-  .P1.P1 {font-size:32pt;}
-  .P2.P2 {text-align:center;font-size:18pt;}
-  .P3.P3 {color:#c0c0c0;}
-  .T1.T1 {color:#c0c0c0;}
   </style>
 </head>
 <body class="odr-gridlines-soft">
-  <div class=
-  "dp1 drawing-page drawing-page drawing-page master_Default Mdp1 PM1 Mdp1 PM1 Mdp1 PM1">
+  <div style="width:27.991000cm;height:21.006000cm;">
     <div style=
-    "width:25.191cm;height:3.507cm;position:absolute;left:1.399cm;top:0.837cm;"
-    class=
-    "pr1 presentation Default-title presentation Default-title presentation Default-title">
-      <p class=""><span contenteditable="true" data-odr-cid="5">title3 -
-      drawing</span></p>
-    </div>
-    <div style=
-    "width:7.618cm;height:4.065cm;position:absolute;left:10.156cm;top:9.911cm;"
-    class=
-    "gr2 graphic standard graphic standard graphic standard P2 paragraph paragraph paragraph">
-      <p class="P2 paragraph paragraph paragraph"><span contenteditable="true"
-      data-odr-cid="6">Test</span></p>
+    "margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
+      <div style=
+      "display:block;position:absolute;left:1.399cm;top:0.837cm;width:25.191cm;height:3.507cm;display:flex;justify-content:center;flex-direction:column;">
+      </div>
+      <div style=
+      "display:block;position:absolute;left:1.399cm;top:4.915cm;width:24.631cm;height:12.183cm;">
+      </div>
+      <div style=
+      "display:block;position:absolute;left:1.399cm;top:19.136cm;width:6.521cm;height:1.448cm;fill:#ffffff;">
+        <p><span></span></p>
+      </div>
+      <div style=
+      "display:block;position:absolute;left:9.572cm;top:19.136cm;width:8.872cm;height:1.448cm;fill:#ffffff;">
+        <p style="text-align:center;"><span></span></p>
+      </div>
+      <div style=
+      "display:block;position:absolute;left:20.069cm;top:19.136cm;width:6.521cm;height:1.448cm;fill:#ffffff;">
+        <p style="text-align:right;"><span></span></p>
+      </div>
+      <div style=
+      "display:block;position:absolute;left:1.399cm;top:0.837cm;width:25.191cm;height:3.507cm;display:flex;justify-content:center;flex-direction:column;">
+        <p style="text-align:center;"><span style=
+        "font-size:44.000000pt;text-shadow:none;">title3 - drawing</span></p>
+      </div>
+      <div style=
+      "position:absolute;left:10.156cm;top:9.911cm;width:7.618cm;height:4.065cm;stroke-width:0.000000cm;stroke:#808080;fill:#cfe7f5;display:flex;justify-content:center;flex-direction:column;">
+        <p style=
+        "text-align:center;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
+        <span style="font-size:18.000000pt;text-shadow:none;">Test</span></p>
+      </div>
     </div>
   </div>
   <script>
