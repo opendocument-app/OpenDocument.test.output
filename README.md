@@ -2,8 +2,8 @@
 related to [OpenDocument.core](https://github.com/opendocument-app/OpenDocument.core) and [OpenDocument.test](https://github.com/opendocument-app/OpenDocument.test)
 
 ## Versions
-- [OpenDocument.core 5ecfee0](https://github.com/opendocument-app/OpenDocument.core/tree/5ecfee04b4726a18183c729d6b5edb9a0716631a)
-- [OpenDocument.test fb2fbef](https://github.com/opendocument-app/OpenDocument.test/tree/fb2fbef8b65cf0f0786abc51b5e37266cda67a91)
+- [OpenDocument.core 5ecfee0](https://github.com/opendocument-app/OpenDocument.core/tree/19f85948de999bc8f69328ef581f653b401fc9ba)
+- [OpenDocument.test fb2fbef](https://github.com/opendocument-app/OpenDocument.test/tree/16165cb832a52cb7dbf4c13613dff29e3eb5d6bb)
 
 ## HTML config
 default + editable
