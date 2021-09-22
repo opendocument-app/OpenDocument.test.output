@@ -17,10 +17,13 @@
   p {
   padding: 0;
   }
-  p:empty:after {
+  p:after {
   content: "";
   display: inline-block;
-  width: 1mm;
+  width: 0;
+  }
+  p:empty:after {
+  width: 0.01mm;
   }
   span {
   margin: 0;
@@ -37,11 +40,15 @@
   td {
   vertical-align: bottom;
   text-overflow: ellipsis;
+  height: inherit;
   }
 
   p {
   font-family: "Arial";
   font-size: 10pt;
+  }
+  td p {
+  height: inherit;
   }
 
   .odr-gridlines-none table td {}
@@ -61,12 +68,10 @@
 <body class="odr-gridlines-soft">
   <table cellpadding="0" border="0" cellspacing="0">
     <col>
-    <col>
+    <col style="width:64.010000pt;min-width:64.010000pt;">
     <tr>
       <td style="width:30px;height:20px;"></td>
-      <td style=
-      "text-align:center;vertical-align:middle;width:64.010000pt;max-width:64.010000pt;">
-      A</td>
+      <td style="text-align:center;vertical-align:middle;">A</td>
     </tr>
     <tr style="height:12.810000pt;">
       <td style=
@@ -76,9 +81,9 @@
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" overflow=
         "visible" style=
         "z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;">
-        <line x1="290.27pt" y1="204.8pt" x2="360.74pt" y2="77.44pt">
-        </line></svg><svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-        overflow="visible" style=
+        <line x1="290.27pt" y1="204.8pt" x2="360.74pt" y2="77.44pt"></line>
+        </svg><svg xmlns="http://www.w3.org/2000/svg" version="1.1" overflow=
+        "visible" style=
         "z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;">
         <line x1="65461.69pt" y1="13421095.26pt" x2="65279.37pt" y2=
         "13421095.26pt"></line></svg><svg xmlns="http://www.w3.org/2000/svg"
@@ -100,8 +105,8 @@
         </div><svg xmlns="http://www.w3.org/2000/svg" version="1.1" overflow=
         "visible" style=
         "z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;">
-        <line x1="230.8pt" y1="100.49pt" x2="464.8pt" y2="268.19pt">
-        </line></svg>
+        <line x1="230.8pt" y1="100.49pt" x2="464.8pt" y2="268.19pt"></line>
+        </svg>
       </td>
     </tr>
   </table>

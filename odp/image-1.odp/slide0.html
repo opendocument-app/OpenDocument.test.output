@@ -15,15 +15,18 @@
   padding: 5px;
   }
   p {
-  padding: 0 !important;
+  padding: 0;
   }
   p:after {
   content: "";
   display: inline-block;
-  width: 0px;
+  width: 0;
+  }
+  p:empty:after {
+  width: 0.01mm;
   }
   span {
-  margin: 0 !important;
+  margin: 0;
   }
 
   /* https://github.com/marcelblanarik/js-keyword-highlighter/blob/dd69436bee06f8c658abe1e12e2abb35d3bf250b/index.html#L81-L82 */
@@ -56,10 +59,11 @@
       <div style=
       "display:block;position:absolute;left:1.4cm;top:0.837cm;width:25.199cm;height:3.506cm;display:flex;justify-content:center;flex-direction:column;">
         <p style="text-align:center;"><span style=
-        "font-size:44.000000pt;text-shadow:none;">OpenDocument
-        Reader</span><br>
-        <span style="font-size:44.000000pt;text-shadow:none;">loves
-        Chromecast</span></p>
+        "font-size:44.000000pt;font-weight:normal;font-style:normal;text-shadow:none;">
+        OpenDocument Reader</span><br>
+        <span style=
+        "font-size:44.000000pt;font-weight:normal;font-style:normal;text-shadow:none;">
+        loves Chromecast</span></p>
       </div>
       <div style=
       "display:block;position:absolute;left:7.909cm;top:4.913cm;width:12.179cm;height:12.179cm;stroke-width:0.000000cm;stroke:#3465af;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;">

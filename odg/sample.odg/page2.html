@@ -15,15 +15,18 @@
   padding: 5px;
   }
   p {
-  padding: 0 !important;
+  padding: 0;
   }
   p:after {
   content: "";
   display: inline-block;
-  width: 0px;
+  width: 0;
+  }
+  p:empty:after {
+  width: 0.01mm;
   }
   span {
-  margin: 0 !important;
+  margin: 0;
   }
 
   /* https://github.com/marcelblanarik/js-keyword-highlighter/blob/dd69436bee06f8c658abe1e12e2abb35d3bf250b/index.html#L81-L82 */
@@ -38,9 +41,9 @@
       <svg xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible"
       style=
       "z-index:-1;position:absolute;top:0;left:0;stroke-width:0.035000cm;stroke:#666666;fill:#cfe7f5;display:flex;justify-content:center;flex-direction:column;">
-      <line x1="0.8cm" y1="18.2cm" x2="0.8cm" y2="27.6cm">
-      </line></svg><svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-      overflow="visible" style=
+      <line x1="0.8cm" y1="18.2cm" x2="0.8cm" y2="27.6cm"></line>
+      </svg><svg xmlns="http://www.w3.org/2000/svg" version="1.1" overflow=
+      "visible" style=
       "z-index:-1;position:absolute;top:0;left:0;stroke-width:0.035000cm;stroke:#666666;fill:#cfe7f5;display:flex;justify-content:center;flex-direction:column;">
       <line x1="0.8cm" y1="8.2cm" x2="0.8cm" y2="15.9cm"></line></svg>
       <div style=
@@ -66,7 +69,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:32.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:32.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOREM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -77,9 +80,9 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:14.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:14.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Wirtschaftsingenieurin</span></span><span><span style=
-        "font-family:'Avenir Next';font-size:14.000000pt;text-shadow:none;color:#333333;">,
+        "font-family:'Avenir Next';font-size:14.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">,
         Fachrichtung Maschinenbau</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -91,7 +94,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:14.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:14.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Ausbildung</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -102,7 +105,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -113,7 +116,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         03.2017 – heute &nbsp; &nbsp;&nbsp;</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -125,7 +128,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -136,7 +139,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         09.2015 – 12.2015</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -148,7 +151,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -159,7 +162,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         03.2013 – 02.2017</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -171,7 +174,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -182,7 +185,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         09.2009 – 07.2012</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -194,7 +197,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:14.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:14.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Praktische Erfahrung</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -206,7 +209,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -217,7 +220,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         03.2018 – 08.2018</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -229,7 +232,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -240,7 +243,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         09.2016 – 02.2017</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -252,7 +255,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -263,7 +266,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         01.2016 – 03.2016</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -275,7 +278,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -286,7 +289,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         03.2015 – 08.2015</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -298,7 +301,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -309,7 +312,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         05.2013</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -398,9 +401,9 @@
       </div><svg xmlns="http://www.w3.org/2000/svg" version="1.1" overflow=
       "visible" style=
       "z-index:-1;position:absolute;top:0;left:0;stroke-width:0.035000cm;stroke:#666666;fill:#cfe7f5;display:flex;justify-content:center;flex-direction:column;">
-      <line x1="1cm" y1="17.7cm" x2="12.3cm" y2="17.7cm">
-      </line></svg><svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-      overflow="visible" style=
+      <line x1="1cm" y1="17.7cm" x2="12.3cm" y2="17.7cm"></line>
+      </svg><svg xmlns="http://www.w3.org/2000/svg" version="1.1" overflow=
+      "visible" style=
       "z-index:-1;position:absolute;top:0;left:0;stroke-width:0.035000cm;stroke:#666666;fill:#cfe7f5;display:flex;justify-content:center;flex-direction:column;">
       <line x1="1cm" y1="7.7cm" x2="12.3cm" y2="7.7cm"></line></svg>
       <div style=
@@ -408,7 +411,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         MS Word</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -419,7 +422,7 @@
         <p style=
         "text-align:center;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:6.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:6.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Grundkenntnisse</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -431,7 +434,7 @@
         <p style=
         "text-align:center;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:6.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:6.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Gut</span></span></p><svg xmlns="http://www.w3.org/2000/svg" version=
         "1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -442,7 +445,7 @@
         <p style=
         "text-align:center;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:6.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:6.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Sehr gut</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -453,7 +456,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:14.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:14.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Persönliche Angaben</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -465,9 +468,9 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Geburtsdatum:&nbsp;</span></span><span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">LOERM
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">LOERM
         IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg" version=
         "1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -478,9 +481,9 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Geburtsort:&nbsp;</span></span><span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">LOERM
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">LOERM
         IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg" version=
         "1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -491,7 +494,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Familienstand: ledig</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -503,7 +506,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Staatsangehörigkeit: deutsch</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -515,7 +518,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:14.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:14.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Kontakt</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -526,7 +529,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -537,7 +540,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -548,7 +551,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -559,7 +562,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         LOERM IPSUM</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -570,7 +573,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:14.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:14.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Kenntnisse</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -581,7 +584,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:14.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:14.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Sprachen</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -592,7 +595,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Englisch</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -603,7 +606,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Spanisch</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -614,7 +617,7 @@
         <p style=
         "text-align:center;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:6.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:6.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Grundkenntnisse</span></span></p><svg xmlns=
         "http://www.w3.org/2000/svg" version="1.1" overflow="visible"
         preserveaspectratio="none" style=
@@ -626,7 +629,7 @@
         <p style=
         "text-align:center;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:6.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:6.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Gut</span></span></p><svg xmlns="http://www.w3.org/2000/svg" version=
         "1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -637,7 +640,7 @@
         <p style=
         "text-align:center;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:6.000000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:6.000000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         Sehr gut</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -651,7 +654,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         MS Excel</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -662,7 +665,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         MATLAB</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -673,7 +676,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         HTML</span></span></p><svg xmlns="http://www.w3.org/2000/svg" version=
         "1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -684,7 +687,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         JAVA</span></span></p><svg xmlns="http://www.w3.org/2000/svg" version=
         "1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -695,7 +698,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         MS Powerpoint</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -847,13 +850,13 @@
       </div><svg xmlns="http://www.w3.org/2000/svg" version="1.1" overflow=
       "visible" style=
       "z-index:-1;position:absolute;top:0;left:0;stroke-width:0.035000cm;stroke:#666666;fill:#cfe7f5;display:flex;justify-content:center;flex-direction:column;">
-      <line x1="12.7cm" y1="17.9cm" x2="20.1cm" y2="17.9cm">
-      </line></svg><svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-      overflow="visible" style=
+      <line x1="12.7cm" y1="17.9cm" x2="20.1cm" y2="17.9cm"></line>
+      </svg><svg xmlns="http://www.w3.org/2000/svg" version="1.1" overflow=
+      "visible" style=
       "z-index:-1;position:absolute;top:0;left:0;stroke-width:0.035000cm;stroke:#666666;fill:#cfe7f5;display:flex;justify-content:center;flex-direction:column;">
-      <line x1="12.8cm" y1="13.3cm" x2="20.2cm" y2="13.3cm">
-      </line></svg><svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-      overflow="visible" style=
+      <line x1="12.8cm" y1="13.3cm" x2="20.2cm" y2="13.3cm"></line>
+      </svg><svg xmlns="http://www.w3.org/2000/svg" version="1.1" overflow=
+      "visible" style=
       "z-index:-1;position:absolute;top:0;left:0;stroke-width:0.035000cm;stroke:#666666;fill:#cfe7f5;display:flex;justify-content:center;flex-direction:column;">
       <line x1="12.7cm" y1="8.7cm" x2="20.1cm" y2="8.7cm"></line></svg>
       <div style=
@@ -861,7 +864,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         QuickBooks</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
@@ -890,7 +893,8 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:14.000000pt;text-shadow:none;">Lebenslauf</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
+        "font-family:'Avenir Next';font-size:14.000000pt;font-weight:normal;font-style:normal;text-shadow:none;">
+        Lebenslauf</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
         <rect x="0" y="0" width="100%" height="100%"></rect></svg>
@@ -909,7 +913,7 @@
         <p style=
         "text-align:left;margin-right:0.000000cm;margin-top:0.000000cm;margin-left:0.000000cm;margin-bottom:0.000000cm;">
         <span><span style=
-        "font-family:'Avenir Next';font-size:10.500000pt;text-shadow:none;color:#333333;">
+        "font-family:'Avenir Next';font-size:10.500000pt;font-weight:normal;font-style:normal;text-shadow:none;color:#333333;">
         SOLIDWORKS</span></span></p><svg xmlns="http://www.w3.org/2000/svg"
         version="1.1" overflow="visible" preserveaspectratio="none" style=
         "z-index:-1;width:inherit;height:inherit;position:absolute;top:0;left:0;padding:inherit;">
