@@ -26,4 +26,3 @@ struct Config {
 
 ## Formatting
 used `format-html.sh` and `format-json.sh` to format outputs
-
