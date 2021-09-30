@@ -14,15 +14,15 @@
   body {
   padding: 5px;
   }
-  p {
+  .odr-paragraph {
   padding: 0;
   }
-  p:after {
+  .odr-paragraph:after {
   content: "";
   display: inline-block;
   width: 0;
   }
-  p:empty:after {
+  .odr-paragraph:empty:after {
   width: 0.01mm;
   }
   span {
@@ -43,11 +43,11 @@
   height: inherit;
   }
 
-  p {
+  .odr-paragraph {
   font-family: "Arial";
   font-size: 10pt;
   }
-  td p {
+  td .odr-paragraph {
   height: inherit;
   }
 
@@ -84,22 +84,26 @@
       "text-align:center;vertical-align:middle;height:0.178000in;max-height:0.178000in;">
       1</td>
       <td>
-        <p><span style="font-family:'Liberation Sans';" contenteditable="true"
-        data-odr-path="/child:0/row:0/child:0/child:0/child:0">with row
-        height</span></p>
+        <div class="odr-paragraph">
+          <span style="font-family:'Liberation Sans';" contenteditable="true"
+          data-odr-path="/child:0/row:0/child:0/child:0/child:0">with row
+          height</span>
+        </div>
       </td>
       <td>
-        <p><span style="font-family:'Liberation Sans';" contenteditable="true"
-        data-odr-path="/child:0/row:0/child:1/child:0/child:0">Lorem ipsum
-        dolor sit amet, consectetur adipiscing elit. Sed cursus tristique urna,
-        non condimentum augue iaculis eget. Donec eu diam in ante cursus
-        finibus in sed tellus. Integer eros velit, luctus in congue a, cursus
-        non nisi. Praesent mollis mauris et enim dapibus, non finibus risus
-        sodales. Maecenas laoreet fermentum ultrices. Fusce finibus faucibus
-        diam, sed lobortis metus hendrerit sed. Maecenas sed est sem. Cras eget
-        tortor a odio tempor malesuada quis ac dolor. Sed non sodales lorem.
-        Duis cursus purus at sollicitudin bibendum. Mauris nec lectus sed urna
-        maximus bibendum.</span></p>
+        <div class="odr-paragraph">
+          <span style="font-family:'Liberation Sans';" contenteditable="true"
+          data-odr-path="/child:0/row:0/child:1/child:0/child:0">Lorem ipsum
+          dolor sit amet, consectetur adipiscing elit. Sed cursus tristique
+          urna, non condimentum augue iaculis eget. Donec eu diam in ante
+          cursus finibus in sed tellus. Integer eros velit, luctus in congue a,
+          cursus non nisi. Praesent mollis mauris et enim dapibus, non finibus
+          risus sodales. Maecenas laoreet fermentum ultrices. Fusce finibus
+          faucibus diam, sed lobortis metus hendrerit sed. Maecenas sed est
+          sem. Cras eget tortor a odio tempor malesuada quis ac dolor. Sed non
+          sodales lorem. Duis cursus purus at sollicitudin bibendum. Mauris nec
+          lectus sed urna maximus bibendum.</span>
+        </div>
       </td>
       <td></td>
       <td></td>
@@ -109,24 +113,28 @@
       "text-align:center;vertical-align:middle;height:0.341700in;max-height:0.341700in;">
       2</td>
       <td>
-        <p><span style="font-family:'Liberation Sans';" contenteditable="true"
-        data-odr-path="/child:0/row:1/child:0/child:0/child:0">with double row
-        height</span></p>
+        <div class="odr-paragraph">
+          <span style="font-family:'Liberation Sans';" contenteditable="true"
+          data-odr-path="/child:0/row:1/child:0/child:0/child:0">with double
+          row height</span>
+        </div>
       </td>
       <td>
-        <p><span style=
-        "font-family:'Liberation Serif';font-size:10.000000pt;font-weight:normal;font-style:normal;text-shadow:none;"
-        contenteditable="true" data-odr-path=
-        "/child:0/row:1/child:1/child:0/child:0">Lorem ipsum dolor sit amet,
-        consectetur adipiscing elit. Sed cursus tristique urna, non condimentum
-        augue iaculis eget. Donec eu diam in ante cursus finibus in sed tellus.
-        Integer eros velit, luctus in congue a, cursus non nisi. Praesent
-        mollis mauris et enim dapibus, non finibus risus sodales. Maecenas
-        laoreet fermentum ultrices. Fusce finibus faucibus diam, sed lobortis
-        metus hendrerit sed. Maecenas sed est sem. Cras eget tortor a odio
-        tempor malesuada quis ac dolor. Sed non sodales lorem. Duis cursus
-        purus at sollicitudin bibendum. Mauris nec lectus sed urna maximus
-        bibendum.</span></p>
+        <div class="odr-paragraph">
+          <span style=
+          "font-family:'Liberation Serif';font-size:10.000000pt;font-weight:normal;font-style:normal;text-shadow:none;"
+          contenteditable="true" data-odr-path=
+          "/child:0/row:1/child:1/child:0/child:0">Lorem ipsum dolor sit amet,
+          consectetur adipiscing elit. Sed cursus tristique urna, non
+          condimentum augue iaculis eget. Donec eu diam in ante cursus finibus
+          in sed tellus. Integer eros velit, luctus in congue a, cursus non
+          nisi. Praesent mollis mauris et enim dapibus, non finibus risus
+          sodales. Maecenas laoreet fermentum ultrices. Fusce finibus faucibus
+          diam, sed lobortis metus hendrerit sed. Maecenas sed est sem. Cras
+          eget tortor a odio tempor malesuada quis ac dolor. Sed non sodales
+          lorem. Duis cursus purus at sollicitudin bibendum. Mauris nec lectus
+          sed urna maximus bibendum.</span>
+        </div>
       </td>
       <td></td>
       <td></td>
@@ -136,27 +144,32 @@
       "text-align:center;vertical-align:middle;height:0.178000in;max-height:0.178000in;">
       3</td>
       <td>
-        <p><span style="font-family:'Liberation Sans';" contenteditable="true"
-        data-odr-path="/child:0/row:2/child:0/child:0/child:0">with row height
-        and right next</span></p>
+        <div class="odr-paragraph">
+          <span style="font-family:'Liberation Sans';" contenteditable="true"
+          data-odr-path="/child:0/row:2/child:0/child:0/child:0">with row
+          height and right next</span>
+        </div>
       </td>
       <td>
-        <p><span style="font-family:'Liberation Sans';" contenteditable="true"
-        data-odr-path="/child:0/row:2/child:1/child:0/child:0">Lorem ipsum
-        dolor sit amet, consectetur adipiscing elit. Sed cursus tristique urna,
-        non condimentum augue iaculis eget. Donec eu diam in ante cursus
-        finibus in sed tellus. Integer eros velit, luctus in congue a, cursus
-        non nisi. Praesent mollis mauris et enim dapibus, non finibus risus
-        sodales. Maecenas laoreet fermentum ultrices. Fusce finibus faucibus
-        diam, sed lobortis metus hendrerit sed. Maecenas sed est sem. Cras eget
-        tortor a odio tempor malesuada quis ac dolor. Sed non sodales lorem.
-        Duis cursus purus at sollicitudin bibendum. Mauris nec lectus sed urna
-        maximus bibendum.</span></p>
+        <div class="odr-paragraph">
+          <span style="font-family:'Liberation Sans';" contenteditable="true"
+          data-odr-path="/child:0/row:2/child:1/child:0/child:0">Lorem ipsum
+          dolor sit amet, consectetur adipiscing elit. Sed cursus tristique
+          urna, non condimentum augue iaculis eget. Donec eu diam in ante
+          cursus finibus in sed tellus. Integer eros velit, luctus in congue a,
+          cursus non nisi. Praesent mollis mauris et enim dapibus, non finibus
+          risus sodales. Maecenas laoreet fermentum ultrices. Fusce finibus
+          faucibus diam, sed lobortis metus hendrerit sed. Maecenas sed est
+          sem. Cras eget tortor a odio tempor malesuada quis ac dolor. Sed non
+          sodales lorem. Duis cursus purus at sollicitudin bibendum. Mauris nec
+          lectus sed urna maximus bibendum.</span>
+        </div>
       </td>
       <td>
-        <p><span style="font-family:'Liberation Sans';" contenteditable="true"
-        data-odr-path=
-        "/child:0/row:2/child:2/child:0/child:0">content</span></p>
+        <div class="odr-paragraph">
+          <span style="font-family:'Liberation Sans';" contenteditable="true"
+          data-odr-path="/child:0/row:2/child:2/child:0/child:0">content</span>
+        </div>
       </td>
       <td></td>
     </tr>
@@ -165,28 +178,33 @@
       "text-align:center;vertical-align:middle;height:0.178000in;max-height:0.178000in;">
       4</td>
       <td>
-        <p><span style="font-family:'Liberation Sans';" contenteditable="true"
-        data-odr-path="/child:0/row:3/child:0/child:0/child:0">with row height
-        and right next</span></p>
+        <div class="odr-paragraph">
+          <span style="font-family:'Liberation Sans';" contenteditable="true"
+          data-odr-path="/child:0/row:3/child:0/child:0/child:0">with row
+          height and right next</span>
+        </div>
       </td>
       <td>
-        <p><span style="font-family:'Liberation Sans';" contenteditable="true"
-        data-odr-path="/child:0/row:3/child:1/child:0/child:0">Lorem ipsum
-        dolor sit amet, consectetur adipiscing elit. Sed cursus tristique urna,
-        non condimentum augue iaculis eget. Donec eu diam in ante cursus
-        finibus in sed tellus. Integer eros velit, luctus in congue a, cursus
-        non nisi. Praesent mollis mauris et enim dapibus, non finibus risus
-        sodales. Maecenas laoreet fermentum ultrices. Fusce finibus faucibus
-        diam, sed lobortis metus hendrerit sed. Maecenas sed est sem. Cras eget
-        tortor a odio tempor malesuada quis ac dolor. Sed non sodales lorem.
-        Duis cursus purus at sollicitudin bibendum. Mauris nec lectus sed urna
-        maximus bibendum.</span></p>
+        <div class="odr-paragraph">
+          <span style="font-family:'Liberation Sans';" contenteditable="true"
+          data-odr-path="/child:0/row:3/child:1/child:0/child:0">Lorem ipsum
+          dolor sit amet, consectetur adipiscing elit. Sed cursus tristique
+          urna, non condimentum augue iaculis eget. Donec eu diam in ante
+          cursus finibus in sed tellus. Integer eros velit, luctus in congue a,
+          cursus non nisi. Praesent mollis mauris et enim dapibus, non finibus
+          risus sodales. Maecenas laoreet fermentum ultrices. Fusce finibus
+          faucibus diam, sed lobortis metus hendrerit sed. Maecenas sed est
+          sem. Cras eget tortor a odio tempor malesuada quis ac dolor. Sed non
+          sodales lorem. Duis cursus purus at sollicitudin bibendum. Mauris nec
+          lectus sed urna maximus bibendum.</span>
+        </div>
       </td>
       <td></td>
       <td>
-        <p><span style="font-family:'Liberation Sans';" contenteditable="true"
-        data-odr-path=
-        "/child:0/row:3/child:3/child:0/child:0">content</span></p>
+        <div class="odr-paragraph">
+          <span style="font-family:'Liberation Sans';" contenteditable="true"
+          data-odr-path="/child:0/row:3/child:3/child:0/child:0">content</span>
+        </div>
       </td>
     </tr>
     <tr style="height:7.793700in;">
@@ -194,24 +212,28 @@
       "text-align:center;vertical-align:middle;height:7.793700in;max-height:7.793700in;">
       5</td>
       <td>
-        <p><span style="font-family:'Liberation Sans';" contenteditable="true"
-        data-odr-path="/child:0/row:4/child:0/child:0/child:0">without row
-        height</span></p>
+        <div class="odr-paragraph">
+          <span style="font-family:'Liberation Sans';" contenteditable="true"
+          data-odr-path="/child:0/row:4/child:0/child:0/child:0">without row
+          height</span>
+        </div>
       </td>
       <td>
-        <p><span style=
-        "font-family:'Liberation Serif';font-size:10.000000pt;font-weight:normal;font-style:normal;text-shadow:none;"
-        contenteditable="true" data-odr-path=
-        "/child:0/row:4/child:1/child:0/child:0">Lorem ipsum dolor sit amet,
-        consectetur adipiscing elit. Sed cursus tristique urna, non condimentum
-        augue iaculis eget. Donec eu diam in ante cursus finibus in sed tellus.
-        Integer eros velit, luctus in congue a, cursus non nisi. Praesent
-        mollis mauris et enim dapibus, non finibus risus sodales. Maecenas
-        laoreet fermentum ultrices. Fusce finibus faucibus diam, sed lobortis
-        metus hendrerit sed. Maecenas sed est sem. Cras eget tortor a odio
-        tempor malesuada quis ac dolor. Sed non sodales lorem. Duis cursus
-        purus at sollicitudin bibendum. Mauris nec lectus sed urna maximus
-        bibendum.</span></p>
+        <div class="odr-paragraph">
+          <span style=
+          "font-family:'Liberation Serif';font-size:10.000000pt;font-weight:normal;font-style:normal;text-shadow:none;"
+          contenteditable="true" data-odr-path=
+          "/child:0/row:4/child:1/child:0/child:0">Lorem ipsum dolor sit amet,
+          consectetur adipiscing elit. Sed cursus tristique urna, non
+          condimentum augue iaculis eget. Donec eu diam in ante cursus finibus
+          in sed tellus. Integer eros velit, luctus in congue a, cursus non
+          nisi. Praesent mollis mauris et enim dapibus, non finibus risus
+          sodales. Maecenas laoreet fermentum ultrices. Fusce finibus faucibus
+          diam, sed lobortis metus hendrerit sed. Maecenas sed est sem. Cras
+          eget tortor a odio tempor malesuada quis ac dolor. Sed non sodales
+          lorem. Duis cursus purus at sollicitudin bibendum. Mauris nec lectus
+          sed urna maximus bibendum.</span>
+        </div>
       </td>
       <td></td>
       <td></td>

@@ -14,15 +14,15 @@
   body {
   padding: 5px;
   }
-  p {
+  .odr-paragraph {
   padding: 0;
   }
-  p:after {
+  .odr-paragraph:after {
   content: "";
   display: inline-block;
   width: 0;
   }
-  p:empty:after {
+  .odr-paragraph:empty:after {
   width: 0.01mm;
   }
   span {
@@ -39,14 +39,18 @@
     <div>
       <div style=
       "display:block;position:absolute;left:0.550787in;top:0.329528in;width:9.917323in;height:1.380315in;">
-        <p><span><span contenteditable="true" data-odr-path=
-        "/child:2/child:0/child:0/child:0/child:0/child:0">title3 -
-        drawing</span></span></p>
+        <div class="odr-paragraph">
+          <span><span contenteditable="true" data-odr-path=
+          "/child:2/child:0/child:0/child:0/child:0/child:0">title3 -
+          drawing</span></span>
+        </div>
       </div>
       <div style=
       "display:block;position:absolute;left:3.998425in;top:3.901968in;width:2.998819in;height:1.600000in;">
-        <p><span><span contenteditable="true" data-odr-path=
-        "/child:2/child:1/child:0/child:0/child:0/child:0">Test</span></span></p>
+        <div class="odr-paragraph">
+          <span><span contenteditable="true" data-odr-path=
+          "/child:2/child:1/child:0/child:0/child:0/child:0">Test</span></span>
+        </div>
       </div>
     </div>
   </div>
