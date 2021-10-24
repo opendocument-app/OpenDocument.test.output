@@ -1,29 +1,35 @@
 # OpenDocument.test.output
+
 related to [OpenDocument.core](https://github.com/opendocument-app/OpenDocument.core) and [OpenDocument.test](https://github.com/opendocument-app/OpenDocument.test)
 
 ## Versions
-- [OpenDocument.core 19f8594](https://github.com/opendocument-app/OpenDocument.core/tree/19f85948de999bc8f69328ef581f653b401fc9ba)
-- [OpenDocument.test 16165cb](https://github.com/opendocument-app/OpenDocument.test/tree/16165cb832a52cb7dbf4c13613dff29e3eb5d6bb)
+
+- [OpenDocument.core 9e73001](https://github.com/opendocument-app/OpenDocument.core/tree/9e7300110f5164a2ba39fc27fda684be6525d766)
+- [OpenDocument.test 24607be](https://github.com/opendocument-app/OpenDocument.test/tree/24607be4e10e251787b237fff0da6ed29d381847)
 
 ## HTML config
-default + editable
 
 ```
 struct Config {
-  std::uint32_t entryOffset{0};
-  std::uint32_t entryCount{0};
-  bool splitEntries{false};
+  bool compact_presentation{false};
+  bool compact_spreadsheet{false};
+  bool compact_drawing{false};
+
+  std::string text_document_output_file_name{"document.html"};
+  std::string presentation_output_file_name{"presentation.html"};
+  std::string spreadsheet_output_file_name{"spreadsheet.html"};
+  std::string drawing_output_file_name{"drawing.html"};
+
+  std::string slide_output_file_name{"slide{index}.html"};
+  std::string sheet_output_file_name{"sheet{index}.html"};
+  std::string page_output_file_name{"page{index}.html"};
+
   bool editable{true};
 
-  std::uint32_t tableOffsetRows{0};
-  std::uint32_t tableOffsetCols{0};
-  std::uint32_t tableLimitRows{10000};
-  std::uint32_t tableLimitCols{500};
-  bool tableLimitByDimensions{true};
-  TableGridlines tableGridlines{TableGridlines::SOFT};
+  bool text_document_margin{false};
+
+  std::optional<TableDimensions> spreadsheet_limit{TableDimensions(4000, 500)};
+  bool spreadsheet_limit_by_content{true};
+  HtmlTableGridlines spreadsheet_gridlines{HtmlTableGridlines::soft};
 };
 ```
-
-## Formatting
-used `format-html.sh` and `format-json.sh` to format outputs
-
