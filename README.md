@@ -4,8 +4,8 @@ related to [OpenDocument.core](https://github.com/opendocument-app/OpenDocument.
 
 ## Versions
 
-- [OpenDocument.core 9e73001](https://github.com/opendocument-app/OpenDocument.core/tree/9e7300110f5164a2ba39fc27fda684be6525d766)
-- [OpenDocument.test 24607be](https://github.com/opendocument-app/OpenDocument.test/tree/24607be4e10e251787b237fff0da6ed29d381847)
+- [OpenDocument.core 56b3a2e](https://github.com/opendocument-app/OpenDocument.core/tree/56b3a2e3d9a0fb6d26689ee57d31d78642162160)
+- [OpenDocument.test c22f1a1](https://github.com/opendocument-app/OpenDocument.test/tree/c22f1a1b1d6050f99f0f9c603818fb7b8a96ace7)
 
 ## HTML config
 
