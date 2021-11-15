@@ -2,11 +2,6 @@
 
 related to [OpenDocument.core](https://github.com/opendocument-app/OpenDocument.core) and [OpenDocument.test](https://github.com/opendocument-app/OpenDocument.test)
 
-## Versions
-
-- [OpenDocument.core 56b3a2e](https://github.com/opendocument-app/OpenDocument.core/tree/56b3a2e3d9a0fb6d26689ee57d31d78642162160)
-- [OpenDocument.test c22f1a1](https://github.com/opendocument-app/OpenDocument.test/tree/c22f1a1b1d6050f99f0f9c603818fb7b8a96ace7)
-
 ## HTML config
 
 ```
