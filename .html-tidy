@@ -26,7 +26,7 @@ escape-scripts: yes
 fix-backslash: yes
 fix-bad-comments: auto
 fix-style-tags: yes
-fix-uri: yes
+fix-uri: no
 force-output: yes
 gdoc: no
 gnu-emacs: no
@@ -52,10 +52,10 @@ merge-spans: auto
 mute: 
 mute-id: no
 ncr: yes
-new-blocklevel-tags: 
-new-empty-tags: 
-new-inline-tags: 
-new-pre-tags: 
+new-blocklevel-tags:
+new-empty-tags:
+new-inline-tags:
+new-pre-tags:
 newline: LF
 numeric-entities: no
 omit-optional-tags: no
@@ -80,7 +80,7 @@ show-info: yes
 show-meta-change: no
 show-warnings: yes
 skip-nested: yes
-sort-attributes: none
+sort-attributes: alpha
 strict-tags-attributes: no
 tab-size: 4
 tidy-mark: no
@@ -89,11 +89,11 @@ uppercase-tags: no
 vertical-space: no
 warn-proprietary-attributes: yes
 word-2000: no
-wrap: 80
-wrap-asp: yes
+wrap: 0
+wrap-asp: no
 wrap-attributes: no
-wrap-jste: yes
-wrap-php: yes
+wrap-jste: no
+wrap-php: no
 wrap-script-literals: no
-wrap-sections: yes
+wrap-sections: no
 write-back: no
