@@ -1,1 +1,1 @@
-*{margin:0;position:relative}body{padding:5px}x-p{display:block;font-size:0}x-s{display:inline}mark{background:#ff0}mark.current{background:orange}
+*{margin:0;position:relative}body{padding:5px}x-p{display:block;font-size:0}x-s{display:inline}.odr-background{background-color:#d3d3d3;display:flex}.odr-pages{padding-left:2cm;padding-right:2cm;padding-top:2cm}.odr-page-outer,.odr-pages{margin-left:auto;margin-right:auto}.odr-page-outer{background-color:#fff;display:flex;margin-bottom:2cm;z-index:-1000}mark{background:#ff0}mark.current{background:orange}
