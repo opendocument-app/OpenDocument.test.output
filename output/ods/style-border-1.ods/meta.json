@@ -1,5 +1,7 @@
 {
-    "encrypted": false,
+    "documentType": "spreadsheet",
     "entryCount": 3,
-    "type": "ods"
+    "fileCategory": "document",
+    "fileType": "ods",
+    "isEncrypted": false
 }

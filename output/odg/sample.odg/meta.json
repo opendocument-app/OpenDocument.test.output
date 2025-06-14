@@ -1,4 +1,6 @@
 {
-    "encrypted": false,
-    "type": "odg"
+    "documentType": "drawing",
+    "fileCategory": "document",
+    "fileType": "odg",
+    "isEncrypted": false
 }

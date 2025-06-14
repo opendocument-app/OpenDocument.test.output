@@ -1,4 +1,6 @@
 {
-    "encrypted": false,
-    "type": "pptx"
+    "documentType": "presentation",
+    "fileCategory": "document",
+    "fileType": "pptx",
+    "isEncrypted": false
 }

@@ -1,4 +1,5 @@
 {
-    "encrypted": false,
-    "type": "unnamed"
+    "fileCategory": "unknown",
+    "fileType": "unknown",
+    "isEncrypted": false
 }

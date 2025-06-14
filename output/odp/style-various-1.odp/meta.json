@@ -1,4 +1,6 @@
 {
-    "encrypted": false,
-    "type": "odp"
+    "documentType": "presentation",
+    "fileCategory": "document",
+    "fileType": "odp",
+    "isEncrypted": false
 }

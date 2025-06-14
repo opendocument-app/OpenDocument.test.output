@@ -1,4 +1,6 @@
 {
-    "encrypted": false,
-    "type": "ods"
+    "documentType": "spreadsheet",
+    "fileCategory": "document",
+    "fileType": "ods",
+    "isEncrypted": false
 }

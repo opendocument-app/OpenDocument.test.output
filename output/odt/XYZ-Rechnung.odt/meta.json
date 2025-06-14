@@ -1,5 +1,7 @@
 {
-    "encrypted": false,
+    "documentType": "text",
     "entryCount": 1,
-    "type": "odt"
+    "fileCategory": "document",
+    "fileType": "odt",
+    "isEncrypted": false
 }

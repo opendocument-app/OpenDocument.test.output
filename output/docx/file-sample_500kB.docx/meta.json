@@ -1,4 +1,6 @@
 {
-    "encrypted": false,
-    "type": "docx"
+    "documentType": "text",
+    "fileCategory": "document",
+    "fileType": "docx",
+    "isEncrypted": false
 }

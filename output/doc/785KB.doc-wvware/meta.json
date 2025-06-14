@@ -1,4 +1,6 @@
 {
-    "encrypted": false,
-    "type": "doc"
+    "documentType": "unknown",
+    "fileCategory": "document",
+    "fileType": "doc",
+    "isEncrypted": false
 }

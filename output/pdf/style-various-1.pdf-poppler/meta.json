@@ -1,5 +1,7 @@
 {
-    "encrypted": false,
+    "documentType": "text",
     "entryCount": 2,
-    "type": "pdf"
+    "fileCategory": "unknown",
+    "fileType": "pdf",
+    "isEncrypted": false
 }
