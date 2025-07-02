@@ -1,6 +1,6 @@
 {
     "documentType": "spreadsheet",
     "fileCategory": "document",
-    "fileType": "ods",
-    "isEncrypted": true
+    "fileType": "xlsx",
+    "isEncrypted": false
 }

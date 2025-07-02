@@ -1,6 +1,5 @@
 {
-    "documentType": "spreadsheet",
-    "fileCategory": "document",
-    "fileType": "xlsx",
-    "isEncrypted": false
+    "fileCategory": "unknown",
+    "fileType": "unnamed",
+    "isEncrypted": true
 }

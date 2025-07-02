@@ -1,6 +1,5 @@
 {
-    "documentType": "text",
-    "fileCategory": "document",
-    "fileType": "docx",
-    "isEncrypted": false
+    "fileCategory": "unknown",
+    "fileType": "unnamed",
+    "isEncrypted": true
 }
