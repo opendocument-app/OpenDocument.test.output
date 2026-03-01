@@ -57,7 +57,7 @@
       <div>#ifndef ODR_OPEN_DOCUMENT_READER_H</div>
       <div>#define ODR_OPEN_DOCUMENT_READER_H</div>
       <div><br/></div>
-      <div>#include <string></div>
+      <div>#include &lt;string&gt;</div>
       <div><br/></div>
       <div>namespace odr {</div>
       <div>enum class FileType;</div>
@@ -69,27 +69,27 @@
       <div><br/></div>
       <div>class OpenDocumentReader final {</div>
       <div>public:</div>
-      <div>  [[nodiscard]] static std::string version() noexcept;</div>
-      <div>  [[nodiscard]] static std::string commit() noexcept;</div>
+      <div>&nbsp; [[nodiscard]] static std::string version() noexcept;</div>
+      <div>&nbsp; [[nodiscard]] static std::string commit() noexcept;</div>
       <div><br/></div>
-      <div>  [[nodiscard]] static FileType</div>
-      <div>  type_by_extension(const std::string &extension) noexcept;</div>
-      <div>  [[nodiscard]] static FileCategory category_by_type(FileType type) noexcept;</div>
-      <div>  [[nodiscard]] static std::string type_to_string(FileType type) noexcept;</div>
+      <div>&nbsp; [[nodiscard]] static FileType</div>
+      <div>&nbsp; type_by_extension(const std::string &amp;extension) noexcept;</div>
+      <div>&nbsp; [[nodiscard]] static FileCategory category_by_type(FileType type) noexcept;</div>
+      <div>&nbsp; [[nodiscard]] static std::string type_to_string(FileType type) noexcept;</div>
       <div><br/></div>
-      <div>  [[nodiscard]] static Html html(const std::string &input_path,</div>
-      <div>                                 const char *password,</div>
-      <div>                                 const std::string &output_path,</div>
-      <div>                                 const HtmlConfig &config);</div>
-      <div>  [[nodiscard]] static Html html(const TextFile &text_file,</div>
-      <div>                                 const std::string &output_path,</div>
-      <div>                                 const HtmlConfig &config);</div>
-      <div>  [[nodiscard]] static Html html(const Document &document,</div>
-      <div>                                 const std::string &output_path,</div>
-      <div>                                 const HtmlConfig &config);</div>
+      <div>&nbsp; [[nodiscard]] static Html html(const std::string &amp;input_path,</div>
+      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const char *password,</div>
+      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const std::string &amp;output_path,</div>
+      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const HtmlConfig &amp;config);</div>
+      <div>&nbsp; [[nodiscard]] static Html html(const TextFile &amp;text_file,</div>
+      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const std::string &amp;output_path,</div>
+      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const HtmlConfig &amp;config);</div>
+      <div>&nbsp; [[nodiscard]] static Html html(const Document &amp;document,</div>
+      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const std::string &amp;output_path,</div>
+      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const HtmlConfig &amp;config);</div>
       <div><br/></div>
       <div>private:</div>
-      <div>  OpenDocumentReader();</div>
+      <div>&nbsp; OpenDocumentReader();</div>
       <div>};</div>
       <div><br/></div>
       <div>} // namespace odr</div>
