@@ -1,103 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8"/>
-  <base target="_blank"/>
-  <title>odr</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes"/>
-  <link rel="stylesheet" href="../../../resources/text.css"/>
+	<meta charset="UTF-8"/>
+	<base target="_blank"/>
+	<title>odr</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes"/>
+	<link rel="stylesheet" href="../../../resources/text.css"/>
 </head>
 <body>
-  <div class="odr-text">
-    <div class="odr-text-nr">
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
-      <div>4</div>
-      <div>5</div>
-      <div>6</div>
-      <div>7</div>
-      <div>8</div>
-      <div>9</div>
-      <div>10</div>
-      <div>11</div>
-      <div>12</div>
-      <div>13</div>
-      <div>14</div>
-      <div>15</div>
-      <div>16</div>
-      <div>17</div>
-      <div>18</div>
-      <div>19</div>
-      <div>20</div>
-      <div>21</div>
-      <div>22</div>
-      <div>23</div>
-      <div>24</div>
-      <div>25</div>
-      <div>26</div>
-      <div>27</div>
-      <div>28</div>
-      <div>29</div>
-      <div>30</div>
-      <div>31</div>
-      <div>32</div>
-      <div>33</div>
-      <div>34</div>
-      <div>35</div>
-      <div>36</div>
-      <div>37</div>
-      <div>38</div>
-      <div>39</div>
-      <div>40</div>
-      <div>41</div>
-      <div>42</div>
-    </div>
-    <div class="odr-text-body odr-text-wrap" contenteditable="true">
-      <div>#ifndef ODR_OPEN_DOCUMENT_READER_H</div>
-      <div>#define ODR_OPEN_DOCUMENT_READER_H</div>
-      <div><br/></div>
-      <div>#include &lt;string&gt;</div>
-      <div><br/></div>
-      <div>namespace odr {</div>
-      <div>enum class FileType;</div>
-      <div>enum class FileCategory;</div>
-      <div>class TextFile;</div>
-      <div>class Document;</div>
-      <div>class Html;</div>
-      <div>struct HtmlConfig;</div>
-      <div><br/></div>
-      <div>class OpenDocumentReader final {</div>
-      <div>public:</div>
-      <div>&nbsp; [[nodiscard]] static std::string version() noexcept;</div>
-      <div>&nbsp; [[nodiscard]] static std::string commit() noexcept;</div>
-      <div><br/></div>
-      <div>&nbsp; [[nodiscard]] static FileType</div>
-      <div>&nbsp; type_by_extension(const std::string &amp;extension) noexcept;</div>
-      <div>&nbsp; [[nodiscard]] static FileCategory category_by_type(FileType type) noexcept;</div>
-      <div>&nbsp; [[nodiscard]] static std::string type_to_string(FileType type) noexcept;</div>
-      <div><br/></div>
-      <div>&nbsp; [[nodiscard]] static Html html(const std::string &amp;input_path,</div>
-      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const char *password,</div>
-      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const std::string &amp;output_path,</div>
-      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const HtmlConfig &amp;config);</div>
-      <div>&nbsp; [[nodiscard]] static Html html(const TextFile &amp;text_file,</div>
-      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const std::string &amp;output_path,</div>
-      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const HtmlConfig &amp;config);</div>
-      <div>&nbsp; [[nodiscard]] static Html html(const Document &amp;document,</div>
-      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const std::string &amp;output_path,</div>
-      <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const HtmlConfig &amp;config);</div>
-      <div><br/></div>
-      <div>private:</div>
-      <div>&nbsp; OpenDocumentReader();</div>
-      <div>};</div>
-      <div><br/></div>
-      <div>} // namespace odr</div>
-      <div><br/></div>
-      <div>#endif // ODR_OPEN_DOCUMENT_READER_H</div>
-      <div><br/></div>
-    </div>
-  </div>
-  <script type="text/javascript" src="../../../resources/text.js"></script>
+	<div class="odr-text">
+		<div class="odr-text-nr">
+			<div>1</div>
+			<div>2</div>
+			<div>3</div>
+			<div>4</div>
+			<div>5</div>
+			<div>6</div>
+			<div>7</div>
+			<div>8</div>
+			<div>9</div>
+			<div>10</div>
+			<div>11</div>
+			<div>12</div>
+			<div>13</div>
+			<div>14</div>
+			<div>15</div>
+			<div>16</div>
+			<div>17</div>
+			<div>18</div>
+			<div>19</div>
+			<div>20</div>
+			<div>21</div>
+			<div>22</div>
+			<div>23</div>
+			<div>24</div>
+			<div>25</div>
+			<div>26</div>
+			<div>27</div>
+			<div>28</div>
+			<div>29</div>
+			<div>30</div>
+			<div>31</div>
+			<div>32</div>
+			<div>33</div>
+			<div>34</div>
+			<div>35</div>
+			<div>36</div>
+			<div>37</div>
+			<div>38</div>
+			<div>39</div>
+			<div>40</div>
+			<div>41</div>
+			<div>42</div>
+		</div>
+		<div class="odr-text-body odr-text-wrap" contenteditable="true">
+			<div>#ifndef ODR_OPEN_DOCUMENT_READER_H</div>
+			<div>#define ODR_OPEN_DOCUMENT_READER_H</div>
+			<div><br/></div>
+			<div>#include &lt;string&gt;</div>
+			<div><br/></div>
+			<div>namespace odr {</div>
+			<div>enum class FileType;</div>
+			<div>enum class FileCategory;</div>
+			<div>class TextFile;</div>
+			<div>class Document;</div>
+			<div>class Html;</div>
+			<div>struct HtmlConfig;</div>
+			<div><br/></div>
+			<div>class OpenDocumentReader final {</div>
+			<div>public:</div>
+			<div>&nbsp; [[nodiscard]] static std::string version() noexcept;</div>
+			<div>&nbsp; [[nodiscard]] static std::string commit() noexcept;</div>
+			<div><br/></div>
+			<div>&nbsp; [[nodiscard]] static FileType</div>
+			<div>&nbsp; type_by_extension(const std::string &amp;extension) noexcept;</div>
+			<div>&nbsp; [[nodiscard]] static FileCategory category_by_type(FileType type) noexcept;</div>
+			<div>&nbsp; [[nodiscard]] static std::string type_to_string(FileType type) noexcept;</div>
+			<div><br/></div>
+			<div>&nbsp; [[nodiscard]] static Html html(const std::string &amp;input_path,</div>
+			<div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const char *password,</div>
+			<div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const std::string &amp;output_path,</div>
+			<div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const HtmlConfig &amp;config);</div>
+			<div>&nbsp; [[nodiscard]] static Html html(const TextFile &amp;text_file,</div>
+			<div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const std::string &amp;output_path,</div>
+			<div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const HtmlConfig &amp;config);</div>
+			<div>&nbsp; [[nodiscard]] static Html html(const Document &amp;document,</div>
+			<div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const std::string &amp;output_path,</div>
+			<div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const HtmlConfig &amp;config);</div>
+			<div><br/></div>
+			<div>private:</div>
+			<div>&nbsp; OpenDocumentReader();</div>
+			<div>};</div>
+			<div><br/></div>
+			<div>} // namespace odr</div>
+			<div><br/></div>
+			<div>#endif // ODR_OPEN_DOCUMENT_READER_H</div>
+			<div><br/></div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../../../resources/text.js"></script>
 </body>
 </html>
