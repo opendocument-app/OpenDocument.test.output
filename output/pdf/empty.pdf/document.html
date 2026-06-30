@@ -12,6 +12,12 @@
 </head>
 <body>
 	<div class="p x1 y1">
+		<div class="vis" aria-hidden="true">
+		</div>
+		<div class="sel">
+		</div>
 	</div>
+	<script>(function(){if(!window.IntersectionObserver)return;var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;io.unobserve(e.target);var s=e.target.querySelectorAll('.sel span[data-w]'),n=s.length,w=new Array(n),f=new Array(n),i,k;for(i=0;i<n;i++){f[i]=getComputedStyle(s[i]).transform==='none';w[i]=s[i].getBoundingClientRect().width;}for(i=0;i<n;i++){if(f[i]&&w[i]>0){k=parseFloat(s[i].getAttribute('data-w'))/w[i];s[i].style.transform='scaleX('+k+')';}}})},{rootMargin:'200px'});document.querySelectorAll('.p').forEach(function(p){io.observe(p);});})();
+	</script>
 </body>
 </html>
