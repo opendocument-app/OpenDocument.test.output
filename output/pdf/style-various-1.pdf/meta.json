@@ -1,5 +1,11 @@
 {
+    "author": "Andreas Stefl",
+    "creationDate": "D:20231230142254+01'00'",
+    "creator": "Writer",
+    "documentType": "text",
+    "entryCount": 2,
     "fileCategory": "unknown",
     "fileType": "pdf",
-    "isEncrypted": false
+    "isEncrypted": false,
+    "producer": "LibreOffice 7.5"
 }

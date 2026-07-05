@@ -1,5 +1,10 @@
 {
+    "creationDate": "D:20231230142342+01'00'",
+    "creator": "Writer",
+    "documentType": "text",
+    "entryCount": 1,
     "fileCategory": "unknown",
     "fileType": "pdf",
-    "isEncrypted": false
+    "isEncrypted": false,
+    "producer": "LibreOffice 7.5"
 }

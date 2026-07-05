@@ -1,5 +1,9 @@
 {
+    "creator": "PDFium",
+    "documentType": "text",
+    "entryCount": 1,
     "fileCategory": "unknown",
     "fileType": "pdf",
-    "isEncrypted": false
+    "isEncrypted": false,
+    "producer": "PDFium"
 }
