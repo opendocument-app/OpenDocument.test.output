@@ -17,8 +17,7 @@
   var pinnedRow = null;
   var pinnedCell = null;
 
-  // Column 0 is the gutter: lighting it would tint every row number rather
-  // than say anything about the row under the pointer.
+  // Column 0 is the gutter, which labels no column.
   function columnRule(index, wash, scope) {
     if (index < 1) {
       return "";
@@ -36,8 +35,7 @@
     );
   }
 
-  // The ruler reacts harder than the cells do: it is the label you are looking
-  // for when you follow a column, and the cells only have to be grouped.
+  // The ruler reacts harder than the cells: it is the label being followed.
   function paint() {
     style.textContent =
       columnRule(hovered, "var(--odr-sheet-wash)", "") +
@@ -90,8 +88,7 @@
       return;
     }
 
-    // Clicking what is already pinned clears it, so there is a way back out
-    // without a second gesture to learn.
+    // Clicking what is pinned clears it.
     if (cell === pinnedCell) {
       pin(-1, null, null);
       return;
@@ -119,9 +116,8 @@
   var sortedColumn = -1;
   var sortedDirection = 0;
 
-  // The rendered text is all a sorted view has to go on: the number behind it
-  // is not in the markup. Whichever separator comes last is the decimal one,
-  // which settles 1,234.56 against 1.234,56 without knowing the locale.
+  // Only the rendered text is in the markup, not the number behind it. The last
+  // separator is the decimal one, which settles 1,234.56 against 1.234,56.
   function toNumber(text) {
     var cleaned = text.replace(/[^0-9,.eE+-]/g, "");
     if (cleaned.lastIndexOf(",") > cleaned.lastIndexOf(".")) {
@@ -133,8 +129,7 @@
     return isFinite(value) ? value : NaN;
   }
 
-  // Numbers, then text, then blanks — a column of figures under a label sorts
-  // by its figures, and a column is not forced into one kind throughout.
+  // Numbers, then text, then blanks: no column is forced into one kind.
   var NUMBER = 0;
   var TEXT = 1;
   var BLANK = 2;
@@ -177,9 +172,8 @@
       keys.set(rows[i], keyOf(rows[i], index));
     }
 
-    // A blank is the absence of a value rather than the smallest one, so it
-    // stays last either way round. The sort is stable, so ties keep the order
-    // the document had them in.
+    // A blank is an absent value, not the smallest one, so it stays last either
+    // way round. The stable sort keeps the document's order for ties.
     rows.sort(function (a, b) {
       var x = keys.get(a);
       var y = keys.get(b);
@@ -198,9 +192,8 @@
     reorder(rows);
   }
 
-  // Merged cells and a reordered sheet do not mix: a `rowspan` reaches into a
-  // row that would no longer be beneath it, and a `colspan` breaks the column
-  // index this sorts by. Such a sheet gets no sort control at all.
+  // A `rowspan` would reach into a row no longer beneath it and a `colspan`
+  // breaks the column index, so a merged sheet gets no sort control.
   if (!merged) {
     var headers = table.tHead.rows[0].children;
     for (var column = 1; column < headers.length; ++column) {

@@ -14,7 +14,6 @@ body{background:#fff;color:#1f2328;font:13px/1.5 var(--odr-files-font)}
 .odr-files-directory .odr-files-name{color:var(--odr-files-muted)}
 .odr-files-size{width:1%;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--odr-files-muted)}
 .odr-files-action{width:1%;white-space:nowrap}
-/* U+2193 rather than one of the download glyphs: those are missing from
-   enough system fonts to show a tofu box, and this one is in all of them. */
+/* U+2193: the download glyphs are missing from enough system fonts to tofu. */
 .odr-files-action a{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:4px;color:var(--odr-files-muted);font-size:15px;line-height:1;text-decoration:none}
 .odr-files-action a:hover{background:rgba(0,0,0,.07);color:var(--odr-files-link)}
