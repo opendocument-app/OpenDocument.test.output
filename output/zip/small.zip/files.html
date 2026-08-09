@@ -5,56 +5,22 @@
 	<base target="_blank"/>
 	<title>odr</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes"/>
-	<style>
-		*{font-family:monospace;}
-	</style>
+	<link rel="stylesheet" href="../../../resources/filesystem.css"/>
 </head>
 <body>
-	<p>
-		<span>
-			/hello.txt
-		</span>
-		<span>
-			 
-		</span>
-		<span>
-			file
-		</span>
-		<span>
-			 
-		</span>
-		<span>
-			14
-		</span>
-		<span>
-			 
-		</span>
-		<a href="data:application/octet-stream;base64,SGVsbG8sIHdvcmxkIQo=" download="hello.txt">
-			download
-		</a>
-	</p>
-	<p>
-		<span>
-			/nested/note.txt
-		</span>
-		<span>
-			 
-		</span>
-		<span>
-			file
-		</span>
-		<span>
-			 
-		</span>
-		<span>
-			33
-		</span>
-		<span>
-			 
-		</span>
-		<a href="data:application/octet-stream;base64,QSB6aXAgcmVuZGVycyBhcyBhIGZpbGUgbGlzdGluZy4K" download="note.txt">
-			download
-		</a>
-	</p>
+	<table class="odr-files">
+		<tbody>
+			<tr>
+				<td class="odr-files-name">/hello.txt</td>
+				<td class="odr-files-size">14 B</td>
+				<td class="odr-files-action"><a href="data:application/octet-stream;base64,SGVsbG8sIHdvcmxkIQo=" download="hello.txt" title="hello.txt">↓</a></td>
+			</tr>
+			<tr>
+				<td class="odr-files-name">/nested/note.txt</td>
+				<td class="odr-files-size">33 B</td>
+				<td class="odr-files-action"><a href="data:application/octet-stream;base64,QSB6aXAgcmVuZGVycyBhcyBhIGZpbGUgbGlzdGluZy4K" download="note.txt" title="note.txt">↓</a></td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

@@ -1,1 +1,47 @@
-table{border-collapse:collapse;table-layout:fixed}td{height:inherit;text-overflow:ellipsis;vertical-align:bottom}x-p{font-family:Arial,serif;font-size:10pt}td x-p{height:inherit}.odr-gridlines-soft table td{border-left:1px solid silver;border-top:1px solid silver}.odr-gridlines-hard table td{border:1px solid silver!important}table td.odr-value-type-float{text-align:right}
+
+:root{
+--odr-sheet-line:#e3e5e8;
+--odr-sheet-rule:#c8ccd1;
+--odr-sheet-ruler:#f5f6f7;
+--odr-sheet-ruler-text:#5c6169;
+--odr-sheet-canvas:#eceef1;
+--odr-sheet-wash:rgba(0,0,0,.045);
+--odr-sheet-wash-pinned:rgba(0,0,0,.09);
+--odr-sheet-wash-ruler:rgba(0,0,0,.10);
+--odr-sheet-focus:#3c78dc;
+--odr-sheet-font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+/* A sheet is not a page: it reaches the window edge, so the ruler can pin
+   itself there, and what lies past the last row and column is canvas rather
+   than more sheet. */
+body{background:var(--odr-sheet-canvas)}
+.odr-sheet{background:#fff}
+table{border-collapse:collapse;table-layout:fixed}
+td{vertical-align:bottom;height:inherit;padding:1px 6px}
+x-p{font-family:var(--odr-sheet-font);font-size:10pt}
+td x-p{height:inherit}
+/* The ruler sticks to the edges it labels. Sticky cells in a collapsed border
+   model do not repaint their borders in Chrome or WebKit, so the ruler draws
+   its own with inset shadows and leaves `border` to the grid. */
+.odr-sheet th{position:sticky;background:var(--odr-sheet-ruler);color:var(--odr-sheet-ruler-text);font:500 12px/1.6 var(--odr-sheet-font);text-align:center;vertical-align:middle;padding:0 4px;white-space:nowrap;user-select:none}
+.odr-sheet thead th{top:0;z-index:2;height:24px;box-shadow:inset 0 -1px 0 var(--odr-sheet-rule),inset -1px 0 0 var(--odr-sheet-line)}
+.odr-sheet-row-header{left:0;z-index:1;box-shadow:inset -1px 0 0 var(--odr-sheet-rule),inset 0 -1px 0 var(--odr-sheet-line)}
+.odr-sheet-corner{left:0;z-index:3;box-shadow:inset -1px 0 0 var(--odr-sheet-rule),inset 0 -1px 0 var(--odr-sheet-rule)}
+.odr-gridlines-soft .odr-sheet td{border-top:1px solid var(--odr-sheet-line);border-left:1px solid var(--odr-sheet-line)}
+.odr-gridlines-hard .odr-sheet td{border:1px solid var(--odr-sheet-line)!important}
+.odr-sheet td.odr-value-type-float{text-align:right}
+/* Tinting through `background-image` layers over whatever background the
+   document gave the cell, instead of replacing it, and leaves `box-shadow` to
+   the ruler's separators. */
+.odr-sheet tbody tr:hover>*{background-image:linear-gradient(var(--odr-sheet-wash),var(--odr-sheet-wash))}
+.odr-sheet tbody tr.odr-sheet-pinned>*{background-image:linear-gradient(var(--odr-sheet-wash-pinned),var(--odr-sheet-wash-pinned))}
+.odr-sheet tbody tr:hover>th,.odr-sheet tbody tr.odr-sheet-pinned>th{background-image:linear-gradient(var(--odr-sheet-wash-ruler),var(--odr-sheet-wash-ruler))}
+.odr-sheet .odr-sheet-pinned-cell{outline:2px solid var(--odr-sheet-focus);outline-offset:-2px}
+/* Absolute against the header, which `*{position:relative}` already makes a
+   containing block. Hidden until the header is under the pointer, so a sheet
+   at rest carries no furniture. */
+.odr-sheet-sort{position:absolute;top:1px;right:1px;bottom:1px;width:17px;display:flex;align-items:center;justify-content:center;border-radius:2px;opacity:0;cursor:pointer}
+.odr-sheet-column-header:hover .odr-sheet-sort,.odr-sheet-sort-asc,.odr-sheet-sort-desc{opacity:1}
+.odr-sheet-sort:hover{background:var(--odr-sheet-wash-ruler)}
+.odr-sheet-sort::after{content:"\25BE";font-size:15px;line-height:1}
+.odr-sheet-sort-asc::after{content:"\25B4"}

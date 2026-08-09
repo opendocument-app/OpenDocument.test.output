@@ -1,1 +1,13 @@
-*{margin:0;position:relative}body{padding:5px}x-p{display:block;font-size:0}x-s{display:inline}.odr-background{background-color:#d3d3d3;display:flex}.odr-pages{padding-left:2cm;padding-right:2cm;padding-top:2cm}.odr-page-outer,.odr-pages{margin-left:auto;margin-right:auto}.odr-page-outer{background-color:#fff;display:flex;margin-bottom:2cm;z-index:-1000}mark{background:#ff0}mark.current{background:orange}
+
+*{margin:0;position:relative}
+x-p{display:block;font-size:0}
+x-s{display:inline}
+.odr-background{padding:0;background:#525659}
+/* The page column, sized to the widest page so pages of differing width centre
+   against each other, not against the viewport. The page's side margin is part
+   of that width, so fitting the document to a phone screen leaves a gutter
+   instead of going edge to edge. */
+.odr-pages{display:flex;flex-direction:column;align-items:center;gap:16px;padding:16px 0;width:max-content;min-width:100%}
+.odr-page-outer{display:flex;margin:0 16px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.5);z-index:-1000}
+mark{background:#ff0}
+mark.current{background:orange}

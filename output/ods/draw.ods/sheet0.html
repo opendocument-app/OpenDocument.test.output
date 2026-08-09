@@ -3,250 +3,51 @@
 <head>
 	<meta charset="UTF-8"/>
 	<base target="_blank"/>
-	<title>odr</title>
+	<title>Sheet1</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes"/>
-	<style>
-*{margin:0;position:relative}
-body{padding:5px}
-x-p{display:block;font-size:0}
-x-s{display:inline}
-.odr-background{padding:0;background:#525659}
-/* The page column, sized to the widest page so pages of differing width centre
-   against each other, not against the viewport. The page's side margin is part
-   of that width, so fitting the document to a phone screen leaves a gutter
-   instead of going edge to edge. */
-.odr-pages{display:flex;flex-direction:column;align-items:center;gap:16px;padding:16px 0;width:max-content;min-width:100%}
-.odr-page-outer{display:flex;margin:0 16px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.5);z-index:-1000}
-mark{background:#ff0}
-mark.current{background:orange}
-
-	</style>
-	<style>
-table{border-collapse:collapse;table-layout:fixed}
-td{vertical-align:bottom;text-overflow:ellipsis;height:inherit}
-x-p{font-family:"Arial",serif;font-size:10pt}
-td x-p{height:inherit}
-.odr-gridlines-soft table td{border-top:1px solid #c0c0c0;border-left:1px solid #c0c0c0}
-.odr-gridlines-hard table td{border:1px solid #c0c0c0!important}
-table td.odr-value-type-float{text-align:right}
-
-	</style>
+	<link rel="stylesheet" href="../../../resources/document.css"/>
+	<link rel="stylesheet" href="../../../resources/spreadsheet.css"/>
 </head>
 <body class="odr-body odr-gridlines-soft">
-	<table cellpadding="0" border="0" cellspacing="0">
-		<col>
+	<table class="odr-sheet">
+		<col class="odr-sheet-gutter">
 		<col style="width:64.01pt;min-width:64.01pt;">
-		<tr>
-			<td style="width:30px;height:20px;"/>
-			<td style="text-align:center;vertical-align:middle;">A</td>
-		</tr>
-		<tr style="height:12.81pt;">
-			<td style="text-align:center;vertical-align:middle;height:12.81pt;max-height:12.81pt;">1</td>
-			<td>
-				<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
-					<line x1="290.27pt" y1="204.8pt" x2="360.74pt" y2="77.44pt"/>
-				</svg>
-				<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
-					<line x1="65461.69pt" y1="13421095pt" x2="65279.37pt" y2="13421095pt"/>
-				</svg>
-				<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
-					<line x1="65473.94pt" y1="13421095pt" x2="65298.76pt" y2="13421095pt"/>
-				</svg>
-				<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
-					<line x1="65496.56pt" y1="13421095pt" x2="65345.92pt" y2="13421095pt"/>
-				</svg>
-				<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
-					<line x1="65450.66pt" y1="13421095pt" x2="65126.13pt" y2="13421095pt"/>
-				</svg>
-				<div style="position:absolute;left:65239.94pt;top:13421095pt;width:205.6pt;height:0.03pt;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;">
-					<x-p style="display:block;"><x-s style="font-size:12pt;"></x-s><wbr></x-p>
-				</div>
-				<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
-					<line x1="230.8pt" y1="100.49pt" x2="464.8pt" y2="268.19pt"/>
-				</svg>
-			</td>
-		</tr>
+		<thead>
+			<tr>
+				<th class="odr-sheet-corner" style="width:calc(1ch + 14px);"></th>
+				<th class="odr-sheet-column-header">A</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr style="height:12.81pt;">
+				<th class="odr-sheet-row-header" style="height:12.81pt;max-height:12.81pt;">1</th>
+				<td>
+					<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
+						<line x1="290.27pt" y1="204.8pt" x2="360.74pt" y2="77.44pt"/>
+					</svg>
+					<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
+						<line x1="65461.69pt" y1="13421095pt" x2="65279.37pt" y2="13421095pt"/>
+					</svg>
+					<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
+						<line x1="65473.94pt" y1="13421095pt" x2="65298.76pt" y2="13421095pt"/>
+					</svg>
+					<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
+						<line x1="65496.56pt" y1="13421095pt" x2="65345.92pt" y2="13421095pt"/>
+					</svg>
+					<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
+						<line x1="65450.66pt" y1="13421095pt" x2="65126.13pt" y2="13421095pt"/>
+					</svg>
+					<div style="position:absolute;left:65239.94pt;top:13421095pt;width:205.6pt;height:0.03pt;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;">
+						<x-p style="display:block;"><x-s style="font-size:12pt;"></x-s><wbr></x-p>
+					</div>
+					<svg style="z-index:-1;position:absolute;top:0;left:0;stroke:#3465a4;fill:#729fcf;display:flex;justify-content:center;flex-direction:column;" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible">
+						<line x1="230.8pt" y1="100.49pt" x2="464.8pt" y2="268.19pt"/>
+					</svg>
+				</td>
+			</tr>
+		</tbody>
 	</table>
-	<script>
-(function () {
-  "use strict";
-
-  var odr = (window.odr = window.odr || {});
-
-  odr.onError = function (code, message) {
-    console.error("error " + code + " message " + message);
-  };
-
-  var errorIllegalEditNewLine = {
-    code: 1,
-    message: "new line not supported by this document",
-  };
-
-  var modified = {};
-
-  odr.generateDiff = function () {
-    var result = { modifiedText: {} };
-    for (var path in modified) {
-      if (Object.prototype.hasOwnProperty.call(modified, path)) {
-        result.modifiedText[path] = modified[path].innerText;
-      }
-    }
-    return JSON.stringify(result);
-  };
-
-  new MutationObserver(function (mutations) {
-    for (var i = 0; i < mutations.length; ++i) {
-      if (mutations[i].type !== "characterData") {
-        continue;
-      }
-      // The nearest owner, not the direct parent: a search `<mark>` may sit
-      // between the edited text and the element carrying the path.
-      var parent = mutations[i].target.parentElement;
-      var owner = parent && parent.closest("[data-odr-path]");
-      if (owner) {
-        modified[owner.getAttribute("data-odr-path")] = owner;
-      }
-    }
-  }).observe(document.body, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-  });
-
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      odr.onError(errorIllegalEditNewLine.code, errorIllegalEditNewLine.message);
-    }
-  });
-
-  var marks = [];
-  var current = -1;
-  var keyword = "";
-
-  // Case- and diacritic-folded `text` plus a folded-index to source-index map
-  // (with an end sentinel), so a match maps back onto the source string.
-  // Folding per character is what keeps that map right when a character folds
-  // to none or to several.
-  function fold(text) {
-    var folded = "";
-    var map = [];
-    for (var i = 0; i < text.length; ++i) {
-      var character = text[i]
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-      for (var j = 0; j < character.length; ++j) {
-        map.push(i);
-      }
-      folded += character;
-    }
-    map.push(text.length);
-    return { text: folded, map: map };
-  }
-
-  function textNodes() {
-    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-      acceptNode: function (node) {
-        var name = node.parentNode ? node.parentNode.nodeName : "";
-        if (name === "SCRIPT" || name === "STYLE" || name === "MARK") {
-          return NodeFilter.FILTER_REJECT;
-        }
-        return node.nodeValue.length > 0
-          ? NodeFilter.FILTER_ACCEPT
-          : NodeFilter.FILTER_REJECT;
-      },
-    });
-    var nodes = [];
-    while (walker.nextNode()) {
-      nodes.push(walker.currentNode);
-    }
-    return nodes;
-  }
-
-  function markNode(node, needle) {
-    var found = [];
-    while (true) {
-      var folded = fold(node.nodeValue);
-      var at = folded.text.indexOf(needle);
-      if (at === -1) {
-        return found;
-      }
-      var match = node.splitText(folded.map[at]);
-      node = match.splitText(folded.map[at + needle.length] - folded.map[at]);
-      var mark = document.createElement("mark");
-      mark.className = "highlight";
-      match.parentNode.replaceChild(mark, match);
-      mark.appendChild(match);
-      found.push(mark);
-    }
-  }
-
-  function select(index) {
-    if (current >= 0 && marks[current]) {
-      marks[current].classList.remove("current");
-    }
-    current = index;
-    marks[current].classList.add("current");
-    marks[current].scrollIntoView({ block: "center", inline: "center" });
-  }
-
-  function step(delta, next) {
-    if (next !== undefined && next !== null && fold(String(next)).text !== keyword) {
-      return odr.search(next);
-    }
-    if (marks.length === 0) {
-      return 0;
-    }
-    select((current + delta + marks.length) % marks.length);
-    return marks.length;
-  }
-
-  odr.resetSearch = function () {
-    for (var i = 0; i < marks.length; ++i) {
-      var parent = marks[i].parentNode;
-      if (!parent) {
-        continue;
-      }
-      while (marks[i].firstChild) {
-        parent.insertBefore(marks[i].firstChild, marks[i]);
-      }
-      parent.removeChild(marks[i]);
-      parent.normalize();
-    }
-    marks = [];
-    current = -1;
-    keyword = "";
-  };
-
-  // Highlights every occurrence, selects the first and returns the count.
-  odr.search = function (text) {
-    odr.resetSearch();
-    keyword = fold(text === undefined || text === null ? "" : String(text)).text;
-    if (keyword === "") {
-      return 0;
-    }
-    var nodes = textNodes();
-    for (var i = 0; i < nodes.length; ++i) {
-      marks = marks.concat(markNode(nodes[i], keyword));
-    }
-    if (marks.length > 0) {
-      select(0);
-    }
-    return marks.length;
-  };
-
-  // An argument is searched for first unless it is already the highlighted
-  // keyword, so a host can drive search and step from the same string.
-  odr.searchNext = function (text) {
-    return step(1, text);
-  };
-
-  odr.searchPrevious = function (text) {
-    return step(-1, text);
-  };
-})();
-
-	</script>
+	<script type="text/javascript" src="../../../resources/document.js"></script>
+	<script type="text/javascript" src="../../../resources/spreadsheet.js"></script>
 </body>
 </html>
