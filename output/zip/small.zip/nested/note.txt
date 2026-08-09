@@ -1,0 +1,1 @@
+A zip renders as a file listing.
