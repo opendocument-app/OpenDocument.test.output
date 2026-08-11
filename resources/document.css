@@ -1,6 +1,7 @@
 
 *{margin:0;position:relative}
-x-p{display:block;font-size:0}
+body{margin:0;background:#fff}
+x-p{display:block}
 x-s{display:inline}
 .odr-background{padding:0;background:#525659}
 /* The page column, sized to the widest page so pages of differing width centre
