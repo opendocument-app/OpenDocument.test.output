@@ -60,11 +60,14 @@
     });
   }
 
+  // The measured height is fractional; `offsetHeight` would round it per line
+  // and the numbers would walk away from the lines they belong to.
   TextEditor.prototype.updateLineNumberHeight = function () {
     var nrCells = this.textNr.querySelectorAll("div");
     var textCells = this.textBody.querySelectorAll("div");
     for (var i = 0; i < textCells.length && i < nrCells.length; ++i) {
-      nrCells[i].style.height = textCells[i].offsetHeight + "px";
+      nrCells[i].style.height =
+        textCells[i].getBoundingClientRect().height + "px";
     }
   };
 
