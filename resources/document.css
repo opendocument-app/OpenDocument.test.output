@@ -1,6 +1,8 @@
 
-*{margin:0;position:relative}
 body{margin:0;background:#fff}
+/* What the formats anchor against: a page for shapes, a paragraph or a cell
+   for frames. */
+x-p,td,.odr-page-outer{position:relative}
 x-p{display:block}
 x-s{display:inline}
 .odr-background{padding:0;background:#525659}
