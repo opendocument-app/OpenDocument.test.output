@@ -73,12 +73,22 @@
 
   // Lines are the element children: formatted output puts a whitespace text
   // node between them, and counting or indexing those as lines is off by as
-  // much as a factor of two.
+  // much as a factor of two. The line is the ancestor the body owns and the
+  // offset is measured from its start: a search `<mark>` may sit in between.
   TextEditor.prototype.getPosition = function (container, offset) {
-    var line = container.nodeName === "DIV" ? container : container.parentNode;
+    var line = container;
+    while (line !== null && line.parentNode !== this.textBody) {
+      line = line.parentNode;
+    }
+    if (line === null) {
+      return { line: -1, offset: offset };
+    }
+    var range = document.createRange();
+    range.selectNodeContents(line);
+    range.setEnd(container, offset);
     return {
       line: Array.prototype.indexOf.call(this.textBody.children, line),
-      offset: offset,
+      offset: range.toString().length,
     };
   };
 
