@@ -15,6 +15,9 @@ x-s{display:inline}
    Not a negative `z-index`, which is one too but takes the page out of reach of
    hit testing. */
 .odr-page-outer{display:flex;margin:0 16px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.5);isolation:isolate}
+/* Reflowed to the viewport there is no page box to inset the text. A physical
+   measure, like the page margin it stands in for. */
+.odr-text-flow{padding:3mm}
 /* The label is text rather than a `::marker`, which no selection would copy.
    It hangs into the item's padding so wrapped lines align under the text. */
 .odr-list-item{padding-left:2em}
