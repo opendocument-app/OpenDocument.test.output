@@ -10,17 +10,17 @@
   var minZoom = 0.1;
   var maxZoom = 10;
 
-  // Only a frame is fitted here: the viewport meta tag covers the top-level
-  // document but is inert in a frame.
   var framed = window.top !== window.self;
 
   function declared(name) {
     return getComputedStyle(root).getPropertyValue(name).trim();
   }
 
-  // `auto` where only we can measure the fit; a number where the css states it.
-  var measures = declared("--odr-fit") === "auto";
-  var fit = measures ? 1 : parseFloat(declared("--odr-fit")) || 1;
+  // A number is the css stating the fit; `view` and `auto` ask us to measure
+  // it. `auto` only in a frame, where the viewport meta tag is inert.
+  var stated = declared("--odr-fit");
+  var measures = stated === "view" || (stated === "auto" && framed);
+  var fit = measures ? 1 : parseFloat(stated) || 1;
 
   // `null` while the view follows the fit.
   var pinned = parseFloat(declared("--odr-zoom"));
@@ -55,9 +55,8 @@
 
   function measureFit() {
     var available = root.clientWidth;
-    if (!available || !framed) {
-      // Out of a frame the viewport meta tag has already fitted the document.
-      return available ? 1 : fit;
+    if (!available) {
+      return fit;
     }
     var content = contentWidth();
     if (!content) {
@@ -65,6 +64,52 @@
     }
     // Only ever down: a page narrower than the viewport is shown at its size.
     return content > available ? available / content : 1;
+  }
+
+  // Whether `getBoundingClientRect` carries the zoom applied to the body;
+  // webkit does not. Only decidable while a zoom is applied.
+  var rectsZoomed = null;
+
+  // Rect coordinates times this are viewport coordinates.
+  function rectFactor() {
+    var zoom = parseFloat(getComputedStyle(body).zoom);
+    if (!isFinite(zoom) || zoom <= 0 || zoom === 1) {
+      return 1;
+    }
+    if (rectsZoomed === null) {
+      var probe = document.createElement("div");
+      probe.style.cssText =
+        "position:absolute;top:0;left:0;width:100px;height:100px;" +
+        "box-sizing:content-box;margin:0;padding:0;border:0";
+      body.appendChild(probe);
+      var measured = probe.getBoundingClientRect().width;
+      body.removeChild(probe);
+      if (!measured) {
+        return 1;
+      }
+      rectsZoomed = Math.abs(measured - 100 * zoom) < Math.abs(measured - 100);
+    }
+    return rectsZoomed ? 1 : zoom;
+  }
+
+  // @p element's box in viewport coordinates, shaped like a `DOMRect`.
+  function boxOf(element) {
+    var box = element.getBoundingClientRect();
+    var factor = rectFactor();
+    var left = box.left * factor;
+    var top = box.top * factor;
+    var width = box.width * factor;
+    var height = box.height * factor;
+    return {
+      x: left,
+      y: top,
+      left: left,
+      top: top,
+      right: left + width,
+      bottom: top + height,
+      width: width,
+      height: height,
+    };
   }
 
   // The element under @p point, and how far into it that point sits - a
@@ -77,7 +122,7 @@
     if (!element) {
       return null;
     }
-    var box = element.getBoundingClientRect();
+    var box = boxOf(element);
     return {
       element: element,
       x: point ? x : null,
@@ -114,7 +159,7 @@
     if (!target || !target.element.isConnected) {
       return;
     }
-    var box = target.element.getBoundingClientRect();
+    var box = boxOf(target.element);
     var deltaY = box.top + target.intoY * box.height - target.y;
     var deltaX =
       target.x === null ? 0 : box.left + target.intoX * box.width - target.x;
@@ -131,18 +176,18 @@
 
   // The browser applies a scroll offset of its own a few frames later, so
   // @p target is re-asserted until it settles.
-  function apply(target) {
-    var zoom = applied();
-    body.style.zoom = zoom;
-    root.style.setProperty("--odr-zoom", zoom);
-
+  function settle(target) {
     restoring = true;
     restore(target);
 
     var token = ++settling;
     var frames = 30;
     (function again() {
-      if (token !== settling || frames-- <= 0) {
+      if (token !== settling) {
+        // A newer run - or the reader - owns the state below now.
+        return;
+      }
+      if (frames-- <= 0) {
         restoring = false;
         remember();
         return;
@@ -150,7 +195,14 @@
       restore(target);
       requestAnimationFrame(again);
     })();
+  }
 
+  function apply(target) {
+    var zoom = applied();
+    body.style.zoom = zoom;
+    root.style.setProperty("--odr-zoom", zoom);
+
+    settle(target);
     notify();
   }
 
@@ -165,8 +217,8 @@
     width = root.clientWidth;
 
     if (pinned !== null || !measures) {
-      // the scale does not follow the viewport
-      remember();
+      // The scale does not follow the viewport; the reader's place still does.
+      settle(target);
       return;
     }
 
@@ -186,6 +238,14 @@
 
   odr.isZoomFitted = function () {
     return pinned === null;
+  };
+
+  // @p element's box in the coordinates `elementFromPoint` takes, for a host
+  // hit-testing while a zoom is applied.
+  odr.getViewportRect = function (element) {
+    return element && typeof element.getBoundingClientRect === "function"
+      ? boxOf(element)
+      : null;
   };
 
   // @p focus, a pinch's midpoint, is the point that stays put across the
