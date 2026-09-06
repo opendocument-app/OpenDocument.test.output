@@ -48,7 +48,90 @@
     return cell !== null && !merged ? cell.cellIndex : -1;
   }
 
+  var raisedCell = null;
+  var raisedWrapper = null;
+  var raisedContent = null;
+
+  // The block the cell writes, or the cell where it writes none. `null` for
+  // anything else — a shape, several blocks — which is not raised.
+  function boxOf(cell) {
+    if (cell.childElementCount === 0) {
+      return cell;
+    }
+    var only = cell.firstElementChild;
+    return cell.childElementCount === 1 && only.tagName === "X-P" ? only : null;
+  }
+
+  // Past the cell's edge by the spill `translate_sheet` measured, at the edge
+  // where it clips, unbounded where it does neither.
+  function visibleRight(cell) {
+    var style = getComputedStyle(cell);
+    var right = cell.getBoundingClientRect().right;
+    var inset = /inset\(([^)]*)\)/.exec(style.clipPath || "");
+    if (inset !== null) {
+      var sides = inset[1].trim().split(/\s+/);
+      return sides.length > 1 ? right - parseFloat(sides[1]) : right;
+    }
+    return style.overflow === "visible" ? Infinity : right;
+  }
+
+  // On the text, not the box: what is cut off is the string running past where
+  // the cell still paints.
+  function cutOff(cell, box) {
+    var range = document.createRange();
+    range.selectNodeContents(box);
+    var ink = range.getBoundingClientRect();
+    var rect = cell.getBoundingClientRect();
+    return (
+      ink.width > 0 &&
+      (ink.right > visibleRight(cell) + 1 ||
+        (getComputedStyle(cell).overflow !== "visible" &&
+          ink.bottom > rect.bottom + 1))
+    );
+  }
+
+  function lower() {
+    if (raisedCell === null) {
+      return;
+    }
+    raisedCell.classList.remove("odr-sheet-raised");
+    if (raisedWrapper !== null) {
+      while (raisedWrapper.firstChild) {
+        raisedCell.insertBefore(raisedWrapper.firstChild, raisedWrapper);
+      }
+      raisedWrapper.remove();
+      raisedWrapper = null;
+    }
+    raisedContent = null;
+    raisedCell = null;
+  }
+
+  // Over its neighbours rather than pushing them aside.
+  function raise(cell) {
+    lower();
+    if (cell === null || cell.tagName !== "TD") {
+      return;
+    }
+    var box = boxOf(cell);
+    if (box === null || !cutOff(cell, box)) {
+      return;
+    }
+    if (box === cell) {
+      raisedWrapper = document.createElement("span");
+      raisedWrapper.className = "odr-sheet-raised-box";
+      while (cell.firstChild) {
+        raisedWrapper.appendChild(cell.firstChild);
+      }
+      cell.appendChild(raisedWrapper);
+      box = raisedWrapper;
+    }
+    cell.classList.add("odr-sheet-raised");
+    raisedCell = cell;
+    raisedContent = box;
+  }
+
   function pin(column, row, cell) {
+    lower();
     if (pinnedRow !== null) {
       pinnedRow.classList.remove("odr-sheet-pinned");
     }
@@ -65,6 +148,7 @@
     }
     if (pinnedCell !== null) {
       pinnedCell.classList.add("odr-sheet-pinned-cell");
+      raise(pinnedCell);
     }
     paint();
   }
@@ -83,6 +167,11 @@
   });
 
   table.addEventListener("click", function (event) {
+    // Selecting inside what is raised must not put the cell back.
+    if (raisedContent !== null && raisedContent.contains(event.target)) {
+      return;
+    }
+
     var cell = event.target.closest("td,th");
     if (cell === null) {
       return;
@@ -102,6 +191,13 @@
       pin(-1, null, null);
     } else {
       pin(columnOf(cell), cell.parentElement, cell);
+    }
+  });
+
+  // The canvas around the sheet included.
+  document.addEventListener("click", function (event) {
+    if (event.target.closest(".odr-sheet") === null) {
+      pin(-1, null, null);
     }
   });
 

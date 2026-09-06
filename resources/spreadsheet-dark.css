@@ -9,5 +9,6 @@
 --odr-sheet-wash-pinned:rgba(255,255,255,.10);
 --odr-sheet-wash-ruler:rgba(255,255,255,.12);
 --odr-sheet-focus:#4c8dff;
+--odr-sheet-raised:#1c2128;
 }
 .odr-sheet{background-color:#161b22!important}
