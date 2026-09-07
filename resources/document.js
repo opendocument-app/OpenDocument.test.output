@@ -16,13 +16,13 @@
   var modified = {};
 
   odr.generateDiff = function () {
-    var result = { modifiedText: {} };
+    var ops = [];
     for (var path in modified) {
       if (Object.prototype.hasOwnProperty.call(modified, path)) {
-        result.modifiedText[path] = modified[path].innerText;
+        ops.push({ op: "setText", path: path, text: modified[path].innerText });
       }
     }
-    return JSON.stringify(result);
+    return JSON.stringify({ version: 1, ops: ops });
   };
 
   new MutationObserver(function (mutations) {
