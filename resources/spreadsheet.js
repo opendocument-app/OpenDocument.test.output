@@ -279,6 +279,149 @@
     return true;
   }
 
+  // Nothing a reader would see, so the cell beside it may spill over it.
+  function isBlank(cell) {
+    return (
+      cell.textContent.trim() === "" &&
+      cell.querySelector(":not(x-p):not(x-s)") === null
+    );
+  }
+
+  // A row's cells by position, a covered one answering with the cell covering
+  // it. Null past the sheet's last row.
+  function rowCells(row) {
+    var entry = indexed().rows.get(row);
+    if (entry === undefined) {
+      return null;
+    }
+    if (merged) {
+      return entry.cells;
+    }
+    return Array.prototype.slice.call(entry.tr.cells, 1);
+  }
+
+  // The row's cells once each, with what `translate_sheet` states about them:
+  // `max-width:0` where the column states a width, which is where it also
+  // clips, and `nowrap` where the string may run past the cell.
+  function rowState(row) {
+    var cells = rowCells(row);
+    if (cells === null) {
+      return null;
+    }
+    var line = [];
+    for (var i = 0; i < cells.length; ++i) {
+      if (cells[i] === cells[i - 1]) {
+        continue;
+      }
+      var style = getComputedStyle(cells[i]);
+      line.push({
+        cell: cells[i],
+        blank: isBlank(cells[i]),
+        sized: style.maxWidth === "0px",
+        nowrap: style.whiteSpace === "nowrap",
+      });
+    }
+    return line;
+  }
+
+  // The spill `translate_sheet` measured goes stale the moment a cell fills or
+  // empties: its rule again, off the geometry the browser has. Offsets, not
+  // rects: blink scales a rect by the body zoom, a `clip-path` is stated under
+  // it.
+  function reflow(row) {
+    var line = rowState(row);
+    if (line === null) {
+      return false;
+    }
+
+    // What each cell sees to its right: the next one showing something, or
+    // the column stating no width that stops the spill before one.
+    var bound = null;
+    var stopped = false;
+    for (var i = line.length - 1; i >= 0; --i) {
+      line[i].bound = bound;
+      line[i].stopped = stopped;
+      if (!line[i].blank) {
+        bound = line[i].cell;
+        stopped = false;
+      } else if (!line[i].sized) {
+        bound = null;
+        stopped = true;
+      }
+    }
+
+    for (var j = 0; j < line.length; ++j) {
+      var entry = line[j];
+      if (!entry.sized || !entry.nowrap) {
+        continue;
+      }
+      var spill =
+        entry.bound === null
+          ? 0
+          : entry.bound.offsetLeft -
+            entry.cell.offsetLeft -
+            entry.cell.offsetWidth;
+      entry.cell.style.overflow =
+        spill > 0.5 || (entry.bound === null && !entry.stopped)
+          ? "visible"
+          : "hidden";
+      entry.cell.style.clipPath =
+        spill > 0.5 ? "inset(0 " + -spill + "px 0 0)" : "none";
+    }
+    return true;
+  }
+
+  // The run a write goes through, so its style survives; the cell itself
+  // where it writes its string without one.
+  function runOf(cell) {
+    var box = boxOf(cell);
+    while (
+      box !== null &&
+      box.childElementCount === 1 &&
+      box.firstElementChild.tagName === "X-S"
+    ) {
+      box = box.firstElementChild;
+    }
+    return box;
+  }
+
+  // What the page shows at a position, shaped the way an op states a value.
+  function valueAt(column, row) {
+    var cell = cellAt(column, row);
+    if (cell === null) {
+      return null;
+    }
+    var text = cell.textContent.trim();
+    if (text === "") {
+      return { type: "empty" };
+    }
+    if (cell.classList.contains("odr-value-type-float")) {
+      var number = toNumber(text);
+      if (!isNaN(number)) {
+        return { type: "number", number: number, text: text };
+      }
+    }
+    return { type: "string", text: text };
+  }
+
+  // Shows @p value at a position, as a write leaves the cell, and reflows
+  // the row around it.
+  function showValue(column, row, value) {
+    var cell = cellAt(column, row);
+    if (cell === null) {
+      return false;
+    }
+    lower();
+    var run = runOf(cell);
+    if (run === null) {
+      return false;
+    }
+    run.textContent = value.type === "empty" ? "" : value.text;
+    cell.classList.toggle("odr-value-type-float", value.type === "number");
+    reflow(row);
+    return true;
+  }
+
   // What the script beside this one, and a host, ask of the sheet: positions
   // the way an op names them, and the pin. `spreadsheet-editing.md` decision 8.
   odr.sheet = {
@@ -286,6 +429,10 @@
     positionOf: positionOf,
     pinned: pinnedPosition,
     pin: pinAt,
+    lower: lower,
+    valueAt: valueAt,
+    showValue: showValue,
+    reflow: reflow,
   };
 
   table.addEventListener("mouseover", function (event) {
@@ -341,6 +488,7 @@
       pin(-1, null, null);
     }
   });
+
 
   var body = table.tBodies[0];
   var original = null;
