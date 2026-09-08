@@ -9,6 +9,8 @@
 
   var merged = table.querySelector("td[colspan],td[rowspan]") !== null;
 
+  var odr = (window.odr = window.odr || {});
+
   var style = document.createElement("style");
   document.head.appendChild(style);
 
@@ -44,8 +46,98 @@
       columnRule(pinnedColumn, "var(--odr-sheet-wash-ruler)", "thead ");
   }
 
-  function columnOf(cell) {
+  // What the wash paints: the cell's place among the ones written beside it,
+  // gutter included, which is what `nth-child` counts. Not a position - a
+  // merge writes nothing for a covered one, and gets no wash either.
+  function rulerColumn(cell) {
     return cell !== null && !merged ? cell.cellIndex : -1;
+  }
+
+  // The gutter's label, which names the row wherever a sort has put it.
+  function rowOf(tr) {
+    return Number(tr.cells[0].textContent) - 1;
+  }
+
+  var index = null;
+
+  // Whether a cell above still reaches into @p row.
+  function holds(above, row) {
+    return above !== undefined && above.last >= row;
+  }
+
+  // A row by its label and, where the sheet merges, its cells by position.
+  // Walked once: a merged sheet is offered no sort control, so the rows are
+  // still in the file's order here and one pass can carry the rowspans down.
+  function build() {
+    var index = { rows: new Map(), positions: new Map() };
+    var covered = [];
+    var body = table.tBodies[0];
+    for (var i = 0; i < body.rows.length; ++i) {
+      var tr = body.rows[i];
+      var row = rowOf(tr);
+      var line = [];
+      index.rows.set(row, { tr: tr, cells: line });
+      if (!merged) {
+        continue;
+      }
+      var column = 0;
+      for (var j = 1; j < tr.cells.length; ++j) {
+        var td = tr.cells[j];
+        while (holds(covered[column], row)) {
+          line[column] = covered[column].cell;
+          ++column;
+        }
+        var columns = Number(td.getAttribute("colspan") || 1);
+        var last = row + Number(td.getAttribute("rowspan") || 1) - 1;
+        for (var k = 0; k < columns; ++k) {
+          line[column + k] = td;
+          covered[column + k] = { last: last, cell: td };
+        }
+        index.positions.set(td, { column: column, row: row });
+        column += columns;
+      }
+      // A rowspan reaching past the row's last cell covers the rest of it.
+      for (; column < covered.length; ++column) {
+        if (holds(covered[column], row)) {
+          line[column] = covered[column].cell;
+        }
+      }
+    }
+    return index;
+  }
+
+  function indexed() {
+    if (index === null) {
+      index = build();
+    }
+    return index;
+  }
+
+  // The `td` at a position, or null past the sheet's extent. A position a
+  // merge covers answers with the cell covering it, which is the one the file
+  // states and an op names.
+  function cellAt(column, row) {
+    var entry = indexed().rows.get(row);
+    if (entry === undefined || column < 0) {
+      return null;
+    }
+    var cell = merged ? entry.cells[column] : entry.tr.cells[column + 1];
+    return cell === undefined ? null : cell;
+  }
+
+  // Where a `td` sits, the way an op names it. Null for anything else - a
+  // header, a cell of another table.
+  function positionOf(cell) {
+    if (cell === null || cell.tagName !== "TD") {
+      return null;
+    }
+    if (merged) {
+      var position = indexed().positions.get(cell);
+      return position === undefined
+        ? null
+        : { column: position.column, row: position.row };
+    }
+    return { column: cell.cellIndex - 1, row: rowOf(cell.parentElement) };
   }
 
   var raisedCell = null;
@@ -153,8 +245,51 @@
     paint();
   }
 
+  // What is pinned: a cell, or a whole column or row where a header is, the
+  // axis that header does not name being null. Null where nothing is pinned.
+  function pinnedPosition() {
+    if (pinnedCell === null) {
+      return null;
+    }
+    var position = positionOf(pinnedCell);
+    if (position !== null) {
+      return { column: position.column, row: position.row, cell: pinnedCell };
+    }
+    return {
+      column: pinnedCell.classList.contains("odr-sheet-column-header")
+        ? pinnedCell.cellIndex - 1
+        : null,
+      row: pinnedRow === null ? null : rowOf(pinnedRow),
+      cell: pinnedCell,
+    };
+  }
+
+  // Pins the cell at a position, as a click on it does; null clears the pin.
+  // False where the sheet holds no such cell.
+  function pinAt(position) {
+    if (position === null) {
+      pin(-1, null, null);
+      return true;
+    }
+    var cell = cellAt(position.column, position.row);
+    if (cell === null) {
+      return false;
+    }
+    pin(rulerColumn(cell), cell.parentElement, cell);
+    return true;
+  }
+
+  // What the script beside this one, and a host, ask of the sheet: positions
+  // the way an op names them, and the pin. `spreadsheet-editing.md` decision 8.
+  odr.sheet = {
+    cellAt: cellAt,
+    positionOf: positionOf,
+    pinned: pinnedPosition,
+    pin: pinAt,
+  };
+
   table.addEventListener("mouseover", function (event) {
-    var column = columnOf(event.target.closest("td,th"));
+    var column = rulerColumn(event.target.closest("td,th"));
     if (column !== hovered) {
       hovered = column;
       paint();
@@ -184,13 +319,13 @@
     }
 
     if (cell.classList.contains("odr-sheet-column-header")) {
-      pin(columnOf(cell), null, cell);
+      pin(rulerColumn(cell), null, cell);
     } else if (cell.classList.contains("odr-sheet-row-header")) {
       pin(-1, cell.parentElement, cell);
     } else if (cell.classList.contains("odr-sheet-corner")) {
       pin(-1, null, null);
     } else {
-      pin(columnOf(cell), cell.parentElement, cell);
+      pin(rulerColumn(cell), cell.parentElement, cell);
     }
   });
 

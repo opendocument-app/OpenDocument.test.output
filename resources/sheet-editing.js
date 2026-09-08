@@ -99,30 +99,10 @@
     },
     /// The lock on the cell at (@p column, @p row), or null where it has none.
     lockAt: function (column, row) {
-      var cell = cellAt(column, row);
+      var cell = odr.sheet.cellAt(column, row);
       return cell === null ? null : cell.getAttribute("data-odr-lock");
     },
   };
-
-  /// The `td` at a position, walking the row's spans - never `cellIndex`,
-  /// which a merge and a sort both break.
-  function cellAt(column, row) {
-    var body = table.tBodies[0];
-    var tr = body && body.rows[row];
-    if (!tr) {
-      return null;
-    }
-    var at = 0;
-    for (var i = 1; i < tr.cells.length; ++i) {
-      var td = tr.cells[i];
-      var span = Number(td.getAttribute("colspan") || 1);
-      if (column < at + span) {
-        return td;
-      }
-      at += span;
-    }
-    return null;
-  }
 
   odr.editing.refuseAt = function (column, row) {
     if (!editable) {
