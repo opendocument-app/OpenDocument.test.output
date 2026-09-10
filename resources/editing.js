@@ -16,11 +16,10 @@
   var editors = [];
   var lastRefusal = null;
 
-  // The codes are `odr::ErrorCode`, written into the page ahead of this script
-  // - one space `odr.onError` shares. The host maps the code. The message stays
-  // here because it is for a console and nothing in this library is localised,
-  // and it says what the code means today rather than when it was added.
-  var codes = odr.errorCodes || {};
+  // The codes are `odr::ErrorCode`, written into the page ahead of this
+  // script. The message stays here: it is for a console, and nothing in this
+  // library is localised.
+  var codes = (odr.errorCodes = odr.errorCodes || {});
   var messages = {
     newLine: "a line break inside a paragraph is not supported",
     formula: "cell holds a formula",
@@ -33,8 +32,7 @@
     unnameableEdit: "an edit landed where no operation can name it",
   };
 
-  /// The code and the wording for @p reason, falling back to `readOnly` for a
-  /// reason no script here states.
+  /// Falls back to `readOnly` for a reason no script here states.
   function refusal(reason) {
     var known = Object.prototype.hasOwnProperty.call(messages, reason)
       ? reason
