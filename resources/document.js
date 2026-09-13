@@ -797,6 +797,14 @@
     };
   }
 
+  /// In scope `paragraph` an edit starts and ends in one paragraph.
+  function outOfScope(at) {
+    return (
+      odr.editing.scope() === "paragraph" &&
+      at.start.paragraph !== at.end.paragraph
+    );
+  }
+
   function refuse(event, reason, at) {
     if (event.cancelable) {
       event.preventDefault();
@@ -870,6 +878,10 @@
     }
 
     if (type === "insertParagraph") {
+      if (odr.editing.scope() === "paragraph") {
+        refuse(event, "outOfScope", at);
+        return;
+      }
       var split = splitAt(at);
       if (split === null) {
         refuse(event, "range", at);
@@ -886,6 +898,14 @@
         : null;
       if (pasted === null) {
         refuse(event, "unsupportedEdit", at);
+        return;
+      }
+      // several lines open paragraphs
+      if (
+        outOfScope(at) ||
+        (odr.editing.scope() === "paragraph" && /[\r\n]/.test(pasted))
+      ) {
+        refuse(event, "outOfScope", at);
         return;
       }
       if (!paste(at, pasted)) {
@@ -908,6 +928,11 @@
     if (covering === null) {
       // nothing to take: the key does nothing rather than being refused
       event.preventDefault();
+      return;
+    }
+    // a delete at a paragraph's start reaches into the one before it
+    if (outOfScope(covering)) {
+      refuse(event, "outOfScope", at);
       return;
     }
 

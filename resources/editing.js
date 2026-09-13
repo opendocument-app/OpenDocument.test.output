@@ -30,6 +30,7 @@
     unsupportedEdit: "this kind of edit is not supported",
     range: "an edit cannot reach over a picture or a table",
     unnameableEdit: "an edit landed where no operation can name it",
+    outOfScope: "the edit reaches past what this page offers",
   };
 
   /// Falls back to `readOnly` for a reason no script here states.
@@ -50,6 +51,7 @@
     console.log("editing " + (event.editing ? "on" : "off"));
   };
   odr.onEditChange = function () {};
+  odr.onCellsStale = function () {};
 
   function fire(name, event) {
     if (typeof odr[name] === "function") {
@@ -136,6 +138,13 @@
     isEditable: function () {
       return editable;
     },
+    /// `paragraph` or `document`, as `<body>` states it. Read per edit, so a
+    /// host can widen it without a render.
+    scope: function () {
+      return body.getAttribute("data-odr-editing-scope") === "paragraph"
+        ? "paragraph"
+        : "document";
+    },
 
     /// Adds one format's editor. Only `operations` is required; `enable`,
     /// `disable`, `undo`, `redo`, `canUndo`, `canRedo` and `committed` default.
@@ -161,6 +170,12 @@
         }
       }
       fire("onEditRefused", event);
+    },
+
+    /// The cells the edits so far left computing an old input. Raised
+    /// whenever the set changes, which an undo does too.
+    stale: function (detail) {
+      fire("onCellsStale", detail);
     },
 
     /// The log a host's save button reads; an editor calls it when its log
