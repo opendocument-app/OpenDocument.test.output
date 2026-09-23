@@ -99,11 +99,20 @@
   var done = [];
   var undone = [];
 
+  // undo and redo take all steps of one gesture together
+  var gesture = 0;
+
   function perform(step) {
     if (step === null) {
       return null;
     }
     step.apply();
+    return record(step);
+  }
+
+  /// Puts @p step on the log without applying it: the page shows it already.
+  function record(step) {
+    step.gesture = gesture;
     done.push(step);
     undone.length = 0;
     odr.editing.changed();
@@ -744,8 +753,10 @@
   /// States @p style on @p at, for a host's `format` and for a chord. A
   /// collapsed caret marks the word it sits in; at a word boundary, or in a
   /// paragraph holding no run, the mark waits for the next typed text.
-  /// Formatting sits behind the scope gate whole.
+  /// Scope `paragraph` holds the range, not the style: a mark inside one
+  /// paragraph opens none.
   function format(style, at) {
+    gesture += 1;
     if (!odr.editing.isEnabled()) {
       refuse(null, "readOnly", at);
       return false;
@@ -758,7 +769,7 @@
       refuse(null, "range", at);
       return false;
     }
-    if (odr.editing.scope() === "paragraph") {
+    if (outOfScope(at)) {
       refuse(null, "outOfScope", at);
       return false;
     }
@@ -1322,39 +1333,92 @@
     });
   }
 
-  // a composition cannot be cancelled, so the browser writes and we read the
-  // run back afterwards; this is the run it started in
-  var composing = null;
+  // A composition cannot be cancelled, so the browser writes and the editor
+  // records each change after its `input`: an Android keyboard holds one open
+  // on the word under the caret for as long as the caret stays there.
+
+  // the runs the browser may write into, each with the text it held before
+  var unrecorded = [];
+
+  function watch(run) {
+    if (run === null) {
+      return;
+    }
+    for (var i = 0; i < unrecorded.length; ++i) {
+      if (unrecorded[i].run === run) {
+        return;
+      }
+    }
+    unrecorded.push({ run: run, before: run.textContent });
+  }
+
+  function watchSelection() {
+    var selection = window.getSelection();
+    if (selection !== null && selection.rangeCount > 0) {
+      watch(runOf(selection.getRangeAt(0).startContainer));
+    }
+  }
+
+  /// One step for what the browser wrote into the watched runs.
+  function recordWritten() {
+    var changes = [];
+    for (var i = 0; i < unrecorded.length; ++i) {
+      var entry = unrecorded[i];
+      var after = entry.run.textContent;
+      if (after === entry.before) {
+        continue;
+      }
+      if (!entry.run.isConnected) {
+        odr.onError(odr.errorCodes.unnameableEdit, "an edit landed where no operation can name it");
+        continue;
+      }
+      changes.push({ run: entry.run, before: entry.before, after: after });
+    }
+    unrecorded = [];
+    if (changes.length === 0) {
+      return;
+    }
+    gesture += 1;
+    record({
+      ops: changes.map(function (change) {
+        return { op: "setText", id: idOf(change.run), text: change.after };
+      }),
+      apply: function () {
+        changes.forEach(function (change) {
+          change.run.textContent = change.after;
+        });
+      },
+      revert: function () {
+        changes.forEach(function (change) {
+          change.run.textContent = change.before;
+        });
+      },
+    });
+  }
 
   root.addEventListener("compositionstart", function () {
-    var selection = window.getSelection();
-    composing =
-      selection === null || selection.rangeCount === 0
-        ? null
-        : runOf(selection.getRangeAt(0).startContainer);
+    if (odr.editing.isEnabled()) {
+      watchSelection();
+    }
   });
 
+  root.addEventListener("input", function () {
+    if (odr.editing.isEnabled()) {
+      recordWritten();
+    }
+  });
+
+  // for a browser that writes a composition without an `input` for it
   root.addEventListener("compositionend", function () {
-    var run = composing;
-    composing = null;
-    if (!odr.editing.isEnabled()) {
-      return;
+    if (odr.editing.isEnabled()) {
+      recordWritten();
     }
-    var selection = window.getSelection();
-    var landed =
-      selection === null || selection.rangeCount === 0
-        ? null
-        : runOf(selection.getRangeAt(0).startContainer);
-    var target = landed !== null ? landed : run;
-    if (target === null) {
-      odr.onError(odr.errorCodes.unnameableEdit, "an edit landed where no operation can name it");
-      return;
-    }
-    // whatever the browser built inside the run, its text is the operation
-    perform(setRunText(target, target.textContent));
   });
 
   root.addEventListener("beforeinput", function (event) {
+    // what the browser wrote before this is a gesture of its own
+    recordWritten();
+    gesture += 1;
     var type = event.inputType;
     var at = rangeOf(event);
 
@@ -1373,8 +1437,15 @@
       return;
     }
 
-    // mid-composition and unstoppable; `compositionend` reconciles it
-    if (type === "insertCompositionText" || composing !== null) {
+    // the browser writes these itself, and the `input` after it is recorded;
+    // WebKit may let a composition be cancelled, but it is not an edit we own
+    if (!event.cancelable || /Composition/.test(type)) {
+      if (at === null) {
+        watchSelection();
+      } else {
+        watch(at.start.run);
+        watch(at.end.run);
+      }
       return;
     }
 
@@ -1428,6 +1499,12 @@
       event.preventDefault();
       // a chord is the shortcuts class, and a host may keep it
       if (!odr.takesKeys("shortcuts")) {
+        return;
+      }
+      // The host draws no button for a key, so it cannot offer less here.
+      // The chord keeps the gate `format` no longer carries.
+      if (odr.editing.scope() === "paragraph") {
+        refuse(event, "outOfScope", at);
         return;
       }
       toggle(property, at);
@@ -1506,9 +1583,11 @@
     },
     operations: operations,
     format: function (style) {
+      recordWritten();
       return format(style, rangeOf({}));
     },
     toggle: function (property) {
+      recordWritten();
       return toggle(property, rangeOf({}));
     },
     canUndo: function () {
@@ -1518,22 +1597,30 @@
       return undone.length > 0;
     },
     undo: function () {
+      recordWritten();
       if (done.length === 0) {
         return false;
       }
-      var step = done.pop();
-      step.revert();
-      undone.push(step);
+      var taken = done[done.length - 1].gesture;
+      while (done.length > 0 && done[done.length - 1].gesture === taken) {
+        var step = done.pop();
+        step.revert();
+        undone.push(step);
+      }
       odr.editing.changed();
       return true;
     },
     redo: function () {
+      recordWritten();
       if (undone.length === 0) {
         return false;
       }
-      var step = undone.pop();
-      step.apply();
-      done.push(step);
+      var given = undone[undone.length - 1].gesture;
+      while (undone.length > 0 && undone[undone.length - 1].gesture === given) {
+        var step = undone.pop();
+        step.apply();
+        done.push(step);
+      }
       odr.editing.changed();
       return true;
     },

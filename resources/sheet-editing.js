@@ -406,12 +406,55 @@
     }
   });
 
+  /// Gesture policy, the viewer's to set. `editOnClick` unstated asks the
+  /// pointer.
+  var options = { editOnClick: null };
+
+  /// Whether a click opens the editor, where a double click always does. The
+  /// pointer answers only while `editOnClick` is unstated, because it is a
+  /// guess: an android WebView reports a fine one on a touch screen.
+  function tapEdits() {
+    // `!= null` so an unset key a host passes reads as unstated, not as off
+    if (options.editOnClick != null) {
+      return !!options.editOnClick;
+    }
+    return (
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(pointer: coarse)").matches
+    );
+  }
+
+  /// Merged into what is set; an unknown key throws.
+  odr.editing.setSheetOptions = function (value) {
+    Object.keys(value || {}).forEach(function (key) {
+      if (!Object.prototype.hasOwnProperty.call(options, key)) {
+        throw new Error("odr.editing: unknown sheet option " + key);
+      }
+      options[key] = value[key];
+    });
+  };
+
+  odr.editing.getSheetOptions = function () {
+    var copy = {};
+    Object.keys(options).forEach(function (key) {
+      copy[key] = options[key];
+    });
+    return copy;
+  };
+
   // A locked cell says so on the click, not on the double click.
   table.addEventListener("click", function (event) {
     var at =
       odr.editing.isEnabled() && overlay === null ? targetPosition(event) : null;
-    if (at !== null && odr.editing.lockAt(at.column, at.row) !== null) {
+    if (at === null) {
+      return;
+    }
+    if (odr.editing.lockAt(at.column, at.row) !== null) {
       odr.editing.refuseAt(at.column, at.row);
+      return;
+    }
+    if (tapEdits()) {
+      edit(at.column, at.row, null);
     }
   });
 

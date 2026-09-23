@@ -19,9 +19,24 @@
     overscrollBehavior: "contain",
   };
 
+  /// Raised as the pending count changes; a stroke counts once it ends.
+  odr.onAnnotationChange = function () {};
+
+  var reported = 0;
+
+  function changed() {
+    if (pending.length === reported) {
+      return;
+    }
+    reported = pending.length;
+    if (typeof odr.onAnnotationChange === "function") {
+      odr.onAnnotationChange({ count: pending.length });
+    }
+  }
+
   function pages() {
     return Array.prototype.slice.call(
-      document.querySelectorAll("[data-odr-space]")
+      document.querySelectorAll("[data-odr-space]"),
     );
   }
 
@@ -35,34 +50,39 @@
     return null;
   }
 
-  /// A viewport point to page-box points (y-down, the unit the overlay draws
+  /// What an event's point is scaled by to reach the space the rects report,
+  /// which is the space `toBox` takes. A webkit view leaves the fit's zoom out
+  /// of a rect while an event carries it; a chromium one reports both alike.
+  /// Read once per event, not per sample: each call costs two layouts.
+  function layoutScale(page) {
+    if (!page || !odr.getViewportRect) {
+      return 1;
+    }
+    var drawn = odr.getViewportRect(page);
+    var raw = page.getBoundingClientRect();
+    return drawn && drawn.width && raw.width ? raw.width / drawn.width : 1;
+  }
+
+  /// A layout point to page-box points (y-down, the unit the overlay draws
   /// in). The page box is laid out in inches, so its own layout width in css
   /// pixels gives the scale a zoom transform is applied on top of.
-  function toBox(page, clientX, clientY) {
+  function toBox(page, x, y) {
     var rect = page.getBoundingClientRect();
     var zoom = page.offsetWidth ? rect.width / page.offsetWidth : 1;
-    return [
-      ((clientX - rect.left) / zoom) * 0.75,
-      ((clientY - rect.top) / zoom) * 0.75,
-    ];
+    return [((x - rect.left) / zoom) * 0.75, ((y - rect.top) / zoom) * 0.75];
   }
 
   /// Page-box points to pdf user space, through the page's own inverse.
   function toUserSpace(page, x, y) {
     var m = page.getAttribute("data-odr-space").split(",").map(Number);
-    return [
-      m[0] * x + m[2] * y + m[4],
-      m[1] * x + m[3] * y + m[5],
-    ];
+    return [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]];
   }
 
   /// Two overlays per page: `multiply` for the washes that have to let the
   /// text through, and a normal one for the marks drawn on top of it.
   function overlay(page, multiply) {
     var name = multiply ? "an an-m" : "an";
-    var svg = page.querySelector(
-      ':scope > svg[class="' + name + '"]'
-    );
+    var svg = page.querySelector(':scope > svg[class="' + name + '"]');
     if (!svg) {
       svg = document.createElementNS(SVG, "svg");
       svg.setAttribute("class", name);
@@ -71,7 +91,7 @@
     }
     svg.setAttribute(
       "viewBox",
-      "0 0 " + page.offsetWidth * 0.75 + " " + page.offsetHeight * 0.75
+      "0 0 " + page.offsetWidth * 0.75 + " " + page.offsetHeight * 0.75,
     );
     return svg;
   }
@@ -115,7 +135,10 @@
       node.setAttribute("stroke-linecap", "round");
       node.setAttribute("stroke-linejoin", "round");
     } else {
-      node.setAttribute("d", annotation.boxes.map(barPath(annotation.type)).join(" "));
+      node.setAttribute(
+        "d",
+        annotation.boxes.map(barPath(annotation.type)).join(" "),
+      );
       if (annotation.type === "squiggly") {
         node.setAttribute("fill", "none");
         node.setAttribute("stroke", css(annotation.color));
@@ -136,17 +159,19 @@
       if (type === "highlight") {
         return rect(b[0], b[1], b[2] - b[0], h);
       }
+      // `b[3]` is the bottom of the glyph boxes, so an underline and a
+      // squiggle hang below it. A strike-out is the one meant to cross.
       if (type === "underline") {
-        return rect(b[0], b[3] - h / 16, b[2] - b[0], Math.max(h / 16, 0.5));
+        return rect(b[0], b[3], b[2] - b[0], Math.max(h / 16, 0.5));
       }
       if (type === "strikeOut") {
         return rect(b[0], b[1] + h / 2, b[2] - b[0], Math.max(h / 16, 0.5));
       }
       var step = Math.max(h / 8, 1);
-      var d = "M " + b[0] + " " + (b[3] - step);
+      var d = "M " + b[0] + " " + b[3];
       var up = true;
       for (var x = b[0] + step; x < b[2]; x += step, up = !up) {
-        d += " L " + x + " " + (up ? b[3] - step * 2 : b[3] - step);
+        d += " L " + x + " " + (up ? b[3] + step : b[3]);
       }
       return d;
     };
@@ -183,7 +208,11 @@
     (byPage[index] = byPage[index] || []).push([a[0], a[1], b[0], b[1]]);
   }
 
-  /// The selection-layer runs a range touches; a spacer carries no text.
+  /// The selection-layer nodes a range touches. The gap spacers count: a word
+  /// break is inside what the reader marked, and leaving it out breaks one
+  /// mark into a bar per word.
+  var RUNS = ".sr,.sg,.sw";
+
   function selectedRuns(selection, range) {
     var scope = range.commonAncestorContainer;
     if (!scope.querySelectorAll) {
@@ -192,21 +221,92 @@
     if (!scope) {
       return [];
     }
-    var self = scope.closest ? scope.closest(".sr") : null;
+    var self = scope.closest ? scope.closest(RUNS) : null;
     if (self) {
-      return self.textContent.length > 0 ? [self] : [];
+      return [self];
     }
     return Array.prototype.filter.call(
-      scope.querySelectorAll(".sr"),
+      scope.querySelectorAll(RUNS),
       function (run) {
-        return run.textContent.length > 0 && selection.containsNode(run, true);
-      }
+        return selection.containsNode(run, true);
+      },
     );
   }
 
+  /// Every glyph-layer rect on the page, read once per mark. `runBox` walks
+  /// this rather than the DOM, which would be a layout per run.
+  function glyphRects() {
+    var out = [];
+    var glyphs = document.querySelectorAll(".g");
+    for (var i = 0; i < glyphs.length; ++i) {
+      if (glyphs[i].textContent.length === 0) {
+        continue;
+      }
+      var r = glyphs[i].getBoundingClientRect();
+      if (r.width >= 0.2 && r.height >= 0.2) {
+        out.push(r);
+      }
+    }
+    return out;
+  }
+
+  /// @p box grown to the glyphs it stands over. The selection layer states one
+  /// em of a substituted font, and a descender falls out of it, so a mark that
+  /// takes that box alone cuts the tails off the text it marks.
+  function overInk(box, glyphs) {
+    var top = box.top;
+    var bottom = box.bottom;
+    var reach = (box.bottom - box.top) / 2;
+    for (var i = 0; i < glyphs.length; ++i) {
+      var g = glyphs[i];
+      if (g.right <= box.left || g.left >= box.right) {
+        continue;
+      }
+      var middle = (g.top + g.bottom) / 2;
+      if (middle < box.top - reach || middle > box.bottom + reach) {
+        continue;
+      }
+      top = Math.min(top, g.top);
+      bottom = Math.max(bottom, g.bottom);
+    }
+    return [top, bottom];
+  }
+
+  /// Client boxes of one line that touch become one: a pdf quad is per line,
+  /// and two of them meeting leaves a seam in the paint.
+  function joined(boxes) {
+    var out = [];
+    boxes
+      .slice()
+      .sort(function (a, b) {
+        return a.top - b.top || a.left - b.left;
+      })
+      .forEach(function (b) {
+        var last = out[out.length - 1];
+        if (
+          last &&
+          b.left - last.right < 0.6 &&
+          b.top < last.bottom &&
+          b.bottom > last.top
+        ) {
+          last.right = Math.max(last.right, b.right);
+          last.top = Math.min(last.top, b.top);
+          last.bottom = Math.max(last.bottom, b.bottom);
+          return;
+        }
+        out.push({
+          left: b.left,
+          top: b.top,
+          right: b.right,
+          bottom: b.bottom,
+        });
+      });
+    return out;
+  }
+
   /// One run's covered box; a partly selected run takes its horizontal edges
-  /// from the rects, clamped to the run.
-  function runBox(byPage, run, rects, selection) {
+  /// from the rects, clamped to the run, and its vertical ones from the ink.
+  function runBox(run, rects, selection, glyphs) {
     var box = run.getBoundingClientRect();
     var left = box.left;
     var right = box.right;
@@ -228,10 +328,14 @@
         right = Math.max(right, Math.min(rect.right, box.right));
       }
     }
-    pushBox(byPage, left, box.top, right, box.bottom);
+    if (right - left < 0.5) {
+      return null;
+    }
+    var ink = overInk(box, glyphs);
+    return { left: left, top: ink[0], right: right, bottom: ink[1] };
   }
 
-  /// The boxes a selection covers, per page, in page-box points. Vertically
+  /// The boxes a selection covers, per page, in page-box points. Horizontally
   /// the run's box, not the range's rect: that rect follows whatever font the
   /// browser substituted for the layer.
   function selectionBoxes() {
@@ -240,20 +344,28 @@
     if (!selection || selection.isCollapsed) {
       return byPage;
     }
+    var glyphs = glyphRects();
+    var boxes = [];
     for (var r = 0; r < selection.rangeCount; ++r) {
       var range = selection.getRangeAt(r);
       var rects = range.getClientRects();
       var runs = selectedRuns(selection, range);
       for (var i = 0; i < runs.length; ++i) {
-        runBox(byPage, runs[i], rects, selection);
+        var box = runBox(runs[i], rects, selection, glyphs);
+        if (box !== null) {
+          boxes.push(box);
+        }
       }
       if (runs.length === 0) {
         // no selection layer under it
         for (var k = 0; k < rects.length; ++k) {
-          pushBox(byPage, rects[k].left, rects[k].top, rects[k].right, rects[k].bottom);
+          boxes.push(rects[k]);
         }
       }
     }
+    joined(boxes).forEach(function (b) {
+      pushBox(byPage, b.left, b.top, b.right, b.bottom);
+    });
     return byPage;
   }
 
@@ -261,7 +373,12 @@
     var all = pages();
     for (var i = 0; i < all.length; ++i) {
       var rect = all[i].getBoundingClientRect();
-      if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+      if (
+        x >= rect.left &&
+        x <= rect.right &&
+        y >= rect.top &&
+        y <= rect.bottom
+      ) {
         return all[i];
       }
     }
@@ -270,8 +387,8 @@
 
   /// One annotation per page the selection covers. `keep` holds the selection,
   /// which the automatic path cannot: the next `selectionchange` re-marks it.
-  function markSelection(keep) {
-    if (!tool || tool === "ink") {
+  function markSelection(type, rgb, keep) {
+    if (!type || type === "ink") {
       return false;
     }
     var byPage = selectionBoxes();
@@ -280,9 +397,9 @@
       pending.push({
         id: nextId++,
         page: +index,
-        type: tool,
+        type: type,
         boxes: byPage[index],
-        color: color.slice(),
+        color: rgb.slice(),
       });
       added = true;
     });
@@ -291,10 +408,41 @@
         window.getSelection().removeAllRanges();
       }
       redraw();
+      changed();
     }
     return added;
   }
 
+  function arm(value) {
+    tool = value || null;
+    pages().forEach(function (page) {
+      page.classList.toggle("an-draw", tool === "ink");
+    });
+    document.documentElement.classList.toggle("an-drawing", tool === "ink");
+  }
+
+  function rgbOf(value) {
+    return value.slice(0, 3).map(Number);
+  }
+
+  function applyStyle(style) {
+    if (style && style.color) {
+      color = rgbOf(style.color);
+    }
+    if (style && style.width !== undefined) {
+      width = Number(style.width);
+    }
+  }
+
+  /// Marks the selection once and disarms, if there is anything to mark.
+  function markOnce(type, style) {
+    var rgb = style && style.color ? rgbOf(style.color) : color;
+    if (!markSelection(type, rgb, false)) {
+      return false;
+    }
+    arm(null);
+    return true;
+  }
 
   var stroke = null;
   var strokeNode = null;
@@ -327,7 +475,7 @@
     }
     window.clearTimeout(settle);
     settle = window.setTimeout(function () {
-      markSelection(false);
+      markSelection(tool, color, false);
     }, 50);
   }
 
@@ -345,12 +493,15 @@
     if (tool !== "ink" || event.button !== 0 || !inkTakes(event)) {
       return;
     }
-    var page = pageAt(event.clientX, event.clientY);
+    var scale = layoutScale(document.querySelector("[data-odr-page]"));
+    var x = event.clientX * scale;
+    var y = event.clientY * scale;
+    var page = pageAt(x, y);
     if (!page) {
       return;
     }
     event.preventDefault();
-    var p = toBox(page, event.clientX, event.clientY);
+    var p = toBox(page, x, y);
     stroke = {
       id: nextId++,
       page: +page.getAttribute("data-odr-page"),
@@ -381,8 +532,13 @@
       samples = [event];
     }
     var appended = false;
+    var scale = layoutScale(page);
     for (var i = 0; i < samples.length; ++i) {
-      var p = toBox(page, samples[i].clientX, samples[i].clientY);
+      var p = toBox(
+        page,
+        samples[i].clientX * scale,
+        samples[i].clientY * scale,
+      );
       // drop the sub-point jitter a pointer emits while nearly still
       if (
         Math.abs(p[0] - points[points.length - 2]) +
@@ -416,6 +572,7 @@
     stroke = null;
     strokeNode = null;
     strokePointer = null;
+    changed();
   }
 
   function applyOptions() {
@@ -434,19 +591,35 @@
 
   odr.annotation = {
     /// null, "highlight", "underline", "strikeOut", "squiggly" or "ink".
-    setTool: function (value) {
-      tool = value || null;
-      pages().forEach(function (page) {
-        page.classList.toggle("an-draw", tool === "ink");
-      });
-      document.documentElement.classList.toggle("an-drawing", tool === "ink");
-    },
+    setTool: arm,
     getTool: function () {
+      return tool;
+    },
+    /// A tool button: marks a selection once, else arms @p type or disarms
+    /// it. @p style is `{color, width}`. Answers the tool left armed.
+    press: function (type, style) {
+      if (markOnce(type, style)) {
+        return tool;
+      }
+      if (type && type === tool) {
+        arm(null);
+      } else {
+        applyStyle(style);
+        arm(type);
+      }
+      return tool;
+    },
+    /// Marks a selection once, as `press` does, else restyles @p type if it is
+    /// armed. Answers the tool left armed.
+    recolor: function (type, style) {
+      if (!markOnce(type, style) && type && type === tool) {
+        applyStyle(style);
+      }
       return tool;
     },
     /// DeviceRGB, each component in [0, 1].
     setColor: function (value) {
-      color = value.slice(0, 3).map(Number);
+      color = rgbOf(value);
     },
     setWidth: function (value) {
       width = Number(value);
@@ -471,7 +644,7 @@
     /// Marks the selection with the armed tool, and answers whether anything
     /// was added. The selection is left standing.
     mark: function () {
-      return markSelection(true);
+      return markSelection(tool, color, true);
     },
     /// What is pending, newest last. Geometry is in page-box points.
     list: function () {
@@ -482,14 +655,17 @@
         return a.id !== id;
       });
       redraw();
+      changed();
     },
     undo: function () {
       pending.pop();
       redraw();
+      changed();
     },
     clear: function () {
       pending = [];
       redraw();
+      changed();
     },
     /// The payload `PdfFile::annotate` takes, in pdf user space.
     getAnnotations: function () {
