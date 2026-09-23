@@ -479,6 +479,18 @@
     }, 50);
   }
 
+  /// A link would take a dragged selection's end to the page's end.
+  var dragging = false;
+  var handles = false;
+
+  function updateSelecting() {
+    var selection = window.getSelection();
+    document.documentElement.classList.toggle(
+      "odr-selecting",
+      dragging || (handles && selection !== null && !selection.isCollapsed),
+    );
+  }
+
   function inkTakes(event) {
     return (
       options.inkPointerTypes === null ||
@@ -490,6 +502,10 @@
     pointerDown = true;
     // a new gesture supersedes a mark the previous one had queued
     window.clearTimeout(settle);
+    dragging = !(event.target.closest && event.target.closest(".lk"));
+    // handles move without pointer events
+    handles = event.pointerType !== "mouse";
+    updateSelecting();
     if (tool !== "ink" || event.button !== 0 || !inkTakes(event)) {
       return;
     }
@@ -558,6 +574,8 @@
 
   function onPointerUp(event) {
     pointerDown = false;
+    dragging = false;
+    updateSelecting();
     scheduleMark();
     if (!stroke || (event && event.pointerId !== strokePointer)) {
       return;
@@ -585,7 +603,10 @@
   document.addEventListener("pointermove", onPointerMove);
   document.addEventListener("pointerup", onPointerUp);
   document.addEventListener("pointercancel", onPointerUp);
-  document.addEventListener("selectionchange", scheduleMark);
+  document.addEventListener("selectionchange", function () {
+    updateSelecting();
+    scheduleMark();
+  });
   window.addEventListener("resize", redraw);
   applyOptions();
 
