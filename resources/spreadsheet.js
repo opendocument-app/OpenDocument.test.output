@@ -341,6 +341,13 @@
     if (cellAt(position.column, position.row) === null) {
       return false;
     }
+    if (
+      focus !== null &&
+      focus.column === position.column &&
+      focus.row === position.row
+    ) {
+      return true;
+    }
     focus = { column: position.column, row: position.row };
     paintSelection();
     return true;
