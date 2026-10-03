@@ -499,7 +499,7 @@
     if (cell === null) {
       return null;
     }
-    var text = cell.textContent.trim();
+    var text = cell.textContent;
     if (text === "") {
       return { type: "empty" };
     }
