@@ -23,7 +23,7 @@
   var messages = {
     newLine: "a line break inside a paragraph is not supported",
     formula: "cell holds a formula",
-    rich: "cell holds more than one plain run",
+    rich: "cell holds more than text",
     shapes: "cell holds a drawing",
     readOnly: "document cannot be edited",
     formulaInput: "typing a formula is not supported",
@@ -31,6 +31,7 @@
     range: "an edit cannot reach over a picture or a table",
     unnameableEdit: "an edit landed where no operation can name it",
     outOfScope: "the edit reaches past what this page offers",
+    sheetCut: "the sheet reaches past what this page renders",
   };
 
   /// Falls back to `readOnly` for a reason no script here states.
@@ -157,8 +158,9 @@
     /// States @p style on the selection: `bold`, `italic`, `underline`,
     /// `strikethrough` (a bool), `color` (`#rrggbb`), `size` (`14pt`), and
     /// `highlight` (`#rrggbb` or null) on text, `align` (`left`, `center`,
-    /// `right`, and `justify` on text) on every paragraph or cell it reaches,
-    /// and `fill` (`#rrggbb` or null) on cells. False where refused.
+    /// `right`, `justify` on text, null on a cell for its value type) on every
+    /// paragraph or cell it reaches, and `fill` (`#rrggbb` or null) on cells.
+    /// False where refused.
     format: function (style) {
       for (var i = editors.length - 1; i >= 0; --i) {
         if (typeof editors[i].format === "function") {

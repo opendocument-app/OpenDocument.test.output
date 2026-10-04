@@ -12,6 +12,15 @@
   var odr = (window.odr = window.odr || {});
 
   var sheet = Number(table.getAttribute("data-odr-sheet") || 0);
+  // The extent of the whole sheet, stated only where the page renders less.
+  var cut = (function () {
+    var stated = table.getAttribute("data-odr-cut");
+    if (stated === null) {
+      return null;
+    }
+    var extent = stated.split(",").map(Number);
+    return { columns: extent[0], rows: extent[1] };
+  })();
 
   var outlined = null;
   var outlinedTimer = 0;
@@ -39,34 +48,82 @@
     odr.editing.refuse(reason, { sheet: sheet, column: column, row: row });
   }
 
+  /// Refuses a move to a position the sheet has and the page does not.
+  function refuseCut(column, row) {
+    if (
+      cut !== null &&
+      column >= 0 &&
+      row >= 0 &&
+      column < cut.columns &&
+      row < cut.rows &&
+      odr.sheet.cellAt(column, row) === null
+    ) {
+      odr.editing.refuse("sheetCut", {
+        sheet: sheet,
+        column: column,
+        row: row,
+        columns: cut.columns,
+        rows: cut.rows,
+      });
+    }
+  }
+
   var overlay = null;
   var editingAt = null;
   var history = [];
   var undone = [];
 
+  var STYLE_OPS = ["setCellStyle", "setRowStyle", "setColumnStyle"];
+
+  /// Whether two style ops reach a cell in common. An absent axis is a whole
+  /// row or column.
+  function overlaps(one, other) {
+    return (
+      (one.column === undefined ||
+        other.column === undefined ||
+        one.column === other.column) &&
+      (one.row === undefined || other.row === undefined || one.row === other.row)
+    );
+  }
+
   /// One op per kind and position: the last value written, and the style
-  /// keys merged with the later ones winning.
+  /// keys merged with the later ones winning. A style op does not merge back
+  /// past a later one that reaches the same cell, so the order survives.
   function coalesced() {
+    var result = [];
     var byKey = new Map();
     for (var i = 0; i < history.length; ++i) {
       var ops = history[i].ops;
       for (var j = 0; j < ops.length; ++j) {
         var op = ops[j];
         var key = op.op + ":" + op.sheet + ":" + op.column + ":" + op.row;
-        var earlier = byKey.get(key);
-        if (op.op === "setCellStyle" && earlier !== undefined) {
-          op = {
-            op: op.op,
-            sheet: op.sheet,
-            column: op.column,
-            row: op.row,
-            style: Object.assign({}, earlier.style, op.style),
-          };
+        var at = byKey.get(key);
+        var styles = STYLE_OPS.indexOf(op.op) !== -1;
+        if (at === undefined) {
+          byKey.set(key, result.length);
+          result.push(op);
+        } else if (styles) {
+          result[at] = Object.assign({}, op, {
+            style: Object.assign({}, result[at].style, op.style),
+          });
+        } else {
+          result[at] = op;
         }
-        byKey.set(key, op);
+        if (styles) {
+          byKey.forEach(function (index, other) {
+            var earlier = result[index];
+            if (
+              other !== key &&
+              STYLE_OPS.indexOf(earlier.op) !== -1 &&
+              overlaps(earlier, op)
+            ) {
+              byKey.delete(other);
+            }
+          });
+        }
       }
     }
-    return Array.from(byKey.values());
+    return result;
   }
 
   /// An undo and a redo are the same move on the page; the log tells them
@@ -79,7 +136,28 @@
     reportSelection(true);
   }
 
-  var NUMBER = /^[+-]?([0-9]+(\.[0-9]*)?|\.[0-9]+)([eE][+-]?[0-9]+)?$/;
+  /// The decimal separator of the document's locale, `.` where it states
+  /// none: an xlsx shows its numbers with `.` until number formats are read.
+  var DECIMAL = (function () {
+    var locale = document.body.getAttribute("data-odr-locale");
+    try {
+      var parts = new Intl.NumberFormat(locale || "en").formatToParts(1.5);
+      for (var i = 0; i < parts.length; ++i) {
+        if (parts[i].type === "decimal") {
+          return parts[i].value;
+        }
+      }
+    } catch (e) {
+      // a tag the browser does not know
+    }
+    return ".";
+  })();
+  var NUMBER = new RegExp(
+    "^[+-]?([0-9]+(D[0-9]*)?|D[0-9]+)([eE][+-]?[0-9]+)?$".replace(
+      /D/g,
+      DECIMAL.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    )
+  );
 
   /// The type follows the string the user typed: a number where the grammar
   /// says so, a string otherwise, and a leading `'` forces one.
@@ -90,9 +168,29 @@
       return { type: "empty" };
     }
     if (!quoted && NUMBER.test(content)) {
-      return { type: "number", number: Number(content), text: content };
+      return {
+        type: "number",
+        number: Number(content.replace(DECIMAL, ".")),
+        text: content,
+      };
     }
     return { type: "string", text: content };
+  }
+
+  /// What the editor opens on: a string that would not read back as itself
+  /// gets the `'` that keeps it one.
+  function spell(value) {
+    if (value.type === "empty") {
+      return "";
+    }
+    var text = value.text;
+    if (
+      value.type === "string" &&
+      (text.charAt(0) === "=" || !same(parse(text), value))
+    ) {
+      return "'" + text;
+    }
+    return text;
   }
 
   function same(one, other) {
@@ -267,6 +365,15 @@
     overlay.style.fontSize = style.fontSize;
     overlay.style.fontStyle = style.fontStyle;
     overlay.style.fontWeight = style.fontWeight;
+    grow();
+  }
+
+  /// A line typed past the cell's height makes the overlay taller.
+  function grow() {
+    var cell = odr.sheet.cellAt(editingAt.column, editingAt.row);
+    overlay.style.height = cell.offsetHeight + "px";
+    overlay.style.height =
+      Math.max(cell.offsetHeight, overlay.scrollHeight) + "px";
   }
 
   /// Opens the editor over a cell, holding @p typed or the cell's own string.
@@ -285,14 +392,14 @@
 
     var value = odr.sheet.valueAt(column, row);
     editingAt = { column: column, row: row };
-    overlay = document.createElement("input");
-    overlay.type = "text";
+    overlay = document.createElement("textarea");
     overlay.className = "odr-sheet-editor";
-    overlay.value =
-      typed !== null ? typed : value.type === "empty" ? "" : value.text;
-    place(cell);
+    overlay.value = typed !== null ? typed : spell(value);
+    // in the page first, so `place` can measure the lines it holds
     document.body.appendChild(overlay);
+    place(cell);
     overlay.addEventListener("keydown", overlayKey);
+    overlay.addEventListener("input", grow);
     overlay.addEventListener("blur", finish);
     overlay.focus();
     if (typed === null) {
@@ -334,6 +441,7 @@
     write(at.column, at.row, parse(text));
     if (!odr.sheet.pin({ column: at.column + columns, row: at.row + rows })) {
       odr.sheet.pin({ column: at.column, row: at.row });
+      refuseCut(at.column + columns, at.row + rows);
     }
     return true;
   }
@@ -345,6 +453,18 @@
     event.stopPropagation();
     if (event.key === "Escape") {
       close();
+    } else if (
+      event.key === "Enter" &&
+      (event.altKey || event.ctrlKey || event.metaKey)
+    ) {
+      // a line break, as Alt+Enter in Excel and Ctrl+Enter in Calc
+      overlay.setRangeText(
+        "\n",
+        overlay.selectionStart,
+        overlay.selectionEnd,
+        "end"
+      );
+      grow();
     } else if (event.key === "Enter") {
       commit(0, event.shiftKey ? -1 : 1);
     } else if (event.key === "Tab") {
@@ -393,11 +513,14 @@
     var step =
       arrows[event.key] ||
       (event.key === "Tab" ? [event.shiftKey ? -1 : 1, 0] : null);
-    if (event.shiftKey && arrows[event.key] !== undefined) {
-      var to = odr.sheet.selection().focus;
-      odr.sheet.select({ column: to.column + step[0], row: to.row + step[1] });
-    } else if (step !== null) {
-      odr.sheet.pin({ column: at.column + step[0], row: at.row + step[1] });
+    if (step !== null) {
+      // shift with an arrow moves the focus, anything else the pin
+      var widens = event.shiftKey && arrows[event.key] !== undefined;
+      var from = widens ? odr.sheet.selection().focus : at;
+      var to = { column: from.column + step[0], row: from.row + step[1] };
+      if (!(widens ? odr.sheet.select(to) : odr.sheet.pin(to))) {
+        refuseCut(to.column, to.row);
+      }
     } else if (event.key === "Enter" || event.key === "F2") {
       edit(at.column, at.row, null);
     } else if (event.key === "Delete" || event.key === "Backspace") {
@@ -518,6 +641,8 @@
 
   // ------------------------------------------------------------- formatting
 
+  // A csv states no style.
+  var styles = document.body.getAttribute("data-odr-sheet-styles") !== "false";
   var TOGGLES = ["bold", "italic", "underline", "strikethrough"];
   var KEYS = TOGGLES.concat(["color", "size", "fill", "align"]);
 
@@ -770,8 +895,14 @@
       }
     }
     if (style.align !== undefined) {
+      // null follows the value type, also after a later write changes it
       holders.concat(holders[0] === cell ? [] : [cell]).forEach(function (node) {
-        node.style.textAlign = style.align;
+        node.style.textAlign =
+          style.align !== null
+            ? style.align
+            : node === cell
+              ? "var(--odr-align-by-type)"
+              : "inherit";
       });
     }
     if (style.fill !== undefined) {
@@ -805,10 +936,29 @@
         return SIZE.test(value);
       }
       if (key === "align") {
-        return value === "left" || value === "center" || value === "right";
+        return (
+          value === null ||
+          value === "left" ||
+          value === "center" ||
+          value === "right"
+        );
       }
       return false;
     });
+  }
+
+  /// A style op on a cell, or on a row or a column where @p column or @p row
+  /// is null.
+  function styleOp(kind, column, row, style) {
+    var op = { op: kind, sheet: sheet };
+    if (column !== null) {
+      op.column = column;
+    }
+    if (row !== null) {
+      op.row = row;
+    }
+    op.style = Object.assign({}, style);
+    return op;
   }
 
   /// States @p style on every selected cell as one undo step. A lock refuses
@@ -820,6 +970,10 @@
     }
     if (!odr.editing.isEditable()) {
       odr.editing.refuse("readOnly", { sheet: sheet });
+      return false;
+    }
+    if (!styles) {
+      odr.editing.refuse("unsupportedEdit", { sheet: sheet });
       return false;
     }
     var cells = odr.sheet.selectedCells();
@@ -835,17 +989,26 @@
     var afters = [];
     var ops = [];
     var rows = new Set();
+    // a header stands for its whole row or column, past the rendered extent
+    var pin = odr.sheet.pinned();
+    var header = pin.row === null || pin.column === null;
+    if (header) {
+      ops.push(
+        styleOp(
+          pin.row === null ? "setColumnStyle" : "setRowStyle",
+          pin.column,
+          pin.row,
+          style
+        )
+      );
+    }
     cells.forEach(function (at) {
       befores.push(snapshot(at.cell));
       paintCell(at.cell, style);
       afters.push(snapshot(at.cell));
-      ops.push({
-        op: "setCellStyle",
-        sheet: sheet,
-        column: at.column,
-        row: at.row,
-        style: Object.assign({}, style),
-      });
+      if (!header) {
+        ops.push(styleOp("setCellStyle", at.column, at.row, style));
+      }
       rows.add(at.row);
     });
     var reflow = function () {
@@ -941,6 +1104,13 @@
     toggle: toggle,
     enable: function () {
       reportSelection(true);
+      if (cut !== null) {
+        odr.editing.refuse("sheetCut", {
+          sheet: sheet,
+          columns: cut.columns,
+          rows: cut.rows,
+        });
+      }
     },
     committed: function () {
       history = [];

@@ -36,8 +36,8 @@ body{margin:0;background:var(--odr-sheet-canvas)}
 /* A cell holds its text as is, so the editor reads back what the file holds.
    The writer indents nothing inside a cell. Important over the `white-space`
    shorthand of a cell's own style, which would collapse it again. */
-.odr-sheet td{white-space-collapse:preserve!important;tab-size:.5in}
-.odr-sheet td.odr-value-type-float{text-align:right}
+.odr-sheet td{white-space-collapse:preserve!important;tab-size:.5in;--odr-align-by-type:start}
+.odr-sheet td.odr-value-type-float{text-align:right;--odr-align-by-type:right}
 /* `background-image` layers over the document's own cell background instead of
    replacing it, and leaves `box-shadow` to the ruler. */
 .odr-sheet tbody tr:hover>*{background-image:linear-gradient(var(--odr-sheet-wash),var(--odr-sheet-wash))}
@@ -54,7 +54,7 @@ body{margin:0;background:var(--odr-sheet-canvas)}
 .odr-sheet-raised-box{display:block}
 /* The editor is an overlay: over the ruler, which sticks at 3, and over the
    raise at 4. */
-.odr-sheet-editor{position:absolute;z-index:5;box-sizing:border-box;margin:0;padding:1px 6px;border:0;outline:2px solid var(--odr-sheet-focus);outline-offset:-2px;border-radius:0;background:var(--odr-sheet-raised)}
+.odr-sheet-editor{position:absolute;z-index:5;box-sizing:border-box;margin:0;padding:1px 6px;border:0;outline:2px solid var(--odr-sheet-focus);outline-offset:-2px;border-radius:0;background:var(--odr-sheet-raised);resize:none;overflow:hidden}
 .odr-editing td{cursor:cell}
 .odr-editing td.odr-locked{cursor:not-allowed}
 .odr-sheet td.odr-sheet-refused{outline:2px solid var(--odr-sheet-refused);outline-offset:-2px}
