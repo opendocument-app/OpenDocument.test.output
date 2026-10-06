@@ -306,6 +306,16 @@
     };
   }
 
+  /// Whether something other than the line box follows @p node.
+  function followedByContent(node) {
+    for (var next = node.nextSibling; next !== null; next = next.nextSibling) {
+      if (next.nodeName !== "BR" && next.nodeName !== "WBR") {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /// Splits @p element after @p stays - one of its children, or null to move
   /// all of them - into a copy of itself. The line box is the paragraph's own
   /// and stays out of the move.
@@ -363,7 +373,10 @@
         var stays = after;
         var level = after === null ? paragraph : after.parentNode;
         while (level !== paragraph) {
-          splitLevel(level, stays, null, undoLog);
+          // as the core does: a wrapper with nothing after the cut stays whole
+          if (followedByContent(stays)) {
+            splitLevel(level, stays, null, undoLog);
+          }
           stays = level;
           level = level.parentNode;
         }
@@ -1396,10 +1409,17 @@
     if (place.run === null) {
       return null;
     }
+    var step = function (run, offset, by) {
+      return odr.editing.characterOffset(run.textContent, offset, by);
+    };
     if (direction < 0) {
       if (place.offset > 0) {
         return {
-          start: { run: place.run, offset: place.offset - 1, paragraph: place.paragraph },
+          start: {
+            run: place.run,
+            offset: step(place.run, place.offset, -1),
+            paragraph: place.paragraph,
+          },
           end: place,
         };
       }
@@ -1409,11 +1429,11 @@
       }
       // at the start of a paragraph the boundary itself is what goes, so the
       // range takes no character with it
-      var back = before.paragraph === place.paragraph ? 1 : 0;
+      var back = before.paragraph === place.paragraph ? -1 : 0;
       return {
         start: {
           run: before.run,
-          offset: before.run.textContent.length - back,
+          offset: step(before.run, before.run.textContent.length, back),
           paragraph: before.paragraph,
         },
         end: place,
@@ -1422,7 +1442,11 @@
     if (place.offset < place.run.textContent.length) {
       return {
         start: place,
-        end: { run: place.run, offset: place.offset + 1, paragraph: place.paragraph },
+        end: {
+          run: place.run,
+          offset: step(place.run, place.offset, 1),
+          paragraph: place.paragraph,
+        },
       };
     }
     var after = runAfter(place.run);
@@ -1432,7 +1456,7 @@
     var forward = after.paragraph === place.paragraph ? 1 : 0;
     return {
       start: place,
-      end: { run: after.run, offset: forward, paragraph: after.paragraph },
+      end: { run: after.run, offset: step(after.run, 0, forward), paragraph: after.paragraph },
     };
   }
 
