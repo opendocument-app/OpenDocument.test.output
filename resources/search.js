@@ -162,7 +162,7 @@
       mark.classList.add("current");
     });
     // A hit inside a folded section, or in a chunk the browser does not lay
-    // out, is scrolled to but not shown.
+    // out, is shown before it is scrolled to.
     for (
       var element = marks[current][0].parentElement;
       element !== null;
@@ -171,9 +171,9 @@
       if (element.nodeName === "DETAILS") {
         element.open = true;
       }
-      if (element.classList.contains("odr-chunk")) {
-        element.classList.add("odr-chunk-near");
-      }
+    }
+    if (odr.chunks !== undefined) {
+      odr.chunks.show(marks[current][0]);
     }
     marks[current][0].scrollIntoView({ block: "center", inline: "center" });
   }

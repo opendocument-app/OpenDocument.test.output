@@ -9,60 +9,78 @@
 	<link rel="stylesheet" href="../../../resources/document.css"/>
 	<link rel="stylesheet" href="../../../resources/search.css"/>
 	<link rel="stylesheet" href="../../../resources/spreadsheet.css"/>
+	<style>.odr-chunk{content-visibility:hidden}.odr-chunk-near{content-visibility:visible}@media print{.odr-chunk{content-visibility:visible}}
+	</style>
+	<noscript><style>@media screen{.odr-chunk{content-visibility:auto}}</style></noscript>
 	<style>
-.c0.c0.c0{white-space:nowrap}
+.c0.c0.c0{width:96.5px}
+.c1.c1.c1{width:44px}
+.c2.c2.c2{width:104px}
+.c3.c3.c3{max-width:0;white-space:nowrap;clip-path:inset(0 -176px 0 0)}
+.c4.c4.c4{max-width:0;white-space:nowrap}
 	</style>
 </head>
 <body class="odr-body odr-gridlines-soft" data-odr-editable="readOnly" data-odr-editing-scope="document" data-odr-keyboard="navigation shortcuts">
-	<table class="odr-sheet" data-odr-sheet="1">
-		<col class="odr-sheet-gutter">
-		<col>
-		<col>
-		<col>
-		<col>
-		<col>
-		<col>
-		<thead>
-			<tr>
-				<th class="odr-sheet-corner" style="width:calc(1ch + 14px);"></th>
-				<th class="odr-sheet-column-header">A</th>
-				<th class="odr-sheet-column-header">B</th>
-				<th class="odr-sheet-column-header">C</th>
-				<th class="odr-sheet-column-header">D</th>
-				<th class="odr-sheet-column-header">E</th>
-				<th class="odr-sheet-column-header">F</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th class="odr-sheet-row-header">1</th>
-				<td class="c0">a</td>
-				<td class="c0"></td>
-				<td class="c0"></td>
-				<td class="c0"></td>
-				<td class="c0"></td>
-				<td class="c0">f</td>
-			</tr>
-			<tr>
-				<th class="odr-sheet-row-header">2</th>
-				<td class="c0"></td>
-				<td class="c0"></td>
-				<td class="c0"></td>
-				<td class="c0"></td>
-				<td class="c0"></td>
-				<td class="c0"></td>
-			</tr>
-			<tr>
-				<th class="odr-sheet-row-header">3</th>
-				<td class="c0">bottom left</td>
-				<td class="c0"></td>
-				<td class="c0"></td>
-				<td class="c0"></td>
-				<td class="c0"></td>
-				<td class="c0">bottom right</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="odr-sheet" style="--odr-sheet-gutter:21.5px;--odr-sheet-width:398px;" data-odr-sheet="1">
+		<table class="odr-sheet-head">
+			<col class="odr-sheet-gutter">
+			<col class="c0">
+			<col class="c1">
+			<col class="c1">
+			<col class="c1">
+			<col class="c1">
+			<col class="c2">
+			<thead>
+				<tr>
+					<th class="odr-sheet-corner"></th>
+					<th class="odr-sheet-column-header">A</th>
+					<th class="odr-sheet-column-header">B</th>
+					<th class="odr-sheet-column-header">C</th>
+					<th class="odr-sheet-column-header">D</th>
+					<th class="odr-sheet-column-header">E</th>
+					<th class="odr-sheet-column-header">F</th>
+				</tr>
+			</thead>
+		</table>
+		<table class="odr-sheet-rows odr-chunk odr-chunk-near" style="contain-intrinsic-height:auto 60px">
+			<col class="odr-sheet-gutter">
+			<col class="c0">
+			<col class="c1">
+			<col class="c1">
+			<col class="c1">
+			<col class="c1">
+			<col class="c2">
+			<tbody>
+				<tr>
+					<th class="odr-sheet-row-header">1</th>
+					<td class="c3">a</td>
+					<td class="c4"></td>
+					<td class="c4"></td>
+					<td class="c4"></td>
+					<td class="c4"></td>
+					<td class="c4">f</td>
+				</tr>
+				<tr>
+					<th class="odr-sheet-row-header">2</th>
+					<td class="c4"></td>
+					<td class="c4"></td>
+					<td class="c4"></td>
+					<td class="c4"></td>
+					<td class="c4"></td>
+					<td class="c4"></td>
+				</tr>
+				<tr>
+					<th class="odr-sheet-row-header">3</th>
+					<td class="c3">bottom left</td>
+					<td class="c4"></td>
+					<td class="c4"></td>
+					<td class="c4"></td>
+					<td class="c4"></td>
+					<td class="c4">bottom right</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<script type="text/javascript" src="../../../resources/search.js"></script>
 	<script>
 window.odr = window.odr || {};
@@ -77,7 +95,9 @@ window.odr.errorCodes = {
   "range": 1008,
   "unnameableEdit": 1009,
   "outOfScope": 1010,
-  "sheetCut": 1011
+  "sheetCut": 1011,
+  "formulaInvalid": 1012,
+  "array": 1013
 };
 
 	</script>

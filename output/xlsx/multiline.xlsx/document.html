@@ -9,44 +9,55 @@
 	<link rel="stylesheet" href="../../../resources/document.css"/>
 	<link rel="stylesheet" href="../../../resources/search.css"/>
 	<link rel="stylesheet" href="../../../resources/spreadsheet.css"/>
+	<style>.odr-chunk{content-visibility:hidden}.odr-chunk-near{content-visibility:visible}@media print{.odr-chunk{content-visibility:visible}}
+	</style>
+	<noscript><style>@media screen{.odr-chunk{content-visibility:auto}}</style></noscript>
 	<style>
-.c0.c0.c0{height:23.85pt}
-.c1.c1.c1{height:23.85pt;max-height:23.85pt}
-.c2.c2.c2{vertical-align:bottom;background-color:#dee6ef;overflow:hidden}
-.c3.c3.c3{font-family:'Arial',sans-serif;font-size:10pt;color:#c9211e}
-.c4.c4.c4{background-color:#ffff00;white-space:nowrap;font-family:'Arial',sans-serif;font-size:10pt}
-.c5.c5.c5{height:12.8pt}
-.c6.c6.c6{height:12.8pt;max-height:12.8pt}
-.c7.c7.c7{background-color:#ff8000;white-space:nowrap;font-family:'Arial',sans-serif;font-size:10pt}
-.c8.c8.c8{background-color:#ffbf00;white-space:nowrap;font-family:'Arial',sans-serif;font-size:10pt}
+.c0.c0.c0{width:66.5px}
+.c1.c1.c1{height:23.85pt}
+.c2.c2.c2{height:23.85pt;max-height:23.85pt}
+.c3.c3.c3{vertical-align:bottom;background-color:#dee6ef;max-width:0;overflow:hidden}
+.c4.c4.c4{font-family:'Arial',sans-serif;font-size:10pt;color:#c9211e}
+.c5.c5.c5{background-color:#ffff00;max-width:0;white-space:nowrap;font-family:'Arial',sans-serif;font-size:10pt}
+.c6.c6.c6{height:12.8pt}
+.c7.c7.c7{height:12.8pt;max-height:12.8pt}
+.c8.c8.c8{background-color:#ff8000;max-width:0;white-space:nowrap;overflow:hidden;font-family:'Arial',sans-serif;font-size:10pt}
+.c9.c9.c9{background-color:#ffbf00;max-width:0;white-space:nowrap;font-family:'Arial',sans-serif;font-size:10pt}
 	</style>
 </head>
-<body class="odr-body odr-gridlines-soft" data-odr-editable="true" data-odr-editing-scope="document" data-odr-keyboard="navigation shortcuts">
-	<table class="odr-sheet" data-odr-sheet="0">
-		<col class="odr-sheet-gutter">
-		<col>
-		<col>
-		<thead>
-			<tr>
-				<th class="odr-sheet-corner" style="width:calc(1ch + 14px);"></th>
-				<th class="odr-sheet-column-header">A</th>
-				<th class="odr-sheet-column-header">B</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="c0">
-				<th class="odr-sheet-row-header c1">1</th>
-				<td class="c2"><x-s class="c3"><x-s class="c3">Line 1
-</x-s></x-s><x-s class="c3"><x-s class="c3">Line 2</x-s></x-s></td>
-				<td class="c4">Cell B1</td>
-			</tr>
-			<tr class="c5">
-				<th class="odr-sheet-row-header c6">2</th>
-				<td class="c7">Cell A2</td>
-				<td class="c8">Cell B2</td>
-			</tr>
-		</tbody>
-	</table>
+<body class="odr-body odr-gridlines-soft" data-odr-editable="true" data-odr-editing-scope="document" data-odr-formula-syntax="ooxml" data-odr-formula-settings="{&quot;caseSensitive&quot;:false,&quot;dialect&quot;:&quot;excel&quot;,&quot;epoch&quot;:1900,&quot;nullDate&quot;:0,&quot;nullYear&quot;:1930,&quot;regularExpressions&quot;:false,&quot;wholeCell&quot;:true,&quot;wildcards&quot;:true}" data-odr-keyboard="navigation shortcuts">
+	<div class="odr-sheet" style="--odr-sheet-gutter:21.5px;--odr-sheet-width:154.5px;" data-odr-sheet="0" data-odr-sheet-name="Sheet1">
+		<table class="odr-sheet-head">
+			<col class="odr-sheet-gutter">
+			<col class="c0">
+			<col class="c0">
+			<thead>
+				<tr>
+					<th class="odr-sheet-corner"></th>
+					<th class="odr-sheet-column-header">A</th>
+					<th class="odr-sheet-column-header">B</th>
+				</tr>
+			</thead>
+		</table>
+		<table class="odr-sheet-rows odr-chunk odr-chunk-near" style="contain-intrinsic-height:auto 48.86667px">
+			<col class="odr-sheet-gutter">
+			<col class="c0">
+			<col class="c0">
+			<tbody>
+				<tr class="c1">
+					<th class="odr-sheet-row-header c2">1</th>
+					<td class="c3"><x-s class="c4"><x-s class="c4">Line 1
+</x-s></x-s><x-s class="c4"><x-s class="c4">Line 2</x-s></x-s></td>
+					<td class="c5">Cell B1</td>
+				</tr>
+				<tr class="c6">
+					<th class="odr-sheet-row-header c7">2</th>
+					<td class="c8">Cell A2</td>
+					<td class="c9">Cell B2</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<script type="text/javascript" src="../../../resources/search.js"></script>
 	<script>
 window.odr = window.odr || {};
@@ -61,7 +72,9 @@ window.odr.errorCodes = {
   "range": 1008,
   "unnameableEdit": 1009,
   "outOfScope": 1010,
-  "sheetCut": 1011
+  "sheetCut": 1011,
+  "formulaInvalid": 1012,
+  "array": 1013
 };
 
 	</script>

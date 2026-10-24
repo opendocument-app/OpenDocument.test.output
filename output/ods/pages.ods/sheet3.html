@@ -9,6 +9,9 @@
 	<link rel="stylesheet" href="../../../resources/document.css"/>
 	<link rel="stylesheet" href="../../../resources/search.css"/>
 	<link rel="stylesheet" href="../../../resources/spreadsheet.css"/>
+	<style>.odr-chunk{content-visibility:hidden}.odr-chunk-near{content-visibility:visible}@media print{.odr-chunk{content-visibility:visible}}
+	</style>
+	<noscript><style>@media screen{.odr-chunk{content-visibility:auto}}</style></noscript>
 	<style>
 .c0.c0.c0{width:0.889in;min-width:0.889in}
 .c1.c1.c1{height:0.178in}
@@ -17,23 +20,29 @@
 .c4.c4.c4{display:block;font-family:'Liberation Sans',sans-serif}
 	</style>
 </head>
-<body class="odr-body odr-gridlines-soft" data-odr-editable="true" data-odr-editing-scope="document" data-odr-locale="en-US" data-odr-keyboard="navigation shortcuts">
-	<table class="odr-sheet" data-odr-sheet="3">
-		<col class="odr-sheet-gutter">
-		<col class="c0">
-		<thead>
-			<tr>
-				<th class="odr-sheet-corner" style="width:calc(1ch + 14px);"></th>
-				<th class="odr-sheet-column-header">A</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="c1">
-				<th class="odr-sheet-row-header c2">1</th>
-				<td class="c3"><x-p class="c4">Page 4<wbr></x-p></td>
-			</tr>
-		</tbody>
-	</table>
+<body class="odr-body odr-gridlines-soft" data-odr-editable="true" data-odr-editing-scope="document" data-odr-locale="en-US" data-odr-formula-syntax="opendocument" data-odr-formula-settings="{&quot;booleanWord&quot;:false,&quot;caseSensitive&quot;:true,&quot;dialect&quot;:&quot;libreoffice&quot;,&quot;epoch&quot;:1900,&quot;nullDate&quot;:0,&quot;nullYear&quot;:1930,&quot;regularExpressions&quot;:false,&quot;wholeCell&quot;:true,&quot;wildcards&quot;:true}" data-odr-keyboard="navigation shortcuts">
+	<div class="odr-sheet" style="--odr-sheet-gutter:21.5px;--odr-sheet-width:106.844px;" data-odr-sheet="3" data-odr-sheet-name="Page 4">
+		<table class="odr-sheet-head">
+			<col class="odr-sheet-gutter">
+			<col class="c0">
+			<thead>
+				<tr>
+					<th class="odr-sheet-corner"></th>
+					<th class="odr-sheet-column-header">A</th>
+				</tr>
+			</thead>
+		</table>
+		<table class="odr-sheet-rows odr-chunk odr-chunk-near" style="contain-intrinsic-height:auto 17.088px">
+			<col class="odr-sheet-gutter">
+			<col class="c0">
+			<tbody>
+				<tr class="c1">
+					<th class="odr-sheet-row-header c2">1</th>
+					<td class="c3"><x-p class="c4">Page 4<wbr></x-p></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<script type="text/javascript" src="../../../resources/search.js"></script>
 	<script>
 window.odr = window.odr || {};
@@ -48,7 +57,9 @@ window.odr.errorCodes = {
   "range": 1008,
   "unnameableEdit": 1009,
   "outOfScope": 1010,
-  "sheetCut": 1011
+  "sheetCut": 1011,
+  "formulaInvalid": 1012,
+  "array": 1013
 };
 
 	</script>
