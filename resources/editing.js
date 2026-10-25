@@ -32,6 +32,8 @@
     unnameableEdit: "an edit landed where no operation can name it",
     outOfScope: "the edit reaches past what this page offers",
     sheetCut: "the sheet reaches past what this page renders",
+    formulaInvalid: "the formula does not parse",
+    array: "cell is part of an array formula",
   };
 
   /// Falls back to `readOnly` for a reason no script here states.

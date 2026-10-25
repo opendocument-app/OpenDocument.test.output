@@ -384,7 +384,7 @@
   }
 
   // A chunk that names its source has its content in a script of its own,
-  // which puts it in through `odr.chunks.fill` (`lazy-loading.md` decision 3).
+  // which puts it in through `odr.chunks.fill` (`lazy-loading.md` decision 2).
   // A script loads over HTTP and from a file alike.
   function load(chunk) {
     var source = chunk.getAttribute("data-odr-chunk-src");
@@ -405,33 +405,78 @@
     document.head.appendChild(script);
   }
 
+  // The text of the chunks that have not loaded, by chunk key, which the
+  // scripts of the search index state (`lazy-loading.md` decision 4), folded
+  // where `search.js` is there to fold it. A script that failed has no text,
+  // and is not asked for again.
+  var texts = {};
+  var indexes = {};
+
+  function loadIndex(source, then) {
+    var state = indexes[source];
+    if (state === undefined) {
+      state = indexes[source] = { done: false, waiting: [] };
+      var script = document.createElement("script");
+      script.src = source;
+      script.onload = script.onerror = function () {
+        script.remove();
+        state.done = true;
+        state.waiting.forEach(function (waiting) {
+          waiting();
+        });
+        state.waiting = [];
+      };
+      document.head.appendChild(script);
+    }
+    if (state.done) {
+      then();
+    } else {
+      state.waiting.push(then);
+    }
+  }
+
   var chunks = document.getElementsByClassName("odr-chunk");
-  var near =
-    typeof IntersectionObserver === "function"
-      ? new IntersectionObserver(
-          function (entries) {
-            entries.forEach(function (entry) {
-              setNear(entry.target, entry.isIntersecting);
-            });
-          },
-          { rootMargin: "100% 0px" }
-        )
-      : null;
+
+  function observed(entries) {
+    entries.forEach(function (entry) {
+      setNear(entry.target, entry.isIntersecting);
+    });
+  }
+
+  // The document as the root, because a frame from another origin ignores the
+  // margin of the implicit one; a browser that takes no document as a root
+  // takes the implicit one.
+  var near = null;
+  if (typeof IntersectionObserver === "function") {
+    try {
+      near = new IntersectionObserver(observed, {
+        root: document,
+        rootMargin: "100% 0px",
+      });
+    } catch (e) {
+      near = new IntersectionObserver(observed, { rootMargin: "100% 0px" });
+    }
+  }
   for (var i = 0; i < chunks.length; ++i) {
     if (near !== null && !chunks[i].hasAttribute("data-odr-chunk-held")) {
       near.observe(chunks[i]);
     } else {
-      chunks[i].classList.add("odr-chunk-near");
+      setNear(chunks[i], true);
     }
   }
 
   odr.chunks = {
     // Lays out the chunk that holds @p element, so it can be measured and
-    // scrolled to. The observer takes it back once it is far again.
+    // scrolled to. Observed anew, so the observer takes it back once it is
+    // far, though it saw no change.
     show: function (element) {
       var chunk = element.closest(".odr-chunk");
       if (chunk !== null) {
         setNear(chunk, true);
+        if (near !== null && !chunk.hasAttribute("data-odr-chunk-held")) {
+          near.unobserve(chunk);
+          near.observe(chunk);
+        }
       }
     },
     // Puts the content of chunk @p index in, which its script states.
@@ -441,16 +486,71 @@
         return;
       }
       chunk.innerHTML = html;
+      delete texts[index];
       chunk.removeAttribute("data-odr-chunk-src");
       chunk.removeAttribute("data-odr-chunk-loading");
       chunk.dispatchEvent(new CustomEvent("odr-chunk-filled", { bubbles: true }));
+    },
+    // Keeps the text of the chunks that a script of the search index states
+    // and that have not loaded since.
+    text: function (byKey) {
+      var fold = typeof odr.foldSearchText === "function" ? odr.foldSearchText : null;
+      for (var key in byKey) {
+        if (!Object.prototype.hasOwnProperty.call(byKey, key)) {
+          continue;
+        }
+        var chunk = document.querySelector('[data-odr-chunk="' + key + '"]');
+        if (chunk !== null && chunk.hasAttribute("data-odr-chunk-src")) {
+          texts[key] = { text: fold === null ? byKey[key] : fold(byKey[key]), folded: fold !== null };
+        }
+      }
+    },
+    // The chunks that have not loaded, in document order, each with its text
+    // or null and whether that is folded, once the index scripts have loaded.
+    // The first chunk of a group names the script of the group, which is
+    // loaded only while a chunk of the group has not.
+    pending: function (then) {
+      var waiting = [];
+      var sources = [];
+      var group = null;
+      for (var i = 0; i < chunks.length; ++i) {
+        group = chunks[i].getAttribute("data-odr-chunk-text") || group;
+        if (chunks[i].hasAttribute("data-odr-chunk-src")) {
+          waiting.push(chunks[i]);
+          if (group !== null && sources.indexOf(group) === -1) {
+            sources.push(group);
+          }
+        }
+      }
+      var left = sources.length + 1;
+      function loaded() {
+        if (--left > 0) {
+          return;
+        }
+        then(
+          waiting
+            .filter(function (chunk) {
+              return chunk.hasAttribute("data-odr-chunk-src");
+            })
+            .map(function (chunk) {
+              var text = texts[chunk.getAttribute("data-odr-chunk")];
+              return text === undefined
+                ? { chunk: chunk, text: null, folded: false }
+                : { chunk: chunk, text: text.text, folded: text.folded };
+            })
+        );
+      }
+      sources.forEach(function (source) {
+        loadIndex(source, loaded);
+      });
+      loaded();
     },
     // Watches a chunk that a script added, as the view writes them.
     observe: function (chunk) {
       if (near !== null) {
         near.observe(chunk);
       } else {
-        chunk.classList.add("odr-chunk-near");
+        setNear(chunk, true);
       }
     },
   };
