@@ -256,7 +256,11 @@
 
     for (var lineNr = from.line + 1; lineNr <= to.line; ++lineNr) {
       var removed = this.nextLine(firstLine);
-      removed.parentNode.removeChild(removed);
+      var chunk = removed.parentNode;
+      chunk.removeChild(removed);
+      if (chunk.childElementCount === 0) {
+        chunk.remove();
+      }
     }
     this.renumber();
   };
