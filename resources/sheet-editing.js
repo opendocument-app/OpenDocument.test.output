@@ -1,15 +1,137 @@
 
 // The sheet's editor, attached to `odr.editing`: the cell overlay, the locks,
 // the `setCell` and `setCellStyle` ops. The mode itself is `editing.js`.
-(function () {
+// Every sheet of the page gets the editor below to itself. One history holds
+// the steps of all of them in the order taken, because an op on one sheet can
+// move what a formula on another names (`sheet-scripts.md`).
+(function (bindEditor) {
   "use strict";
 
-  var table = document.querySelector(".odr-sheet");
-  if (table === null) {
+  var tables = document.querySelectorAll(".odr-sheet");
+  if (tables.length === 0) {
     return;
   }
+  var odr = (window.odr = window.odr || {});
+
+  var shared = {
+    history: [],
+    undone: [],
+    module: null,
+    // one evaluator for every sheet of the page
+    formulaModule: function () {
+      if (shared.module === null) {
+        shared.module = window.createOdrFormula();
+      }
+      return shared.module;
+    },
+  };
+  var editors = Array.prototype.map.call(tables, function (table) {
+    return bindEditor(table, shared);
+  });
+
+  // The editor of the sheet the reader is in, which `odr.sheet` answers for.
+  function active() {
+    for (var i = 0; i < editors.length; ++i) {
+      if (editors[i].sheet === odr.sheet) {
+        return editors[i];
+      }
+    }
+    return editors[0];
+  }
+
+  function onEach(name) {
+    return function (argument) {
+      editors.forEach(function (editor) {
+        editor[name](argument);
+      });
+    };
+  }
+
+  function onActive(name) {
+    return function (first, second) {
+      return active()[name](first, second);
+    };
+  }
+
+  /// Loads the evaluator the page carries, which an edit or `enable` does
+  /// too. Resolves to whether the page computes its formula cells.
+  odr.editing.loadFormulas = function () {
+    return Promise.all(
+      editors.map(function (editor) {
+        return editor.loadFormulas();
+      })
+    ).then(function (loaded) {
+      return loaded.indexOf(true) !== -1;
+    });
+  };
+  /// Merged into what is set, on every sheet; an unknown key throws.
+  odr.editing.setSheetOptions = onEach("setOptions");
+  odr.editing.getSheetOptions = onActive("getOptions");
+  /// The lock on the cell at (@p column, @p row), or null where it has none.
+  odr.editing.lockAt = onActive("lockAt");
+  /// Whether the cell at (@p column, @p row) refuses a write, which is also
+  /// what tells the host.
+  odr.editing.refuseAt = onActive("refuseAt");
+  /// Opens the editor over a cell, as a double click does.
+  odr.editing.editAt = onActive("editAt");
+
+  odr.editing.attach({
+    // A cell nothing can commit must keep no overlay open over it.
+    disable: onEach("close"),
+    operations: function () {
+      return editors[0].coalesced(true);
+    },
+    canUndo: function () {
+      return shared.history.length > 0;
+    },
+    canRedo: function () {
+      return shared.undone.length > 0;
+    },
+    /// Takes the last step back, on whichever sheet; false where there is
+    /// none.
+    undo: function () {
+      if (shared.history.length === 0) {
+        return false;
+      }
+      var entry = shared.history.pop();
+      shared.undone.push(entry);
+      entry.replay(entry.undo);
+      return true;
+    },
+    redo: function () {
+      if (shared.undone.length === 0) {
+        return false;
+      }
+      var entry = shared.undone.pop();
+      shared.history.push(entry);
+      entry.replay(entry.redo);
+      return true;
+    },
+    format: onActive("format"),
+    toggle: onActive("toggle"),
+    insertRows: onActive("insertRows"),
+    deleteRows: onActive("deleteRows"),
+    insertColumns: onActive("insertColumns"),
+    deleteColumns: onActive("deleteColumns"),
+    enable: onEach("enable"),
+    committed: function () {
+      // every sheet reads the log it saved, then it goes, then the marks
+      editors.forEach(function (editor) {
+        editor.committed();
+      });
+      shared.history = [];
+      shared.undone = [];
+      editors.forEach(function (editor) {
+        editor.repaint();
+      });
+    },
+  });
+})(function (table, shared) {
+  "use strict";
 
   var odr = (window.odr = window.odr || {});
+  // this sheet's part of `spreadsheet.js`
+  var sheetApi = odr.sheetFor(table);
 
   var sheet = Number(table.getAttribute("data-odr-sheet") || 0);
   // The extent of the whole sheet, stated only where the page renders less.
@@ -44,7 +166,7 @@
 
   /// The outline answers every tap; `odr.editing` drops the repeated event.
   function refuse(reason, column, row) {
-    outline(odr.sheet.cellAt(column, row));
+    outline(sheetApi.cellAt(column, row));
     odr.editing.refuse(reason, { sheet: sheet, column: column, row: row });
   }
 
@@ -56,7 +178,7 @@
       row >= 0 &&
       column < cut.columns &&
       row < cut.rows &&
-      odr.sheet.cellAt(column, row) === null
+      sheetApi.cellAt(column, row) === null
     ) {
       odr.editing.refuse("sheetCut", {
         sheet: sheet,
@@ -69,9 +191,10 @@
   }
 
   var overlay = null;
+  /// The rows and columns an edit past the content made for its cell, until
+  /// a write takes them into its history or the edit ends without one.
+  var created = null;
   var editingAt = null;
-  var history = [];
-  var undone = [];
 
   var STYLE_OPS = ["setCellStyle", "setRowStyle", "setColumnStyle"];
   /// The axis a row or column op moves along.
@@ -95,11 +218,16 @@
 
   /// Coalesces values and style keys by position, with later writes winning.
   /// Overlapping style operations and structural edits are merge barriers.
-  function coalesced() {
+  /// This sheet's steps as the ops a save replays; with @p all, every
+  /// sheet's, in the order taken.
+  function coalesced(all) {
     var result = [];
     var byKey = new Map();
-    for (var i = 0; i < history.length; ++i) {
-      var ops = history[i].ops;
+    for (var i = 0; i < shared.history.length; ++i) {
+      if (!all && shared.history[i].sheet !== sheet) {
+        continue;
+      }
+      var ops = shared.history[i].ops;
       for (var j = 0; j < ops.length; ++j) {
         var op = ops[j];
         if (STRUCTURE_OPS[op.op] !== undefined) {
@@ -464,10 +592,11 @@
 
   /// Writes @p value at a position: the cell shows it, and the op joins the
   /// log beside the value it replaced. A formula value states its expression
-  /// in the syntax of the file, and shows nothing until it is computed.
-  function write(column, row, value) {
-    var cell = odr.sheet.cellAt(column, row);
-    var before = odr.sheet.valueAt(column, row);
+  /// in the syntax of the file, and shows nothing until it is computed. The
+  /// rows and columns @p made for the cell go with its undo.
+  function write(column, row, value, made) {
+    var cell = sheetApi.cellAt(column, row);
+    var before = sheetApi.valueAt(column, row);
     if (cell === null || before === null) {
       return false;
     }
@@ -499,7 +628,7 @@
 
     // what a repaint computes for the cell, and what an undo puts back
     function apply(state, show, result) {
-      if (!odr.sheet.showValue(column, row, show)) {
+      if (!sheetApi.showValue(column, row, show)) {
         return false;
       }
       setAttribute(cell, "data-odr-formula", state.formula);
@@ -525,16 +654,24 @@
     if (formula.formula !== null) {
       written.set(op, { cell: cell, reads: formula.reads });
     }
-    history.push({
+    shared.history.push({
+      sheet: sheet,
+      replay: replay,
       ops: [op],
       undo: function () {
         apply(formulaBefore, shownBefore, computedBefore);
+        if (made) {
+          sheetApi.unmaterialize(made);
+        }
       },
       redo: function () {
+        if (made) {
+          sheetApi.rematerialize(made);
+        }
         apply(formula, shown, undefined);
       },
     });
-    undone = [];
+    shared.undone = [];
     repaintStale();
     odr.editing.changed();
     return true;
@@ -609,7 +746,7 @@
   /// Every formula, including one with no reads: ROW() and COLUMN() still
   /// change when their own cell moves.
   function readerOf(cell) {
-    var at = odr.sheet.positionOf(cell);
+    var at = sheetApi.positionOf(cell);
     var stated = cell.getAttribute("data-odr-reads");
     var array = arrayOf(cell);
     if (at === null || !cell.hasAttribute("data-odr-formula")) {
@@ -870,7 +1007,7 @@
       return Promise.resolve(false);
     }
     if (formulas.loading === null) {
-      formulas.loading = window.createOdrFormula().then(
+      formulas.loading = shared.formulaModule().then(
         function (module) {
           formulas.module = module;
           // nothing is computed yet, so the cells show what the file wrote
@@ -895,7 +1032,7 @@
   /// What a cell holds as the evaluator reads it, from what the page shows.
   function shownValue(cell, column, row) {
     var type = cell.getAttribute("data-odr-type");
-    var value = odr.sheet.valueAt(column, row);
+    var value = sheetApi.valueAt(column, row);
     if (type === "boolean") {
       return {
         type: "boolean",
@@ -1142,7 +1279,7 @@
       positionsOf(entry)
         .slice(1)
         .forEach(function (at) {
-          var cell = odr.sheet.cellAt(at.column, at.row);
+          var cell = sheetApi.cellAt(at.column, at.row);
           if (cell !== null) {
             owners.set(cell, {
               entry: entry,
@@ -1223,12 +1360,12 @@
         if (at !== sheet) {
           return null;
         }
-        var cell = odr.sheet.cellAt(column, row);
+        var cell = sheetApi.cellAt(column, row);
         if (cell === null) {
           // the page shows all of the sheet, or not what lies past the cut
           return cut === null ? { type: "empty" } : null;
         }
-        var position = odr.sheet.positionOf(cell);
+        var position = sheetApi.positionOf(cell);
         if (position.column !== column || position.row !== row) {
           return { type: "empty" };
         }
@@ -1281,7 +1418,7 @@
         if (extent === null) {
           extent = { columns: 0, rows: 0 };
           table.querySelectorAll("td").forEach(function (cell) {
-            var at = odr.sheet.positionOf(cell);
+            var at = sheetApi.positionOf(cell);
             if (at !== null) {
               extent.rows = Math.max(extent.rows, at.row + 1);
               extent.columns = Math.max(extent.columns, at.column + 1);
@@ -1406,7 +1543,7 @@
         shownValue(entry.cell, entry.at.column, entry.at.row)
       );
     }
-    odr.sheet.showValue(entry.at.column, entry.at.row, value);
+    sheetApi.showValue(entry.at.column, entry.at.row, value);
   }
 
   /// Puts back what the cells showed, where no result stands in for it now.
@@ -1415,9 +1552,9 @@
       if (kept.has(cell)) {
         return;
       }
-      var at = odr.sheet.positionOf(cell);
+      var at = sheetApi.positionOf(cell);
       if (at !== null) {
-        odr.sheet.showValue(at.column, at.row, before);
+        sheetApi.showValue(at.column, at.row, before);
       }
       computed.delete(cell);
     });
@@ -1491,7 +1628,7 @@
     marked.forEach(function (entry) {
       var result = answers.get(entry.cell);
       positionsOf(entry).forEach(function (at) {
-        var cell = odr.sheet.cellAt(at.column, at.row);
+        var cell = sheetApi.cellAt(at.column, at.row);
         if (cell === null) {
           return;
         }
@@ -1559,7 +1696,7 @@
 
   /// A line typed past the cell's height makes the overlay taller.
   function grow() {
-    var cell = odr.sheet.cellAt(editingAt.column, editingAt.row);
+    var cell = sheetApi.cellAt(editingAt.column, editingAt.row);
     overlay.style.height = cell.offsetHeight + "px";
     overlay.style.height =
       Math.max(cell.offsetHeight, overlay.scrollHeight) + "px";
@@ -1569,26 +1706,26 @@
   /// The raise is put back down: the overlay shows what it would have.
   function edit(column, row, typed) {
     finish();
-    if (!odr.editing.isEnabled() || odr.editing.refuseAt(column, row)) {
+    if (!odr.editing.isEnabled() || refuseAt(column, row)) {
       return false;
     }
-    var cell = odr.sheet.cellAt(column, row);
+    var cell = sheetApi.cellAt(column, row);
     if (cell === null) {
-      // an empty cell of the grid past the content takes no edit yet
-      // (`sheet-grid.md` decision 3)
-      var at = odr.sheet.pinned();
-      if (
-        at !== null &&
-        at.cell === null &&
-        at.column === column &&
-        at.row === row
-      ) {
-        refuse("unsupportedEdit", column, row);
+      // an empty cell of the grid past the content gets its rows and columns
+      // made first (`sheet-grid.md` decision 3)
+      if (!sheetApi.inGrid(column, row)) {
+        return false;
       }
-      return false;
+      var made = sheetApi.materialize(column, row);
+      if (made === null) {
+        refuse("unsupportedEdit", column, row);
+        return false;
+      }
+      created = made;
+      cell = sheetApi.cellAt(column, row);
     }
-    odr.sheet.pin({ column: column, row: row });
-    odr.sheet.lower();
+    sheetApi.pin({ column: column, row: row });
+    sheetApi.lower();
 
     // typed input replaces the formula, so only an opened one needs the module
     var stated = typed === null ? cell.getAttribute("data-odr-formula") : null;
@@ -1604,7 +1741,7 @@
       refuse("formulaInput", column, row);
       return false;
     }
-    var value = odr.sheet.valueAt(column, row);
+    var value = sheetApi.valueAt(column, row);
     editingAt = { column: column, row: row };
     overlay = document.createElement("textarea");
     overlay.className = "odr-sheet-editor";
@@ -1633,6 +1770,10 @@
     editingAt = null;
     if (input !== null) {
       input.remove();
+    }
+    if (created !== null) {
+      sheetApi.unmaterialize(created);
+      created = null;
     }
   }
 
@@ -1675,10 +1816,17 @@
       }
       value = { type: "formula", formula: expression };
     }
+    var made = created;
+    created = null;
     close();
-    write(at.column, at.row, value !== null ? value : parse(text));
-    if (!odr.sheet.pin({ column: at.column + columns, row: at.row + rows })) {
-      odr.sheet.pin({ column: at.column, row: at.row });
+    if (
+      !write(at.column, at.row, value !== null ? value : parse(text), made) &&
+      made !== null
+    ) {
+      sheetApi.unmaterialize(made);
+    }
+    if (!sheetApi.pin({ column: at.column + columns, row: at.row + rows })) {
+      sheetApi.pin({ column: at.column, row: at.row });
       refuseCut(at.column + columns, at.row + rows);
     }
     return true;
@@ -1729,9 +1877,98 @@
     );
   }
 
+  /// Whether the cell at a position shows anything; the grid past the
+  /// content shows nothing.
+  function isFilled(column, row) {
+    var cell = sheetApi.cellAt(column, row);
+    return cell !== null && cell.textContent.trim() !== "";
+  }
+
+  /// Where Ctrl with an arrow lands from @p at, as in a desktop application:
+  /// from a filled cell to the last filled one before a gap, else to the
+  /// next filled one, else to the edge the page reaches. Past the content
+  /// nothing is filled, so the walk stops there and goes to the edge.
+  function jumpTarget(at, step) {
+    var extent = sheetApi.extent();
+    var reach = sheetApi.reach();
+    function inside(column, row) {
+      return (
+        column >= 0 && row >= 0 && column <= reach.column && row <= reach.row
+      );
+    }
+    var column = at.column + step[0];
+    var row = at.row + step[1];
+    if (!inside(column, row)) {
+      return { column: at.column, row: at.row };
+    }
+    if (isFilled(at.column, at.row) && isFilled(column, row)) {
+      while (
+        inside(column + step[0], row + step[1]) &&
+        isFilled(column + step[0], row + step[1])
+      ) {
+        column += step[0];
+        row += step[1];
+      }
+      return { column: column, row: row };
+    }
+    while (!isFilled(column, row)) {
+      var past =
+        (step[0] > 0 && column >= extent.columns) ||
+        (step[1] > 0 && row >= extent.rows);
+      if (past || !inside(column + step[0], row + step[1])) {
+        return {
+          column: step[0] > 0 ? reach.column : column,
+          row: step[1] > 0 ? reach.row : row,
+        };
+      }
+      column += step[0];
+      row += step[1];
+    }
+    return { column: column, row: row };
+  }
+
+  /// Ctrl or Cmd with an arrow, Home or End moves the pin, Shift widening
+  /// the selection; true where the key was one of them.
+  function jumpKey(event) {
+    var at = sheetApi.pinned();
+    if (at === null || at.column === null || at.row === null) {
+      return false;
+    }
+    var to;
+    if (arrows[event.key] !== undefined) {
+      var from = event.shiftKey ? sheetApi.selection().focus || at : at;
+      to = jumpTarget(from, arrows[event.key]);
+    } else if (event.key === "Home") {
+      to = { column: 0, row: 0 };
+    } else if (event.key === "End") {
+      var extent = sheetApi.extent();
+      to = { column: extent.columns - 1, row: extent.rows - 1 };
+    } else {
+      return false;
+    }
+    if (event.shiftKey) {
+      sheetApi.select(to);
+    } else {
+      sheetApi.goToCell(to.column, to.row);
+    }
+    return true;
+  }
+
   /// What a pinned cell does with a key when no editor is open. Captured, so
   /// these never reach the pin and the sort beneath. The chord is `editing.js`'s.
   function pinnedKey(event) {
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      !event.altKey &&
+      odr.editing.isEnabled() &&
+      overlay === null &&
+      !typingIn(event.target) &&
+      jumpKey(event)
+    ) {
+      event.stopPropagation();
+      event.preventDefault();
+      return;
+    }
     if (
       !odr.editing.isEnabled() ||
       overlay !== null ||
@@ -1743,7 +1980,7 @@
       return;
     }
 
-    var at = odr.sheet.pinned();
+    var at = sheetApi.pinned();
     if (at === null || at.column === null || at.row === null) {
       return;
     }
@@ -1754,15 +1991,15 @@
     if (step !== null) {
       // shift with an arrow moves the focus, anything else the pin
       var widens = event.shiftKey && arrows[event.key] !== undefined;
-      var from = widens ? odr.sheet.selection().focus : at;
+      var from = widens ? sheetApi.selection().focus : at;
       var to = { column: from.column + step[0], row: from.row + step[1] };
-      if (!(widens ? odr.sheet.select(to) : odr.sheet.pin(to))) {
+      if (!(widens ? sheetApi.select(to) : sheetApi.pin(to))) {
         refuseCut(to.column, to.row);
       }
     } else if (event.key === "Enter" || event.key === "F2") {
       edit(at.column, at.row, null);
     } else if (event.key === "Delete" || event.key === "Backspace") {
-      if (!odr.editing.refuseAt(at.column, at.row)) {
+      if (!refuseAt(at.column, at.row)) {
         write(at.column, at.row, { type: "empty" });
       }
     } else if (event.key.length === 1) {
@@ -1780,12 +2017,25 @@
 
   window.addEventListener("resize", function () {
     if (overlay !== null) {
-      place(odr.sheet.cellAt(editingAt.column, editingAt.row));
+      place(sheetApi.cellAt(editingAt.column, editingAt.row));
     }
   });
 
+  /// The cell under a click: a `td`, or in the grid past the content the
+  /// empty cell the grid pinned for that click.
   function targetPosition(event) {
-    return odr.sheet.positionOf(event.target.closest("td"));
+    var at = sheetApi.positionOf(event.target.closest("td"));
+    if (
+      at === null &&
+      event.target.closest(".odr-sheet-grid-below,.odr-sheet-grid-right") !==
+        null
+    ) {
+      var pin = sheetApi.pinned();
+      if (pin !== null && pin.cell === null) {
+        at = { column: pin.column, row: pin.row };
+      }
+    }
+    return at;
   }
 
   table.addEventListener("dblclick", function (event) {
@@ -1801,7 +2051,7 @@
   var options = {
     editOnClick: onClick === null ? null : onClick === "true",
     // the empty grid past the content, which `spreadsheet.js` draws
-    grid: odr.sheet.hasGrid(),
+    grid: sheetApi.hasGrid(),
   };
 
   /// Whether a click opens the editor, where a double click always does. The
@@ -1818,30 +2068,26 @@
     );
   }
 
-  /// Loads the evaluator the page carries, which an edit or `enable` does
-  /// too. Resolves to whether the page computes its formula cells.
-  odr.editing.loadFormulas = loadFormulas;
-
   /// Merged into what is set; an unknown key throws.
-  odr.editing.setSheetOptions = function (value) {
+  function setSheetOptions(value) {
     Object.keys(value || {}).forEach(function (key) {
       if (!Object.prototype.hasOwnProperty.call(options, key)) {
         throw new Error("odr.editing: unknown sheet option " + key);
       }
       options[key] = value[key];
     });
-    options.grid = odr.sheet.setGrid(options.grid);
-  };
+    options.grid = sheetApi.setGrid(options.grid);
+  }
 
-  odr.editing.getSheetOptions = function () {
+  function getSheetOptions() {
     var copy = {};
     Object.keys(options).forEach(function (key) {
       copy[key] = options[key];
     });
     // `odr.sheet.setGrid` turns it too
-    copy.grid = odr.sheet.hasGrid();
+    copy.grid = sheetApi.hasGrid();
     return copy;
-  };
+  }
 
   // A locked cell says so on the click, not on the double click. A shift
   // click spans a selection and opens nothing.
@@ -1853,8 +2099,8 @@
     if (at === null) {
       return;
     }
-    if (odr.editing.lockAt(at.column, at.row) !== null) {
-      odr.editing.refuseAt(at.column, at.row);
+    if (lockAt(at.column, at.row) !== null) {
+      refuseAt(at.column, at.row);
       return;
     }
     if (tapEdits()) {
@@ -1863,30 +2109,30 @@
   });
 
   /// The lock on the cell at (@p column, @p row), or null where it has none.
-  odr.editing.lockAt = function (column, row) {
-    var cell = odr.sheet.cellAt(column, row);
+  function lockAt(column, row) {
+    var cell = sheetApi.cellAt(column, row);
     return cell === null ? null : cell.getAttribute("data-odr-lock");
-  };
+  }
 
   /// Whether the cell at (@p column, @p row) refuses a write, which is also
   /// what tells the host.
-  odr.editing.refuseAt = function (column, row) {
+  function refuseAt(column, row) {
     if (!odr.editing.isEditable()) {
       refuse("readOnly", column, row);
       return true;
     }
-    var lock = odr.editing.lockAt(column, row);
+    var lock = lockAt(column, row);
     if (lock !== null) {
       refuse(lock, column, row);
       return true;
     }
     return false;
-  };
+  }
 
   /// Opens the editor over a cell, as a double click does.
-  odr.editing.editAt = function (column, row) {
+  function editAt(column, row) {
     return edit(column, row, null);
-  };
+  }
 
   // ------------------------------------------------------------- formatting
 
@@ -2042,7 +2288,7 @@
   /// across them, and none where they differ.
   function summary() {
     var result = {};
-    var cells = odr.sheet.selectedCells();
+    var cells = sheetApi.selectedCells();
     if (cells.length === 0) {
       return result;
     }
@@ -2210,9 +2456,53 @@
     return op;
   }
 
+  /// Formats the selection; on an empty cell of the grid past the content,
+  /// its rows and columns are made first, and the step owns them as an
+  /// edit's does (`sheet-grid.md` decision 3). A style `formatCells` refuses
+  /// takes them away again.
+  function format(style) {
+    var pin = sheetApi.pinned();
+    var made = null;
+    if (
+      pin !== null &&
+      pin.cell === null &&
+      pin.column !== null &&
+      pin.row !== null &&
+      odr.editing.isEnabled() &&
+      odr.editing.isEditable()
+    ) {
+      made = sheetApi.materialize(pin.column, pin.row);
+      if (made === null) {
+        refuse("unsupportedEdit", pin.column, pin.row);
+        return false;
+      }
+      sheetApi.pin({ column: pin.column, row: pin.row });
+    }
+    var steps = shared.history.length;
+    var done = formatCells(style);
+    if (made !== null) {
+      if (done && shared.history.length > steps) {
+        var entry = shared.history[shared.history.length - 1];
+        var undo = entry.undo;
+        var redo = entry.redo;
+        entry.undo = function () {
+          undo();
+          sheetApi.unmaterialize(made);
+        };
+        entry.redo = function () {
+          sheetApi.rematerialize(made);
+          redo();
+        };
+      } else {
+        sheetApi.unmaterialize(made);
+      }
+    }
+    return done;
+  }
+
   /// States @p style on every selected cell as one undo step. A lock refuses
   /// a value, not a style.
-  function format(style) {
+  function formatCells(style) {
     finish();
     if (!odr.editing.isEnabled()) {
       return false;
@@ -2225,7 +2515,7 @@
       odr.editing.refuse("unsupportedEdit", { sheet: sheet });
       return false;
     }
-    var cells = odr.sheet.selectedCells();
+    var cells = sheetApi.selectedCells();
     if (
       cells.length === 0 ||
       Object.keys(style).length === 0 ||
@@ -2239,7 +2529,7 @@
     var ops = [];
     var rows = new Set();
     // a header stands for its whole row or column, past the rendered extent
-    var pin = odr.sheet.pinned();
+    var pin = sheetApi.pinned();
     var header = pin.row === null || pin.column === null;
     if (header) {
       ops.push(
@@ -2262,10 +2552,12 @@
     });
     var reflow = function () {
       rows.forEach(function (row) {
-        odr.sheet.reflow(row);
+        sheetApi.reflow(row);
       });
     };
-    history.push({
+    shared.history.push({
+      sheet: sheet,
+      replay: replay,
       ops: ops,
       undo: function () {
         befores.forEach(restore);
@@ -2276,7 +2568,7 @@
         reflow();
       },
     });
-    undone = [];
+    shared.undone = [];
     reflow();
     odr.editing.changed();
     reportSelection(true);
@@ -2324,10 +2616,17 @@
       return false;
     }
     readersOf();
-    var range = odr.sheet.selection();
+    var range = sheetApi.selection();
     var span = range === null ? null : axis === "row" ? range.rows : range.columns;
     var index = span === null ? null : after ? span[1] + 1 : span[0];
     var count = span === null ? 0 : span[1] - span[0] + 1;
+    // the grid past the content is empty: nothing moves, nothing to record
+    if (
+      index !== null &&
+      (axis === "row" ? sheetApi.inGrid(0, index) : sheetApi.inGrid(index, 0))
+    ) {
+      return true;
+    }
     var plural = axis === "row" ? "Rows" : "Columns";
     if (index !== null && cutsArray(axis, index, count, insert)) {
       var refused = { sheet: sheet };
@@ -2336,7 +2635,7 @@
       return false;
     }
     var taken =
-      index === null ? null : odr.sheet[(insert ? "insert" : "delete") + plural](index, count);
+      index === null ? null : sheetApi[(insert ? "insert" : "delete") + plural](index, count);
     var detail = { sheet: sheet };
     detail[axis] = index;
     if (taken === null) {
@@ -2347,17 +2646,19 @@
     op[axis] = index;
     op.count = count;
     var takeOut = function () {
-      odr.sheet["delete" + plural](index, count);
+      sheetApi["delete" + plural](index, count);
     };
     var putBack = function () {
-      odr.sheet["restore" + plural](index, taken);
+      sheetApi["restore" + plural](index, taken);
     };
-    history.push({
+    shared.history.push({
+      sheet: sheet,
+      replay: replay,
       ops: [op],
       undo: insert ? takeOut : putBack,
       redo: insert ? putBack : takeOut,
     });
-    undone = [];
+    shared.undone = [];
     repaintStale();
     odr.editing.changed();
     reportSelection(true);
@@ -2398,7 +2699,7 @@
     }
     // a header selected: Shift with `+` inserts before it, `-` deletes, as in
     // Excel
-    var pin = odr.sheet.pinned();
+    var pin = sheetApi.pinned();
     var axis =
       pin === null || (pin.column === null) === (pin.row === null)
         ? null
@@ -2411,7 +2712,12 @@
       editStructure(axis, false, false);
     } else {
       var property = chords[event.key.toLowerCase()];
-      if (property === undefined || odr.sheet.selectedCells().length === 0) {
+      // an empty cell of the grid has no `td` yet, and `format` makes one
+      var empty = pin !== null && pin.cell === null && pin.row !== null;
+      if (
+        property === undefined ||
+        (sheetApi.selectedCells().length === 0 && !empty)
+      ) {
         return;
       }
       toggle(property);
@@ -2424,35 +2730,16 @@
     document.addEventListener("keydown", chordKey, true);
   }
 
-  odr.editing.attach({
-    // A cell nothing can commit must keep no overlay open over it.
-    disable: close,
-    operations: coalesced,
-    canUndo: function () {
-      return history.length > 0;
-    },
-    canRedo: function () {
-      return undone.length > 0;
-    },
-    /// Takes the last step back; false where there is none.
-    undo: function () {
-      if (history.length === 0) {
-        return false;
-      }
-      var entry = history.pop();
-      undone.push(entry);
-      replay(entry.undo);
-      return true;
-    },
-    redo: function () {
-      if (undone.length === 0) {
-        return false;
-      }
-      var entry = undone.pop();
-      history.push(entry);
-      replay(entry.redo);
-      return true;
-    },
+  return {
+    sheet: sheetApi,
+    close: close,
+    coalesced: coalesced,
+    loadFormulas: loadFormulas,
+    setOptions: setSheetOptions,
+    getOptions: getSheetOptions,
+    lockAt: lockAt,
+    refuseAt: refuseAt,
+    editAt: editAt,
     format: format,
     toggle: toggle,
     insertRows: insertRows,
@@ -2486,9 +2773,7 @@
       }
       // the results shown are the ones the save wrote
       computed.clear();
-      history = [];
-      undone = [];
-      repaintStale();
     },
-  });
-})();
+    repaint: repaintStale,
+  };
+});

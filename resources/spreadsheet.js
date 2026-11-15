@@ -1,14 +1,71 @@
 
-(function () {
+// Every sheet of the page gets the script below to itself, and `odr.sheet`
+// answers for the one the reader is in (`sheet-scripts.md`).
+(function (bindSheet) {
+  "use strict";
+
+  var tables = document.querySelectorAll(".odr-sheet");
+  if (tables.length === 0) {
+    return;
+  }
+  var odr = (window.odr = window.odr || {});
+
+  var apis = [];
+  // the sheet pinned last, else the one shown
+  var active = null;
+
+  // One pin on the page: a sheet that takes one clears the others', or a
+  // key would reach two of them.
+  function activate(api) {
+    active = api;
+    apis.forEach(function (other) {
+      if (other !== api && other.pinned() !== null) {
+        other.pin(null);
+      }
+    });
+  }
+
+  Array.prototype.forEach.call(tables, function (table) {
+    apis.push(bindSheet(table, activate));
+  });
+  active = apis[0];
+
+  // Under a single-page layout the reader is in the sheet shown.
+  function followPage() {
+    apis.forEach(function (api) {
+      if (api.table.classList.contains("odr-page-current")) {
+        active = api;
+        api.refresh();
+      }
+    });
+  }
+  followPage();
+  document.addEventListener("odr-page-change", followPage);
+
+  Object.defineProperty(odr, "sheet", {
+    configurable: true,
+    get: function () {
+      return active;
+    },
+  });
+  odr.sheets = apis;
+  // The sheet a table is, which the editor beside this script works on.
+  odr.sheetFor = function (table) {
+    for (var i = 0; i < apis.length; ++i) {
+      if (apis[i].table === table) {
+        return apis[i];
+      }
+    }
+    return null;
+  };
+  odr.goToCell = function (column, row) {
+    return active.goToCell(column, row);
+  };
+})(function (table, activate) {
   "use strict";
 
   // The sheet: the ruler, and a table for each chunk of rows
   // (`lazy-loading.md` decision 3).
-  var table = document.querySelector(".odr-sheet");
-  if (table === null) {
-    return;
-  }
-
   var odr = (window.odr = window.odr || {});
 
   var merged = table.querySelector("td[colspan],td[rowspan]") !== null;
@@ -112,13 +169,21 @@
   var emptyPin = null;
   var layers = null;
 
+  // this sheet's own, where a page holds several
+  var scoped = table.hasAttribute("data-odr-sheet")
+    ? '.odr-sheet[data-odr-sheet="' +
+      table.getAttribute("data-odr-sheet") +
+      '"]'
+    : ".odr-sheet";
+
   // Column 0 is the gutter, which labels no column.
   function columnRule(index, wash, scope) {
     if (index < 1) {
       return "";
     }
     return (
-      ".odr-sheet " +
+      scoped +
+      " " +
       scope +
       "tr>:nth-child(" +
       (index + 1) +
@@ -329,6 +394,9 @@
     pinnedColumn = column;
     pinnedRow = row;
     pinnedCell = cell;
+    if (cell !== null) {
+      activate(api);
+    }
 
     if (pinnedRow !== null) {
       pinnedRow.classList.add("odr-sheet-pinned");
@@ -933,13 +1001,13 @@
   // on. A new column is as wide as Excel's default one, because every table
   // of the sheet has to state it, and its cells have no style. Null where the
   // edge would cut a merge, or lies past the rendered columns.
-  function insertColumns(column, count) {
+  function insertColumns(column, count, width) {
     if (column > lastColumn() + 1 || colspanReaches(column)) {
       return null;
     }
     var slice = { widths: [], headers: [], cells: [] };
     for (var i = 0; i < count; ++i) {
-      slice.widths.push("64px");
+      slice.widths.push(width === undefined ? "64px" : width);
       var header = document.createElement("th");
       header.className = "odr-sheet-column-header";
       if (!merged) {
@@ -1065,6 +1133,21 @@
     );
   }
 
+  // The row numbers past the content outgrow the gutter the content needed:
+  // it widens to the widest in view, as a desktop application's does, and
+  // never narrows back. True where it widened.
+  function fitGutter(label) {
+    layers.measure.textContent = label;
+    var needed = Math.ceil(layers.measure.offsetWidth) + 8;
+    var current = gutterWidth();
+    if (needed <= current) {
+      return false;
+    }
+    table.style.setProperty("--odr-sheet-gutter", needed + "px");
+    widen(needed - current);
+    return true;
+  }
+
   // Grows the grid to hold the cell at @p column, @p row, which `inGrid`
   // allows.
   function hold(column, row) {
@@ -1117,6 +1200,8 @@
     var right = element("div", "odr-sheet-grid-right");
     var ruler = element("div", "odr-sheet-grid-ruler");
     var mark = element("div", "odr-sheet-grid-pin");
+    var measure = element("span", "odr-sheet-grid-measure");
+    gutter.appendChild(measure);
     table.appendChild(below);
     table.appendChild(right);
     table.insertBefore(ruler, head.nextSibling);
@@ -1129,6 +1214,7 @@
       right: right,
       ruler: ruler,
       mark: mark,
+      measure: measure,
       rowLabels: [],
       columnLabels: [],
       rowLines: [],
@@ -1216,6 +1302,9 @@
 
   function pinEmpty(position) {
     emptyPin = position;
+    if (position !== null) {
+      activate(api);
+    }
     if (layers !== null) {
       placeMark();
     }
@@ -1302,6 +1391,10 @@
       label.style.top = (firstRow + i) * height + "px";
       label.style.height = height + "px";
       label.textContent = String(contentRows + firstRow + i + 1);
+    }
+    var widest = String(contentRows + firstRow + rowCount);
+    if (rowCount > 0 && fitGutter(widest)) {
+      refresh();
     }
 
     var content = contentWidth();
@@ -1465,6 +1558,107 @@
     return true;
   }
 
+  // An edit past the content needs a `td`: the columns and rows up to it are
+  // made as an insert makes them, at the grid's size (`sheet-grid.md`
+  // decision 3). Within a budget, because a jump far out would make a cell
+  // for every row and column on the way.
+  var materializeBudget = 200000;
+
+  // What `unmaterialize` takes away again, or null past the budget, a merge
+  // or the grid.
+  function materialize(column, row) {
+    if (!inGrid(column, row)) {
+      return null;
+    }
+    var columns = contentColumns();
+    var addColumns = Math.max(0, column - columns + 1);
+    var addRows = Math.max(0, row - contentRows + 1);
+    var cells = addColumns * contentRows + addRows * (columns + addColumns);
+    if (cells > materializeBudget) {
+      return null;
+    }
+    var made = {
+      columnsAt: columns,
+      columns: null,
+      columnCount: addColumns,
+      rowsAt: contentRows,
+      rows: null,
+      rowCount: addRows,
+    };
+    if (addColumns > 0) {
+      made.columns = insertColumns(columns, addColumns, cellWidth() + "px");
+      if (made.columns === null) {
+        return null;
+      }
+    }
+    if (addRows > 0) {
+      made.rows = insertRows(made.rowsAt, addRows);
+      if (made.rows === null) {
+        unmaterialize(made);
+        return null;
+      }
+      made.rows.forEach(function (tr) {
+        tr.style.height = cellHeight() + "px";
+      });
+    }
+    pinEmpty(null);
+    layout();
+    return made;
+  }
+
+  // Takes what `materialize` made away, keeping it for `rematerialize`. A
+  // cell pinned there stays pinned, as the empty cell of the grid.
+  function unmaterialize(made) {
+    var at = pinnedPosition();
+    if (made.rows !== null) {
+      made.rows = deleteRows(made.rowsAt, made.rowCount);
+    }
+    if (made.columns !== null) {
+      made.columns = deleteColumns(made.columnsAt, made.columnCount);
+    }
+    if (at !== null && at.cell !== null && pinnedCell === null) {
+      pinAt(at);
+    }
+    layout();
+  }
+
+  function rematerialize(made) {
+    var at = emptyPin;
+    if (made.columns !== null) {
+      restoreColumns(made.columnsAt, made.columns);
+    }
+    if (made.rows !== null) {
+      restoreRows(made.rowsAt, made.rows);
+    }
+    if (at !== null && cellAt(at.column, at.row) !== null) {
+      pinAt(at);
+    }
+    layout();
+  }
+
+  // The last column and row the page can show: the format's, short of the
+  // browser's height limit, where the grid is drawn; else the content's.
+  function reach() {
+    var column = contentColumns() - 1;
+    var row = contentRows - 1;
+    if (gridOn && growsRight) {
+      column = maximum[0] - 1;
+    }
+    if (gridOn && growsDown) {
+      var below = layers === null ? 0 : belowTop();
+      row = Math.min(
+        maximum[1] - 1,
+        contentRows - 1 + Math.floor((heightLimit - below) / cellHeight())
+      );
+    }
+    return { column: column, row: row };
+  }
+
+  // The rows and columns the page writes, the grid past them.
+  function contentExtent() {
+    return { columns: contentColumns(), rows: contentRows };
+  }
+
   window.addEventListener("scroll", refresh, { passive: true });
   window.addEventListener("load", refresh);
   window.addEventListener("resize", refresh);
@@ -1473,7 +1667,9 @@
 
   // What the script beside this one, and a host, ask of the sheet: positions
   // the way an op names them, and the pin. `spreadsheet-editing.md` decision 8.
-  odr.sheet = {
+  var api = {
+    table: table,
+    refresh: refresh,
     cellAt: cellAt,
     positionOf: positionOf,
     pinned: pinnedPosition,
@@ -1497,9 +1693,13 @@
       return gridOn;
     },
     goToCell: goToCell,
+    inGrid: inGrid,
+    extent: contentExtent,
+    reach: reach,
+    materialize: materialize,
+    unmaterialize: unmaterialize,
+    rematerialize: rematerialize,
   };
-
-  odr.goToCell = goToCell;
 
   table.addEventListener("mouseover", function (event) {
     var column = rulerColumn(event.target.closest("td,th"));
@@ -1598,7 +1798,7 @@
 
   // The canvas around the sheet included.
   document.addEventListener("click", function (event) {
-    if (event.target.closest(".odr-sheet") === null) {
+    if (event.target.closest(".odr-sheet") !== table) {
       pin(-1, null, null);
     }
   });
@@ -1750,4 +1950,5 @@
       true
     );
   }
-})();
+  return api;
+});
