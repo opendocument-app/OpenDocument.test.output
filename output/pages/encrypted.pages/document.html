@@ -13,11 +13,21 @@
 </head>
 <body class="odr-body odr-background" data-odr-editable="readOnly" data-odr-editing-scope="document" data-odr-keyboard="navigation shortcuts">
 	<div class="odr-pages">
-		<div class="odr-page-outer">
-			<div class="odr-page-inner">
-				<x-p style="display:block;"><x-s>Secret text in a Pages document.</x-s><wbr></x-p>
+		<div class="odr-pagination-original">
+			<div class="odr-page-outer">
+				<div class="odr-page-inner">
+					<x-p style="display:block;"><x-s>Secret text in a Pages document.</x-s><wbr></x-p>
+				</div>
 			</div>
 		</div>
+		<template data-odr-page-template="root" data-odr-next-layout="root" data-odr-master-page="">
+			<div class="odr-page-outer odr-pagination-page odr-page">
+				<div class="odr-pagination-inner">
+					<div class="odr-pagination-body">
+					</div>
+				</div>
+			</div>
+		</template>
 	</div>
 	<script type="text/javascript" src="../../../resources/search.js"></script>
 	<script>
